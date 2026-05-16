@@ -16,13 +16,31 @@
     <link rel="stylesheet" href="css/brands.css">
 
     <style>
+      /* متغيرات الألوان للوضعين الليلي والنهاري */
+      :root {
+        --bg-color: #07080B;
+        --text-color: #E4E6EB;
+        --card-bg: #1F222F;
+        --sub-text: #94A3B8;
+        --btn-border: rgba(255, 255, 255, 0.03);
+      }
+
+      .light-theme {
+        --bg-color: #F8FAFC;
+        --text-color: #0F172A;
+        --card-bg: #E2E8F0;
+        --sub-text: #64748B;
+        --btn-border: rgba(0, 0, 0, 0.05);
+      }
+
       body {
-        background-color: #07080B !important;
-        color: #E4E6EB !important;
+        background-color: var(--bg-color) !important;
+        color: var(--text-color) !important;
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
       .avatar {
-        border: 3px solid #1F222F;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+        border: 3px solid var(--card-bg);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
         transition: transform 0.3s ease;
         width: 128px;
         height: 128px;
@@ -35,33 +53,61 @@
         border-radius: 16px !important;
         font-weight: 600 !important;
         margin-bottom: 16px !important;
-        border: 1px solid rgba(255, 255, 255, 0.03) !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        border: 1px solid var(--btn-border) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         transition: transform 0.2s ease, box-shadow 0.2s ease !important;
       }
       .button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
       }
       h1 div {
-        color: #FFF !important;
+        color: var(--text-color) !important;
         font-weight: 800 !important;
         letter-spacing: -0.03em;
+        transition: color 0.3s ease;
       }
       p {
-        color: #94A3B8 !important;
+        color: var(--sub-text) !important;
         font-size: 0.95rem;
         margin-bottom: 30px;
+        transition: color 0.3s ease;
       }
       footer, footer a {
-        color: #334155 !important;
+        color: #64748B !important;
         font-size: 0.8rem;
         margin-top: 50px;
+      }
+
+      /* ستايل زر التبديل الاحترافي */
+      .theme-toggle-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--card-bg);
+        border: 1px solid var(--btn-border);
+        color: var(--text-color);
+        padding: 10px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: background-color 0.3s, color 0.3s, transform 0.2s;
+      }
+      .theme-toggle-btn:hover {
+        transform: scale(1.05);
       }
     </style>
   </head>
 
 <body>
+
+  <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle Theme">
+    🌙
+  </button>
 
   <div class="container">
     <div class="column">
@@ -109,6 +155,34 @@
     </div>
   </div>
 
+  <script>
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const currentTheme = localStorage.getItem('theme');
+
+    // التحقق من الثيم المحفوظ سابقاً
+    if (currentTheme === 'light') {
+      document.body.classList.add('light-theme');
+      themeToggleBtn.textContent = '☀️';
+    } else {
+      themeToggleBtn.textContent = '🌙';
+    }
+
+    // عند الضغط على الزر
+    themeToggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      
+      let theme = 'dark';
+      if (document.body.classList.contains('light-theme')) {
+        theme = 'light';
+        themeToggleBtn.textContent = '☀️';
+      } else {
+        themeToggleBtn.textContent = '🌙';
+      }
+      
+      // حفظ خيار المستخدم
+      localStorage.setItem('theme', theme);
+    });
+  </script>
+
 </body>
 </html>
-
