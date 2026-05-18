@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>SKRT7 | Bio</title>
-    <link rel="icon" type="image/x-icon" href="images/avatar.png">
+    <link class="fav-icon" rel="icon" type="image/x-icon" href="images/avatar.png">
 
     <meta name="description" content="SKRT7 Personal Space and Links">
     <meta name="author" content="SKRT7">
@@ -109,15 +109,14 @@
 
       /* ==========================================
          🔥 ستايل حركة الشحن العام لجميع الأزرار 🔥
-         ========================================= */
+         ========================================== */
       .ship-btn {
         appearance: none;
         position: relative;
-        overflow: hidden !important;
+        overflow: visible !important; /* تم تغييرها لـ visible لتسمح لـ Jinx بالخروج من خلف الزر */
         cursor: pointer;
         height: 52px !important; 
         border-radius: 32px !important;
-        -webkit-mask-image: -webkit-radial-gradient(white, black);
         -webkit-tap-highlight-color: transparent;
       }
 
@@ -128,6 +127,8 @@
         width: 100%;
         height: 100%;
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+        position: relative;
+        z-index: 3; /* النص فوق كل شيء */
       }
 
       .ship-btn .truck-container {
@@ -140,6 +141,9 @@
         align-items: center;
         justify-content: flex-start;
         pointer-events: none;
+        overflow: hidden; /* الشاحنة فقط تبقى محبوسة داخل الزر */
+        border-radius: 32px;
+        z-index: 2;
       }
 
       .ship-btn .truck {
@@ -155,7 +159,6 @@
         z-index: 1;
       }
 
-      /* أنيميشن التنشيط */
       .ship-btn.animating .btn-content {
         transform: translateX(150%);
         opacity: 0;
@@ -181,6 +184,35 @@
         40% { opacity: 1; transform: translateY(4px); } 
         60% { opacity: 1; transform: translateY(4px); }
         100% { opacity: 0; transform: translateX(15px); }
+      }
+
+      /* ==========================================
+         💙 ستايل أنيميشن شخصية Jinx العشوائية 💙
+         ========================================== */
+      .jinx-peeker {
+        position: absolute;
+        top: -38px; /* تظهر ممتدة من أعلى الزر */
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        z-index: 1; /* خلف نص الزر لإعطاء بعد ثلاثي الأبعاد */
+        pointer-events: none;
+        transform: translateY(20px);
+        opacity: 0;
+        animation: jinxAppear 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s forwards,
+                  jinxFloat 3s ease-in-out 1.7s infinite alternate;
+      }
+
+      @keyframes jinxAppear {
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes jinxFloat {
+        0% { transform: translateY(0) rotate(0deg); }
+        100% { transform: translateY(-4px) rotate(3deg); }
       }
     </style>
   </head>
@@ -270,19 +302,48 @@
         
         this.classList.add('animating');
         
+        // إخفاء شخصية جينكس بسرعة إذا ضغط المستخدم على الزر الذي تظهر فوقه
+        const jinx = this.querySelector('.jinx-peeker');
+        if(jinx) jinx.style.opacity = '0';
+
         setTimeout(() => {
           window.location.href = targetUrl;
         }, 1700);
       });
     });
 
-    // 🔥 حل مشكلة اختفاء النص عند العودة بـ زر الرجوع للخلف 🔥
+    // سكريبت جافا سكريبت لاختيار زر عشوائي ووضع Jinx فيه
+    function injectRandomJinx() {
+      // حذف أي جينكس قديمة أولاً لمنع التكرار
+      document.querySelectorAll('.jinx-peeker').forEach(el => el.remove());
+
+      const allButtons = document.querySelectorAll('.ship-btn');
+      if (allButtons.length > 0) {
+        // اختيار مؤشر عشوائي بناءً على عدد الأزرار
+        const randomIndex = Math.floor(Math.random() * allButtons.length);
+        const selectedButton = allButtons[randomIndex];
+
+        // إنشاء عنصر الصورة لشخصية Jinx Chibi المتحركة اللطيفة
+        const jinxImg = document.createElement('img');
+        jinxImg.src = 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXN5ZzZ0amN0bXNiaW93bXNidm55bXNidm55bXNidm55bXNidm55JnB0PW0mZj1n/3OhXBaoR1tVPW/giphy.gif'; 
+        jinxImg.className = 'jinx-peeker';
+        jinxImg.alt = 'Jinx';
+
+        // وضعها داخل الزر المختار عشوائياً
+        selectedButton.appendChild(jinxImg);
+      }
+    }
+
+    // تشغيل الدالة عند تحميل الصفحة لأول مرة
+    window.addEventListener('DOMContentLoaded', injectRandomJinx);
+
+    // إعادة ضبط الأزرار وإعادة اختيار مكان عشوائي لـ Jinx عند الرجوع للخلف بمتصفح الهاتف
     window.addEventListener('pageshow', function(event) {
-      // إذا تم تحميل الصفحة من الكاش (أي عند الضغط على زر الرجوع)
       if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
         document.querySelectorAll('.ship-btn').forEach(button => {
-          button.classList.remove('animating'); // إزالة الأنيميشن وإرجاع النصوص فوراً
+          button.classList.remove('animating');
         });
+        injectRandomJinx(); // تغيير مكانها عشوائياً عند العودة لتشعر أنها حية وتتحرك!
       }
     });
 
@@ -318,9 +379,5 @@
       
       setTimeout(() => {
         themeToggleBtn.classList.remove('popout-active');
-      }, 400);
-    });
-  </script>
+      }, 400
 
-</body>
-</html>
