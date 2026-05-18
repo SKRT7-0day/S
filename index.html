@@ -70,7 +70,7 @@
       p {
         color: var(--sub-text) !important;
         font-size: 0.95rem;
-        margin-bottom: 16px; /* تقليل المسافة لإفساح المجال لزر التبديل */
+        margin-bottom: 16px;
         transition: color 0.3s ease;
       }
       footer, footer a {
@@ -79,13 +79,13 @@
         margin-top: 50px;
       }
 
-      /* ستايل زر التبديل "الشريط الأنيق" (الأنحف والأصغر والمدمج) */
+      /* ستايل زر التبديل المرتب المدمج */
       .theme-toggle-btn {
-        position: relative; /* لكي يعمل تأثير خروج الرموز */
+        position: relative;
         background: var(--card-bg);
         border: 1px solid var(--btn-border);
         color: var(--text-color);
-        padding: 6px 12px; /* جعل الشريط أنحف وأصغر */
+        padding: 6px 12px;
         border-radius: 14px;
         cursor: pointer;
         font-size: 1rem;
@@ -93,160 +93,90 @@
         align-items: center;
         justify-content: center;
         width: fit-content;
-        margin: 0 auto 30px; /* توسيطه وتقليل المسافة السفلية */
+        margin: 0 auto 30px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         user-select: none;
-        transition: background-color 0.3s, color 0.3s, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+        transition: background-color 0.3s, color 0.3s, transform 0.2s;
         -webkit-tap-highlight-color: transparent;
       }
+      .theme-toggle-btn:hover { transform: translateY(-2px); }
+      .theme-toggle-btn:active { transform: translateY(1px) scale(0.98); }
+      .toggle-text { margin-left: 8px; font-weight: 500; font-size: 0.9rem; }
 
-      .theme-toggle-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-      }
-
-      .theme-toggle-btn:active {
-        transform: translateY(1px) scale(0.98);
-      }
-
-      /* تنسيق نص الزر المدمج */
-      .toggle-text {
-        margin-left: 8px;
-        font-weight: 500;
-        font-size: 0.9rem;
-      }
-
-      /* -- أنيميشن "خروج الرموز" عند الضغط -- */
-      
-      /* تعريف تأثير النبضة/الخروج */
       @keyframes popOut {
         0% { transform: translate(0, 0) scale(1); opacity: 0; }
         30% { opacity: 0.8; }
         100% { transform: translate(-3px, -35px) scale(1.4); opacity: 0; }
       }
+      .theme-toggle-btn.popout-active #popoutIcon { animation: popOut 0.4s ease forwards; }
+      #popoutIcon { position: absolute; pointer-events: none; opacity: 0; }
 
-      /* تعريف تأثير الدوران السلس للأيقونة بداخل الزر */
-      @keyframes rotateIcon {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
+      /* ==========================================
+         🔥 ستايل زر الشحن الاحترافي (Dispatch Button) 🔥
+         ========================================== */
+      .ship-btn {
+        appearance: none;
+        position: relative;
+        overflow: hidden; /* يمنع خروج الشاحنة خارج إطار الزر الدائري */
+        cursor: pointer;
+        -webkit-mask-image: -webkit-radial-gradient(white, black); /* حواف ناعمة للموبايل */
+        -webkit-tap-highlight-color: transparent;
       }
 
-      /* تطبيق الأنيميشن على الرمز عند الضغط (سيتم تشغيله بالسكريبت) */
-      .theme-toggle-btn.clicked #themeIcon {
-        animation: rotateIcon 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      /* محتوى الزر الأصلي (النص والأيقونة) */
+      .ship-btn .btn-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
       }
 
-      /* الرمز الذي سيخرج ويختفي */
-      #popoutIcon {
+      /* حاوية الشاحنة المخفية في اليسار */
+      .ship-btn .truck-container {
         position: absolute;
+        top: 0;
+        left: -100px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
         pointer-events: none;
+      }
+
+      .ship-btn .truck {
+        font-size: 1.6rem;
+      }
+
+      /* الصندوق الصغير المشحون */
+      .ship-btn .box {
+        font-size: 1.1rem;
+        margin-left: -8px;
         opacity: 0;
-        transition: none; /* لمنع التعارض مع أنيميشن popOut */
+        transform: translateY(-20px);
       }
-      .theme-toggle-btn.popout-active #popoutIcon {
-        animation: popOut 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+
+      /* --- تأثيرات الحركة عند الضغط (Triggered via JS) --- */
+      
+      /* خروج النص الأصلي لليمين */
+      .ship-btn.animating .btn-content {
+        transform: translateX(160%);
+        opacity: 0;
       }
-    </style>
-  </head>
 
-<body>
-
-  <div class="container">
-    <div class="column">
-
-      <img class="avatar avatar--rounded" src="images/avatar.png" alt="SKRT7">
-
-      <h1>
-        <div>SKRT7<span style="color: #a855f7;">.</span></div>
-      </h1>
-
-      <p>Developer & Discord Server Manager. Welcome to my space.</p>
-
-      <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle Theme">
-        <span id="popoutIcon"></span>
-        <span id="themeIcon">🌙</span> 
-        <span class="toggle-text">Mode</span>
-      </button>
-
-      <div class="button-stack" role="navigation">
-
-        <a class="button button-discord" href="https://discord.gg/Vk8WJhpQW4" target="_blank" rel="noopener" role="button">
-          <img class="icon" aria-hidden="true" src="images/icons/discord.svg" alt="Discord Logo">Discord
-        </a>
-
-        <a class="button button-instagram" href="https://www.instagram.com/skrt7_66?igsh=bWZzeHdhNDJtOGo2" target="_blank" rel="noopener" role="button">
-          <img class="icon" aria-hidden="true" src="images/icons/instagram.svg" alt="Instagram Logo">Instagram
-        </a>
-
-        <a class="button button-github" href="https://github.com/SKRT7-0day" target="_blank" rel="noopener" role="button">
-          <img class="icon" aria-hidden="true" src="images/icons/github.svg" alt="GitHub Logo">GitHub
-        </a>
-
-        <a class="button button-yt" href="https://www.youtube.com/@SKRT7-v5h" target="_blank" rel="noopener" role="button">
-          <img class="icon" aria-hidden="true" src="images/icons/youtube.svg" alt="YouTube Logo">YouTube
-        </a>
-
-        <a class="button button-spotify" href="https://open.spotify.com/user/315dy6lskacyrxfg42pk7x5atm44?si=9SMX0LY6QUeOpEpVEjsmMQ" target="_blank" rel="noopener" role="button">
-          <img class="icon" aria-hidden="true" src="images/icons/spotify.svg" alt="Spotify Logo">Spotify
-        </a>
-
-        <a class="button button-faceb" href="https://www.facebook.com/share/18giPaZseb/" target="_blank" rel="noopener" role="button">
-          <img class="icon" aria-hidden="true" src="images/icons/facebook.svg" alt="Facebook Logo">Facebook
-        </a>
-
-      </div>
-
-      <footer>
-        © 2026 SKRT7. ALL RIGHTS RESERVED.
-      </footer>
-
-    </div>
-  </div>
-
-  <script>
-    const themeToggleBtn = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const popoutIcon = document.getElementById('popoutIcon');
-    const currentTheme = localStorage.getItem('theme');
-
-    // التحقق من حالة الثيم المحفوظة مسبقاً في المتصفح
-    if (currentTheme === 'light') {
-      document.body.classList.add('light-theme');
-      themeIcon.textContent = '☀️';
-    } else {
-      themeIcon.textContent = '🌙';
-    }
-
-    // إضافة مستمع الأحداث لتطبيق الأنيميشن وتغيير الألوان عند الضغط
-    themeToggleBtn.addEventListener('click', () => {
-      // تطبيق كلاس الأنيميشن على الزر
-      themeToggleBtn.classList.add('clicked', 'popout-active');
-      
-      // تحديد الرمز الذي سيخرج بناءً على الوضع الحالي
-      const outgoingIcon = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
-      popoutIcon.textContent = outgoingIcon;
-
-      // تغيير الوضع بعد تأخير بسيط جداً
-      document.body.classList.toggle('light-theme');
-      
-      let theme = 'dark';
-      if (document.body.classList.contains('light-theme')) {
-        theme = 'light';
-        themeIcon.textContent = '☀️';
-      } else {
-        themeIcon.textContent = '🌙';
+      /* حركة انطلاق ومرور الشاحنة */
+      .ship-btn.animating .truck-container {
+        animation: driveAndDeliver 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       }
-      
-      // حفظ خيار المستخدم في المتصفح
-      localStorage.setItem('theme', theme);
-      
-      // إزالة كلاسات الأنيميشن بعد اكتمالها لكي تعمل في الضغطة التالية
-      setTimeout(() => {
-        themeToggleBtn.classList.remove('clicked', 'popout-active');
-      }, 400); // يجب أن تكون المدة مساوية أو أكبر من مدة popOut animation
-    });
-  </script>
 
-</body>
-</html>
+      /* حركة سقوط الصندوق داخل الشاحنة */
+      .ship-btn.animating .box {
+        animation: dropBoxInTruck 1.6s ease forwards;
+      }
 
+      /* أنيميشن حركة الشاحنة */
+      @keyframes driveAndDeliver {
+        0% { left: -60px; }
+        35% { left: 40%; }  /* تتوقف في المنتصف قلي
