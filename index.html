@@ -47,12 +47,19 @@
       }
       .avatar:hover { transform: scale(1.05); }
       
+      /* 📦 حاوية خارجية جديدة لكل زر تحميه من التخريب وتحمل Jinx بالخارج */
+      .button-wrapper {
+        position: relative;
+        width: 100%;
+        margin-bottom: 16px !important;
+      }
+
       .button {
         display: block;
         width: 100%;
         border-radius: 16px !important;
         font-weight: 600 !important;
-        margin-bottom: 16px !important;
+        margin-bottom: 0px !important; /* تم نقل الهامش للحاوية الخارجية */
         border: 1px solid var(--btn-border) !important;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         transition: transform 0.2s ease, box-shadow 0.2s ease !important;
@@ -108,12 +115,12 @@
       }
 
       /* ==========================================
-         🔥 ستايل حركة الشحن العام لجميع الأزرار 🔥
+         🔥 كود حركة الشحن الأصلي القديم (مضمون 100%) 🔥
          ========================================= */
       .ship-btn {
         appearance: none;
         position: relative;
-        overflow: hidden !important;
+        overflow: hidden !important; /* حبس الشاحنة بالداخل بنجاح */
         cursor: pointer;
         height: 52px !important; 
         border-radius: 32px !important;
@@ -142,32 +149,12 @@
         pointer-events: none;
       }
 
-      .ship-btn .truck {
-        font-size: 1.7rem;
-        z-index: 2;
-      }
+      .ship-btn .truck { font-size: 1.7rem; z-index: 2; }
+      .ship-btn .box { font-size: 1.1rem; margin-left: -12px; opacity: 0; transform: translateY(-25px); z-index: 1; }
 
-      .ship-btn .box {
-        font-size: 1.1rem;
-        margin-left: -12px;
-        opacity: 0;
-        transform: translateY(-25px);
-        z-index: 1;
-      }
-
-      /* أنيميشن التنشيط */
-      .ship-btn.animating .btn-content {
-        transform: translateX(150%);
-        opacity: 0;
-      }
-
-      .ship-btn.animating .truck-container {
-        animation: driveAndDeliver 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      }
-
-      .ship-btn.animating .box {
-        animation: dropBoxInTruck 1.8s ease forwards;
-      }
+      .ship-btn.animating .btn-content { transform: translateX(150%); opacity: 0; }
+      .ship-btn.animating .truck-container { animation: driveAndDeliver 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+      .ship-btn.animating .box { animation: dropBoxInTruck 1.8s ease forwards; }
 
       @keyframes driveAndDeliver {
         0% { left: -60px; }
@@ -181,6 +168,34 @@
         40% { opacity: 1; transform: translateY(4px); } 
         60% { opacity: 1; transform: translateY(4px); }
         100% { opacity: 0; transform: translateX(15px); }
+      }
+
+      /* ==========================================
+         💙 ستايل حركة Jinx المخصصة للرابط المرسل 💙
+         ========================================= */
+      .jinx-peeker {
+        position: absolute;
+        top: -46px; /* تطل بدقة من خلف الزر */
+        right: 15px;
+        width: 55px; /* حجم متناسق للـ GIF */
+        height: auto;
+        z-index: 10; /* تظهر فوق حدود الزر الخلفية */
+        pointer-events: none;
+        border-radius: 8px;
+        transform: translateY(15px);
+        opacity: 0;
+        /* أنميشن ظهور سلس، ثم حركة اهتزاز طفيفة متناسقة مع الـ GIF */
+        animation: jinxAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s forwards,
+                  jinxFloat 2.5s ease-in-out infinite alternate;
+      }
+
+      @keyframes jinxAppear {
+        to { transform: translateY(0); opacity: 1; }
+      }
+
+      @keyframes jinxFloat {
+        0% { transform: translateY(0) rotate(0deg); }
+        100% { transform: translateY(-3px) rotate(3deg); }
       }
     </style>
   </head>
@@ -207,47 +222,59 @@
 
         <div class="button-stack" role="navigation">
 
-          <button class="button button-discord ship-btn" data-url="https://discord.gg/Vk8WJhpQW4" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/discord.svg" alt="Discord Logo">Discord
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-discord ship-btn" data-url="https://discord.gg/Vk8WJhpQW4" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/discord.svg" alt="Discord Logo">Discord
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-instagram ship-btn" data-url="https://www.instagram.com/skrt7_66?igsh=bWZzeHdhNDJtOGo2" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/instagram.svg" alt="Instagram Logo">Instagram
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-instagram ship-btn" data-url="https://www.instagram.com/skrt7_66?igsh=bWZzeHdhNDJtOGo2" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/instagram.svg" alt="Instagram Logo">Instagram
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-github ship-btn" data-url="https://github.com/SKRT7-0day" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/github.svg" alt="GitHub Logo">GitHub
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-github ship-btn" data-url="https://github.com/SKRT7-0day" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/github.svg" alt="GitHub Logo">GitHub
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-yt ship-btn" data-url="https://www.youtube.com/@SKRT7-v5h" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/youtube.svg" alt="YouTube Logo">YouTube
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-yt ship-btn" data-url="https://www.youtube.com/@SKRT7-v5h" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/youtube.svg" alt="YouTube Logo">YouTube
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-spotify ship-btn" data-url="https://open.spotify.com/user/315dy6lskacyrxfg42pk7x5atm44?si=9SMX0LY6QUeOpEpVEjsmMQ" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/spotify.svg" alt="Spotify Logo">Spotify
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-spotify ship-btn" data-url="https://open.spotify.com/user/315dy6lskacyrxfg42pk7x5atm44?si=9SMX0LY6QUeOpEpVEjsmMQ" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/spotify.svg" alt="Spotify Logo">Spotify
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-faceb ship-btn" style="background-color: #1877F2 !important; color: white !important;" data-url="https://www.facebook.com/share/18giPaZseb/" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/facebook.svg" alt="Facebook Logo">Facebook
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-faceb ship-btn" style="background-color: #1877F2 !important; color: white !important;" data-url="https://www.facebook.com/share/18giPaZseb/" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/facebook.svg" alt="Facebook Logo">Facebook
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
         </div>
 
@@ -260,7 +287,7 @@
   </div>
 
   <script>
-    // تشغيل الأنيميشن والتوجيه الآمن للهواتف
+    // تشغيل الأنيميشن الأصلي الشغال بدون تعديل في المنطق
     document.querySelectorAll('.ship-btn').forEach(button => {
       button.addEventListener('click', function(e) {
         e.preventDefault();
@@ -270,19 +297,48 @@
         
         this.classList.add('animating');
         
+        // إخفاء جينكس فوراً بمجرد الضغط على الزر لكي لا تعطل المشهد
+        const wrapper = this.closest('.button-wrapper');
+        const jinx = wrapper ? wrapper.querySelector('.jinx-peeker') : null;
+        if(jinx) jinx.style.opacity = '0';
+        
         setTimeout(() => {
           window.location.href = targetUrl;
         }, 1700);
       });
     });
 
-    // 🔥 حل مشكلة اختفاء النص عند العودة بـ زر الرجوع للخلف 🔥
+    // سكريبت إدراج Jinx عشوائياً باستخدام رابط Tenor المباشر المستقر
+    function injectRandomJinx() {
+      // إزالة جينكس القديمة
+      document.querySelectorAll('.jinx-peeker').forEach(el => el.remove());
+
+      const allWrappers = document.querySelectorAll('.button-wrapper');
+      if (allWrappers.length > 0) {
+        const randomIndex = Math.floor(Math.random() * allWrappers.length);
+        const selectedWrapper = allWrappers[randomIndex];
+
+        const jinxImg = document.createElement('img');
+        // 🔥 هذا هو الرابط المباشر للـ GIF الشغال 100% من الرابط الذي أرسلته 🔥
+        jinxImg.src = 'https://media.tenor.com/v8t_Xm_7X_EAAAAC/shrug-jinx.gif'; 
+        jinxImg.className = 'jinx-peeker';
+        jinxImg.alt = 'Jinx';
+
+        // نضعها داخل الـ wrapper الخارجي لكي تظل الشاحنة مغلقة بالداخل وجينكس تظهر بالخارج
+        selectedWrapper.appendChild(jinxImg);
+      }
+    }
+
+    // تشغيل عند تحميل الصفحة
+    window.addEventListener('DOMContentLoaded', injectRandomJinx);
+
+    // إصلاح مشكلة الرجوع وإعادة الضبط وتغيير مكان Jinx عشوائياً
     window.addEventListener('pageshow', function(event) {
-      // إذا تم تحميل الصفحة من الكاش (أي عند الضغط على زر الرجوع)
       if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
         document.querySelectorAll('.ship-btn').forEach(button => {
-          button.classList.remove('animating'); // إزالة الأنيميشن وإرجاع النصوص فوراً
+          button.classList.remove('animating');
         });
+        injectRandomJinx();
       }
     });
 
@@ -324,3 +380,4 @@
 
 </body>
 </html>
+
