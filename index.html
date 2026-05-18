@@ -109,14 +109,14 @@
 
       /* ==========================================
          🔥 ستايل حركة الشحن العام لجميع الأزرار 🔥
-         ========================================== */
+         ========================================= */
       .ship-btn {
         appearance: none;
         position: relative;
         overflow: hidden !important;
         cursor: pointer;
         height: 52px !important; 
-        border-radius: 32px !important; /* شكل كبسولة احترافي متناسق */
+        border-radius: 32px !important;
         -webkit-mask-image: -webkit-radial-gradient(white, black);
         -webkit-tap-highlight-color: transparent;
       }
@@ -260,7 +260,7 @@
   </div>
 
   <script>
-    // تشغيل الأنيميشن والتوجيه الآمن للهواتف دون حظر المتصفح
+    // تشغيل الأنيميشن والتوجيه الآمن للهواتف
     document.querySelectorAll('.ship-btn').forEach(button => {
       button.addEventListener('click', function(e) {
         e.preventDefault();
@@ -270,11 +270,20 @@
         
         this.classList.add('animating');
         
-        // استخدام window.location.href يمنع متصفحات الهواتف من حظر الانتقال
         setTimeout(() => {
           window.location.href = targetUrl;
         }, 1700);
       });
+    });
+
+    // 🔥 حل مشكلة اختفاء النص عند العودة بـ زر الرجوع للخلف 🔥
+    window.addEventListener('pageshow', function(event) {
+      // إذا تم تحميل الصفحة من الكاش (أي عند الضغط على زر الرجوع)
+      if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+        document.querySelectorAll('.ship-btn').forEach(button => {
+          button.classList.remove('animating'); // إزالة الأنيميشن وإرجاع النصوص فوراً
+        });
+      }
     });
 
     // سكريبت تبديل وحفظ الوضع ليلي / نهاري
@@ -315,4 +324,3 @@
 
 </body>
 </html>
-
