@@ -158,7 +158,7 @@
         transform: translateY(-20px);
       }
 
-      /* --- تأثيرات الحركة عند الضغط (Triggered via JS) --- */
+      /* --- تأثيرات الحركة عند الضغط --- */
       
       /* خروج النص الأصلي لليمين */
       .ship-btn.animating .btn-content {
@@ -179,4 +179,137 @@
       /* أنيميشن حركة الشاحنة */
       @keyframes driveAndDeliver {
         0% { left: -60px; }
-        35% { left: 40%; }  /* تتوقف في المنتصف قلي
+        35% { left: 40%; }  /* تتوقف في المنتصف قليلاً للتسليم */
+        65% { left: 43%; }
+        100% { left: 110%; } /* تنطلق خارج الزر */
+      }
+
+      /* أنيميشن سقوط الصندوق */
+      @keyframes dropBoxInTruck {
+        0%, 30% { opacity: 0; transform: translateY(-20px); }
+        45% { opacity: 1; transform: translateY(2px); }
+        65% { opacity: 1; transform: translateY(2px); }
+        100% { opacity: 0; transform: translateX(10px); }
+      }
+    </style>
+  </head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="column" style="margin-top: 10%">
+
+        <img class="avatar avatar--rounded" src="images/avatar.png" alt="SKRT7">
+
+        <h1>
+          <div>SKRT7<span style="color: #a855f7;">.</span></div>
+        </h1>
+
+        <p>Developer & Discord Server Manager. Welcome to my space.</p>
+
+        <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle Theme">
+          <span id="popoutIcon"></span>
+          <span id="themeIcon">🌙</span> 
+          <span class="toggle-text">Mode</span>
+        </button>
+
+        <div class="button-stack" role="navigation">
+
+          <button class="button button-discord ship-btn" data-url="https://discord.gg/Vk8WJhpQW4" role="button">
+            <div class="btn-content">
+              <img class="icon" aria-hidden="true" src="images/icons/discord.svg" alt="Discord Logo">Discord
+            </div>
+            <div class="truck-container">
+              <span class="truck">🚚</span>
+              <span class="box">📦</span>
+            </div>
+          </button>
+
+          <a class="button button-instagram" href="https://www.instagram.com/skrt7_66?igsh=bWZzeHdhNDJtOGo2" target="_blank" rel="noopener" role="button">
+            <img class="icon" aria-hidden="true" src="images/icons/instagram.svg" alt="Instagram Logo">Instagram
+          </a>
+
+          <a class="button button-github" href="https://github.com/SKRT7-0day" target="_blank" rel="noopener" role="button">
+            <img class="icon" aria-hidden="true" src="images/icons/github.svg" alt="GitHub Logo">GitHub
+          </a>
+
+          <a class="button button-yt" href="https://www.youtube.com/@SKRT7-v5h" target="_blank" rel="noopener" role="button">
+            <img class="icon" aria-hidden="true" src="images/icons/youtube.svg" alt="YouTube Logo">YouTube
+          </a>
+
+          <a class="button button-spotify" href="https://open.spotify.com/user/315dy6lskacyrxfg42pk7x5atm44?si=9SMX0LY6QUeOpEpVEjsmMQ" target="_blank" rel="noopener" role="button">
+            <img class="icon" aria-hidden="true" src="images/icons/spotify.svg" alt="Spotify Logo">Spotify
+          </a>
+
+          <a class="button button-faceb" href="https://www.facebook.com/share/18giPaZseb/" target="_blank" rel="noopener" role="button">
+            <img class="icon" aria-hidden="true" src="images/icons/facebook.svg" alt="Facebook Logo">Facebook
+          </a>
+
+        </div>
+
+        <footer>
+          © 2026 SKRT7. ALL RIGHTS RESERVED.
+        </footer>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- سكريبت تشغيل حركة زر الشحن والتوجيه للرابط ---
+    document.querySelectorAll('.ship-btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetUrl = this.getAttribute('data-url');
+        
+        if (this.classList.contains('animating')) return;
+        
+        this.classList.add('animating');
+        
+        setTimeout(() => {
+          window.open(targetUrl, '_blank');
+          this.classList.remove('animating');
+        }, 1500);
+      });
+    });
+
+    // --- سكريبت تبديل الوضع المحفوظ ---
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const popoutIcon = document.getElementById('popoutIcon');
+    const currentTheme = localStorage.getItem('theme');
+
+    if (currentTheme === 'light') {
+      document.body.classList.add('light-theme');
+      themeIcon.textContent = '☀️';
+    } else {
+      themeIcon.textContent = '🌙';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      themeToggleBtn.classList.add('popout-active');
+      const outgoingIcon = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
+      popoutIcon.textContent = outgoingIcon;
+
+      document.body.classList.toggle('light-theme');
+      
+      let theme = 'dark';
+      if (document.body.classList.contains('light-theme')) {
+        theme = 'light';
+        themeIcon.textContent = '☀️';
+      } else {
+        themeIcon.textContent = '🌙';
+      }
+      
+      localStorage.setItem('theme', theme);
+      
+      setTimeout(() => {
+        themeToggleBtn.classList.remove('popout-active');
+      }, 400);
+    });
+  </script>
+
+</body>
+</html>
+
