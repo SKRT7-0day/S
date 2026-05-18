@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>SKRT7 | Bio</title>
-    <link class="fav-icon" rel="icon" type="image/x-icon" href="images/avatar.png">
+    <link rel="icon" type="image/x-icon" href="images/avatar.png">
 
     <meta name="description" content="SKRT7 Personal Space and Links">
     <meta name="author" content="SKRT7">
@@ -47,12 +47,19 @@
       }
       .avatar:hover { transform: scale(1.05); }
       
+      /* حاوية الزر لحمل شخصية Jinx بالخارج وحبس الشاحنة بالداخل */
+      .button-wrapper {
+        position: relative;
+        width: 100%;
+        margin-bottom: 16px !important;
+      }
+
       .button {
         display: block;
         width: 100%;
         border-radius: 16px !important;
         font-weight: 600 !important;
-        margin-bottom: 16px !important;
+        margin-bottom: 0px !important; /* الاعتماد على Wrapper */
         border: 1px solid var(--btn-border) !important;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         transition: transform 0.2s ease, box-shadow 0.2s ease !important;
@@ -108,15 +115,16 @@
       }
 
       /* ==========================================
-         🔥 ستايل حركة الشحن العام لجميع الأزرار 🔥
+         🔥 ستايل الشاحنة والأزرار (مغلق ومحمي) 🔥
          ========================================== */
       .ship-btn {
         appearance: none;
         position: relative;
-        overflow: visible !important; /* تم تغييرها لـ visible لتسمح لـ Jinx بالخروج من خلف الزر */
+        overflow: hidden !important; /* قفل الأزرار لحبس الشاحنات بالداخل ومنع خروجها */
         cursor: pointer;
         height: 52px !important; 
         border-radius: 32px !important;
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
         -webkit-tap-highlight-color: transparent;
       }
 
@@ -127,8 +135,6 @@
         width: 100%;
         height: 100%;
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
-        position: relative;
-        z-index: 3; /* النص فوق كل شيء */
       }
 
       .ship-btn .truck-container {
@@ -141,8 +147,6 @@
         align-items: center;
         justify-content: flex-start;
         pointer-events: none;
-        overflow: hidden; /* الشاحنة فقط تبقى محبوسة داخل الزر */
-        border-radius: 32px;
         z-index: 2;
       }
 
@@ -159,6 +163,7 @@
         z-index: 1;
       }
 
+      /* أنيميشن تشغيل الحركة */
       .ship-btn.animating .btn-content {
         transform: translateX(150%);
         opacity: 0;
@@ -187,20 +192,20 @@
       }
 
       /* ==========================================
-         💙 ستايل أنيميشن شخصية Jinx العشوائية 💙
+         💙 ستايل أنيميشن شخصية Jinx المستقلة 💙
          ========================================== */
       .jinx-peeker {
         position: absolute;
-        top: -38px; /* تظهر ممتدة من أعلى الزر */
-        right: 15px;
-        width: 45px;
-        height: 45px;
-        z-index: 1; /* خلف نص الزر لإعطاء بعد ثلاثي الأبعاد */
+        top: -36px; /* تطل من أعلى الزر بدقة */
+        right: 25px;
+        width: 42px;
+        height: 42px;
+        z-index: 10; /* فوق الزر تماماً لتظهر بوضوح */
         pointer-events: none;
-        transform: translateY(20px);
+        transform: translateY(15px);
         opacity: 0;
-        animation: jinxAppear 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s forwards,
-                  jinxFloat 3s ease-in-out 1.7s infinite alternate;
+        animation: jinxAppear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards,
+                  jinxFloat 2.5s ease-in-out infinite alternate;
       }
 
       @keyframes jinxAppear {
@@ -212,7 +217,7 @@
 
       @keyframes jinxFloat {
         0% { transform: translateY(0) rotate(0deg); }
-        100% { transform: translateY(-4px) rotate(3deg); }
+        100% { transform: translateY(-3px) rotate(4deg); }
       }
     </style>
   </head>
@@ -239,47 +244,59 @@
 
         <div class="button-stack" role="navigation">
 
-          <button class="button button-discord ship-btn" data-url="https://discord.gg/Vk8WJhpQW4" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/discord.svg" alt="Discord Logo">Discord
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-discord ship-btn" data-url="https://discord.gg/Vk8WJhpQW4" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/discord.svg" alt="Discord Logo">Discord
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-instagram ship-btn" data-url="https://www.instagram.com/skrt7_66?igsh=bWZzeHdhNDJtOGo2" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/instagram.svg" alt="Instagram Logo">Instagram
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-instagram ship-btn" data-url="https://www.instagram.com/skrt7_66?igsh=bWZzeHdhNDJtOGo2" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/instagram.svg" alt="Instagram Logo">Instagram
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-github ship-btn" data-url="https://github.com/SKRT7-0day" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/github.svg" alt="GitHub Logo">GitHub
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-github ship-btn" data-url="https://github.com/SKRT7-0day" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/github.svg" alt="GitHub Logo">GitHub
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-yt ship-btn" data-url="https://www.youtube.com/@SKRT7-v5h" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/youtube.svg" alt="YouTube Logo">YouTube
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-yt ship-btn" data-url="https://www.youtube.com/@SKRT7-v5h" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/youtube.svg" alt="YouTube Logo">YouTube
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-spotify ship-btn" data-url="https://open.spotify.com/user/315dy6lskacyrxfg42pk7x5atm44?si=9SMX0LY6QUeOpEpVEjsmMQ" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/spotify.svg" alt="Spotify Logo">Spotify
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-spotify ship-btn" data-url="https://open.spotify.com/user/315dy6lskacyrxfg42pk7x5atm44?si=9SMX0LY6QUeOpEpVEjsmMQ" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/spotify.svg" alt="Spotify Logo">Spotify
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
-          <button class="button button-faceb ship-btn" style="background-color: #1877F2 !important; color: white !important;" data-url="https://www.facebook.com/share/18giPaZseb/" role="button">
-            <div class="btn-content">
-              <img class="icon" aria-hidden="true" src="images/icons/facebook.svg" alt="Facebook Logo">Facebook
-            </div>
-            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-          </button>
+          <div class="button-wrapper">
+            <button class="button button-faceb ship-btn" style="background-color: #1877F2 !important; color: white !important;" data-url="https://www.facebook.com/share/18giPaZseb/" role="button">
+              <div class="btn-content">
+                <img class="icon" aria-hidden="true" src="images/icons/facebook.svg" alt="Facebook Logo">Facebook
+              </div>
+              <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+            </button>
+          </div>
 
         </div>
 
@@ -292,7 +309,7 @@
   </div>
 
   <script>
-    // تشغيل الأنيميشن والتوجيه الآمن للهواتف
+    // تشغيل أنيميشن الشاحنات والتوجيه عند الضغط على الأزرار
     document.querySelectorAll('.ship-btn').forEach(button => {
       button.addEventListener('click', function(e) {
         e.preventDefault();
@@ -302,9 +319,10 @@
         
         this.classList.add('animating');
         
-        // إخفاء شخصية جينكس بسرعة إذا ضغط المستخدم على الزر الذي تظهر فوقه
-        const jinx = this.querySelector('.jinx-peeker');
-        if(jinx) jinx.style.opacity = '0';
+        // إخفاء Jinx فوراً عند تفعيل الأنميشن الخاص بالزر الحالي لكي لا تعطل المنظر
+        const wrapper = this.closest('.button-wrapper');
+        const jinx = wrapper ? wrapper.querySelector('.jinx-peeker') : null;
+        if (jinx) jinx.style.opacity = '0';
 
         setTimeout(() => {
           window.location.href = targetUrl;
@@ -312,38 +330,37 @@
       });
     });
 
-    // سكريبت جافا سكريبت لاختيار زر عشوائي ووضع Jinx فيه
+    // دالة وضع Jinx عشوائياً في الـ Wrapper الخاص بالزر
     function injectRandomJinx() {
-      // حذف أي جينكس قديمة أولاً لمنع التكرار
+      // إزالة أي ظهور قديم لـ Jinx تماماً لمنع التراكم
       document.querySelectorAll('.jinx-peeker').forEach(el => el.remove());
 
-      const allButtons = document.querySelectorAll('.ship-btn');
-      if (allButtons.length > 0) {
-        // اختيار مؤشر عشوائي بناءً على عدد الأزرار
-        const randomIndex = Math.floor(Math.random() * allButtons.length);
-        const selectedButton = allButtons[randomIndex];
+      const allWrappers = document.querySelectorAll('.button-wrapper');
+      if (allWrappers.length > 0) {
+        const randomIndex = Math.floor(Math.random() * allWrappers.length);
+        const selectedWrapper = allWrappers[randomIndex];
 
-        // إنشاء عنصر الصورة لشخصية Jinx Chibi المتحركة اللطيفة
+        // رابط صورة جينكس متحركة ومجربة 100% بحلفية شفافة
         const jinxImg = document.createElement('img');
-        jinxImg.src = 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXN5ZzZ0amN0bXNiaW93bXNidm55bXNidm55bXNidm55bXNidm55JnB0PW0mZj1n/3OhXBaoR1tVPW/giphy.gif'; 
+        jinxImg.src = 'https://i.imgur.com/vHdf3gS.gif'; // صورة Chibi Jinx لطيفة ومتحركة بخلفية شفافة
         jinxImg.className = 'jinx-peeker';
         jinxImg.alt = 'Jinx';
 
-        // وضعها داخل الزر المختار عشوائياً
-        selectedButton.appendChild(jinxImg);
+        // إدراجها داخل الحاوية الخارجية للزر لتتحرك بحرية من الأعلى
+        selectedWrapper.appendChild(jinxImg);
       }
     }
 
-    // تشغيل الدالة عند تحميل الصفحة لأول مرة
+    // تشغيل الدالة فور اكتمال تحميل الصفحة
     window.addEventListener('DOMContentLoaded', injectRandomJinx);
 
-    // إعادة ضبط الأزرار وإعادة اختيار مكان عشوائي لـ Jinx عند الرجوع للخلف بمتصفح الهاتف
+    // إصلاح مشكلة الرجوع للخلف وإعادة إنعاش الأزرار ومكان Jinx العشوائي
     window.addEventListener('pageshow', function(event) {
       if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
         document.querySelectorAll('.ship-btn').forEach(button => {
           button.classList.remove('animating');
         });
-        injectRandomJinx(); // تغيير مكانها عشوائياً عند العودة لتشعر أنها حية وتتحرك!
+        injectRandomJinx();
       }
     });
 
@@ -379,5 +396,10 @@
       
       setTimeout(() => {
         themeToggleBtn.classList.remove('popout-active');
-      }, 400
+      }, 400);
+    });
+  </script>
+
+</body>
+</html>
 
