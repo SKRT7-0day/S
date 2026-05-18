@@ -114,7 +114,7 @@
       }
 
       /* ==========================================
-         🚚 كود أنميشن الشاحنة الأصلي والمستقر 🚚
+         🚚 كود أنميشن الشاحنة المطور والمحمي من التجميد 🚚
          ========================================== */
       .ship-btn {
         appearance: none;
@@ -127,12 +127,15 @@
         -webkit-tap-highlight-color: transparent;
       }
 
+      /* محتوى الزر الطبيعي (الاسم والأيقونة) */
       .ship-btn .btn-content {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 100%;
         height: 100%;
+        transform: translateX(0) !important; /* الإجبار على الوضع الافتراضي */
+        opacity: 1 !important; /* الإجبار على الظهور الافتراضي */
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
       }
 
@@ -151,8 +154,11 @@
       .ship-btn .truck { font-size: 1.7rem; z-index: 2; }
       .ship-btn .box { font-size: 1.1rem; margin-left: -12px; opacity: 0; transform: translateY(-25px); z-index: 1; }
 
-      /* فئات التفعيل للأنميشن */
-      .ship-btn.animating .btn-content { transform: translateX(150%); opacity: 0; }
+      /* 🔥 تفعيل الأنميشن فقط عند وجود فئة animating بشكل صريح 🔥 */
+      .ship-btn.animating .btn-content { 
+        transform: translateX(150%) !important; 
+        opacity: 0 !important; 
+      }
       .ship-btn.animating .truck-container { animation: driveAndDeliver 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
       .ship-btn.animating .box { animation: dropBoxInTruck 1.8s ease forwards; }
 
@@ -275,27 +281,27 @@
       });
     });
 
-    // 🔥 الحل السحري لمشكلة اختفاء الأسماء عند العودة بالمتصفح 🔥
+    // دالة تصفير صارمة للتخلص من ذاكرة المتصفح المؤقتة (BFCache) لإعادة الأسماء فوراً
     function resetButtonsState() {
       document.querySelectorAll('.ship-btn').forEach(button => {
-        // إزالة فئة الأنميشن فوراً لإرجاع الشاحنة والنص لوضعهما الطبيعي
+        // 1. حذف كلاس الأنميشن فوراً
         button.classList.remove('animating');
         
-        // إجبار المتصفح على إعادة إظهار المحتوى الداخلي يدوياً للتأكيد
+        // 2. تصفير الستاين المكتوب بالـ JS بشكل صريح لضمان الإستجابة للوضع الطبيعي
         const content = button.querySelector('.btn-content');
         if (content) {
-          content.style.transform = 'none';
-          content.style.opacity = '1';
+          content.style.setProperty('transform', 'translateX(0)', 'important');
+          content.style.setProperty('opacity', '1', 'important');
         }
       });
     }
 
-    // 1. يشتغل عند العودة للخلف في متصفحات الهواتف (BFCache)
+    // التنظيف عند العودة للخلف في متصفحات الهواتف
     window.addEventListener('pageshow', function(event) {
       resetButtonsState();
     });
 
-    // 2. احتياط إضافي لضمان التنظيف الفوري عند تحميل الصفحة
+    // تنظيف إضافي عند التحميل الكامل للتأكيد
     window.addEventListener('DOMContentLoaded', resetButtonsState);
 
 
