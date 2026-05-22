@@ -69,56 +69,35 @@
       }
 
       /* ==========================================
-         🖋️ كود أنميشن رسم الاسم (SVG Text Outline) 🖋️
+         ✨ كود أنميشن تلوين الاسم ✨
          ========================================== */
       h1 {
-        margin: 15px 0 5px 0;
-        text-align: center;
+        margin: 15px 0;
       }
       
-      .animated-svg-text {
-        width: 100%;
-        height: 60px;
-        overflow: visible;
+      .animated-name {
+        font-weight: 900 !important;
+        letter-spacing: -0.03em;
+        /* تدرج الألوان للوضع الليلي */
+        background: linear-gradient(90deg, #E4E6EB, #a855f7, #3b82f6, #E4E6EB);
+        background-size: 300% 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: textGradientFill 4s linear infinite;
+        display: inline-block;
       }
 
-      .draw-text {
-        font-size: 2.8rem; /* حجم الخط */
-        font-weight: 900;
-        font-family: inherit;
-        letter-spacing: -0.02em;
-        
-        /* إعدادات الرسم */
-        fill: transparent;
-        stroke: #a855f7; /* لون القلم البنفسجي */
-        stroke-width: 1.5px;
-        stroke-dasharray: 400;
-        stroke-dashoffset: 400;
-        
-        /* تشغيل الأنميشن */
-        animation: sketchText 3.5s ease-in-out infinite alternate;
+      /* تدرج الألوان للوضع الفاتح ليكون واضحاً أكثر */
+      .light-theme .animated-name {
+        background: linear-gradient(90deg, #0F172A, #a855f7, #3b82f6, #0F172A);
+        background-size: 300% 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
 
-      /* إبقاء النقطة بنفسجية دائماً وعدم تفريغها */
-      .draw-text .dot {
-        fill: #a855f7;
-        stroke: none;
-      }
-
-      /* تفاصيل الحركة (الرسم ثم التعبئة باللون) */
-      @keyframes sketchText {
-        0% {
-          stroke-dashoffset: 400;
-          fill: transparent;
-        }
-        40% {
-          stroke-dashoffset: 0;
-          fill: transparent;
-        }
-        80%, 100% {
-          stroke-dashoffset: 0;
-          fill: var(--text-color); /* التعبئة باللون المناسب للثيم */
-        }
+      @keyframes textGradientFill {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
       }
       /* ========================================== */
 
@@ -126,13 +105,11 @@
         color: var(--sub-text) !important;
         font-size: 0.95rem;
         margin-bottom: 16px;
-        text-align: center;
       }
       footer {
         color: #64748B !important;
         font-size: 0.8rem;
         margin-top: 50px;
-        text-align: center;
       }
 
       /* زر تبديل الوضع */
@@ -231,11 +208,7 @@
         <img class="avatar avatar--rounded" src="images/avatar.png" alt="SKRT7">
 
         <h1>
-          <svg class="animated-svg-text" viewBox="0 0 300 60">
-            <text class="draw-text" x="50%" y="50%" dominant-baseline="central" text-anchor="middle">
-              SKRT7<tspan class="dot">.</tspan>
-            </text>
-          </svg>
+          <div class="animated-name">SKRT7.</div>
         </h1>
 
         <p>Developer & Discord Server Manager. Welcome to my space.</p>
@@ -311,4 +284,82 @@
       </div>
     </div>
   </div>
+
+  <script>
+    document.querySelectorAll('.ship-btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetUrl = this.getAttribute('data-url');
+        
+        if (this.classList.contains('animating')) return;
+        
+        this.classList.add('animating');
+        
+        const content = this.querySelector('.btn-content');
+        if (content) {
+          content.style.transform = 'translateX(150%)';
+          content.style.opacity = '0';
+        }
+        
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 1700);
+      });
+    });
+
+    function resetButtonsState() {
+      document.querySelectorAll('.ship-btn').forEach(button => {
+        button.classList.remove('animating');
+        
+        const content = button.querySelector('.btn-content');
+        if (content) {
+          content.style.transform = 'translateX(0)';
+          content.style.opacity = '1';
+        }
+      });
+    }
+
+    window.addEventListener('pageshow', function(event) {
+      resetButtonsState();
+    });
+
+    window.addEventListener('DOMContentLoaded', resetButtonsState);
+
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const popoutIcon = document.getElementById('popoutIcon');
+    const currentTheme = localStorage.getItem('theme');
+
+    if (currentTheme === 'light') {
+      document.body.classList.add('light-theme');
+      themeIcon.textContent = '☀️';
+    } else {
+      themeIcon.textContent = '🌙';
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      themeToggleBtn.classList.add('popout-active');
+      const outgoingIcon = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
+      popoutIcon.textContent = outgoingIcon;
+
+      document.body.classList.toggle('light-theme');
+      
+      let theme = 'dark';
+      if (document.body.classList.contains('light-theme')) {
+        theme = 'light';
+        themeIcon.textContent = '☀️';
+      } else {
+        themeIcon.textContent = '🌙';
+      }
+      
+      localStorage.setItem('theme', theme);
+      
+      setTimeout(() => {
+        themeToggleBtn.classList.remove('popout-active');
+      }, 400);
+    });
+  </script>
+
+</body>
+</html>
 
