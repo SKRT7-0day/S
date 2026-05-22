@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>SKRT7 | Bio</title>
-    <link class="brand-avatar" rel="icon" type="image/x-icon" href="images/avatar.png">
+    <link rel="icon" type="image/x-icon" href="images/avatar.png">
 
     <meta name="description" content="SKRT7 Personal Space and Links">
     <meta name="author" content="SKRT7">
@@ -69,28 +69,28 @@
       }
 
       /* ==========================================
-         🎉 كود أنميشن الاحتفال المبهج (Celebration Effect) 🎉
+         🎉 ستايل حاوية الاسم التفاعلية 🎉
          ========================================== */
       .celebration-container {
         position: relative;
         display: inline-block;
         margin: 15px auto;
-        padding: 0 20px;
+        padding: 10px 30px;
         text-align: center;
+        cursor: crosshair; /* تغيير شكل الماوس ليدل على التفاعل */
       }
       
       .celebration-name {
         font-size: 3rem;
         font-weight: 900 !important;
         letter-spacing: -0.03em;
-        /* تدرج لوني احتفالي صارخ ومتحرك */
         background: linear-gradient(45deg, #ff007f, #a855f7, #3b82f6, #ffd700, #ff007f);
         background-size: 200% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         display: inline-block;
-        /* دمج أنميشن حركة الألوان مع نبض الحفلة الاهتزازي المبهج */
         animation: celebrateColors 3s linear infinite, partyPulse 1.2s ease-in-out infinite alternate;
+        pointer-events: none; /* لمنع إعاقة تتبع الماوس */
       }
 
       @keyframes celebrateColors {
@@ -99,38 +99,8 @@
       }
 
       @keyframes partyPulse {
-        0% { 
-          transform: scale(1); 
-          filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); 
-        }
-        100% { 
-          transform: scale(1.06); 
-          filter: drop-shadow(0 0 12px #a855f7) drop-shadow(0 0 20px #ff007f); 
-        }
-      }
-
-      /* عناصر القصاصات الورقية (Confetti) المتطايرة حول الاسم */
-      .confetti {
-        position: absolute;
-        width: 7px;
-        height: 7px;
-        border-radius: 2px;
-        opacity: 0;
-        pointer-events: none;
-        z-index: 10;
-      }
-      /* توزيع عشوائي للقصاصات الملونة وأوقات انطلاقها */
-      .c1 { background: #ff007f; left: 15%; animation: floatConfetti 2s ease-in-out infinite; }
-      .c2 { background: #ffd700; left: 35%; animation: floatConfetti 2.4s ease-in-out infinite 0.4s; }
-      .c3 { background: #3b82f6; left: 55%; animation: floatConfetti 2.1s ease-in-out infinite 0.2s; }
-      .c4 { background: #a855f7; left: 75%; animation: floatConfetti 2.6s ease-in-out infinite 0.6s; }
-      .c5 { background: #00ffcc; left: 90%; animation: floatConfetti 1.8s ease-in-out infinite 0.3s; }
-
-      @keyframes floatConfetti {
-        0% { transform: translateY(25px) translateX(0) rotate(0deg); opacity: 0; }
-        30% { opacity: 1; }
-        90% { opacity: 1; }
-        100% { transform: translateY(-45px) translateX(15px) rotate(360deg); opacity: 0; }
+        0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); }
+        100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); }
       }
       /* ========================================== */
 
@@ -166,17 +136,9 @@
         -webkit-tap-highlight-color: transparent;
       }
       .theme-toggle-btn:hover { transform: translateY(-2px); }
-      .theme-toggle-btn.popout-active #popoutIcon { animation: popOut 0.4s ease forwards; }
-      #popoutIcon { position: absolute; pointer-events: none; opacity: 0; }
-      .toggle-text { margin-left: 8px; font-weight: 500; font-size: 0.9rem; }
-
-      @keyframes popOut {
-        0% { transform: translate(0, 0) scale(1); opacity: 0; }
-        100% { transform: translate(-3px, -35px) scale(1.4); opacity: 0; }
-      }
 
       /* ==========================================
-         🚚 كود الأنميشن الجديد المبتكر والسلس 🚚
+         🚚 كود الأنميشن للشاحنات 🚚
          ========================================== */
       .ship-btn {
         appearance: none;
@@ -241,20 +203,14 @@
         <img class="avatar avatar--rounded" src="images/avatar.png" alt="SKRT7">
 
         <h1>
-          <div class="celebration-container">
+          <div class="celebration-container" id="interactiveName">
             <span class="celebration-name">SKRT7.</span>
-            <span class="confetti c1"></span>
-            <span class="confetti c2"></span>
-            <span class="confetti c3"></span>
-            <span class="confetti c4"></span>
-            <span class="confetti c5"></span>
           </div>
         </h1>
 
         <p>Developer & Discord Server Manager. Welcome to my space.</p>
 
         <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle Theme">
-          <span id="popoutIcon"></span>
           <span id="themeIcon">🌙</span> 
           <span class="toggle-text">Mode</span>
         </button>
@@ -263,54 +219,42 @@
 
           <div class="button-wrapper">
             <button class="button button-discord ship-btn" data-url="https://discord.gg/Vk8WJhpQW4" role="button">
-              <div class="btn-content">
-                <img class="icon" aria-hidden="true" src="images/icons/discord.svg" alt="Discord Logo">Discord
-              </div>
+              <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/discord.svg" alt="Discord Logo">Discord</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
             <button class="button button-instagram ship-btn" data-url="https://www.instagram.com/skrt7_66?igsh=bWZzeHdhNDJtOGo2" role="button">
-              <div class="btn-content">
-                <img class="icon" aria-hidden="true" src="images/icons/instagram.svg" alt="Instagram Logo">Instagram
-              </div>
+              <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/instagram.svg" alt="Instagram Logo">Instagram</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
             <button class="button button-github ship-btn" data-url="https://github.com/SKRT7-0day" role="button">
-              <div class="btn-content">
-                <img class="icon" aria-hidden="true" src="images/icons/github.svg" alt="GitHub Logo">GitHub
-              </div>
+              <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/github.svg" alt="GitHub Logo">GitHub</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
             <button class="button button-yt ship-btn" data-url="https://www.youtube.com/@SKRT7-v5h" role="button">
-              <div class="btn-content">
-                <img class="icon" aria-hidden="true" src="images/icons/youtube.svg" alt="YouTube Logo">YouTube
-              </div>
+              <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/youtube.svg" alt="YouTube Logo">YouTube</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
             <button class="button button-spotify ship-btn" data-url="https://open.spotify.com/user/315dy6lskacyrxfg42pk7x5atm44?si=9SMX0LY6QUeOpEpVEjsmMQ" role="button">
-              <div class="btn-content">
-                <img class="icon" aria-hidden="true" src="images/icons/spotify.svg" alt="Spotify Logo">Spotify
-              </div>
+              <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/spotify.svg" alt="Spotify Logo">Spotify</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
             <button class="button button-faceb ship-btn" style="background-color: #1877F2 !important; color: white !important;" data-url="https://www.facebook.com/share/18giPaZseb/" role="button">
-              <div class="btn-content">
-                <img class="icon" aria-hidden="true" src="images/icons/facebook.svg" alt="Facebook Logo">Facebook
-              </div>
+              <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/facebook.svg" alt="Facebook Logo">Facebook</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
@@ -326,13 +270,67 @@
   </div>
 
   <script>
+    // ==========================================
+    // 🖱️ سكربت تفاعل القصاصات مع الماوس واللمس 🖱️
+    // ==========================================
+    const nameContainer = document.getElementById('interactiveName');
+    const colors = ['#ff007f', '#a855f7', '#3b82f6', '#ffd700', '#00ffcc'];
+
+    function spawnConfetti(x, y) {
+      // تقليل عدد القصاصات للحفاظ على الأداء
+      if(Math.random() > 0.6) return; 
+
+      const confetti = document.createElement('span');
+      confetti.style.position = 'absolute';
+      confetti.style.width = '7px';
+      confetti.style.height = '7px';
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.borderRadius = (Math.random() > 0.5) ? '50%' : '2px'; // دوائر ومربعات
+      confetti.style.pointerEvents = 'none';
+      confetti.style.left = x + 'px';
+      confetti.style.top = y + 'px';
+      confetti.style.zIndex = '10';
+
+      // مسار عشوائي لكل قصاصة
+      const moveX = (Math.random() - 0.5) * 120; 
+      const moveY = (Math.random() - 1) * 100; 
+
+      // تشغيل الأنميشن
+      confetti.animate([
+        { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
+        { transform: `translate(${moveX}px, ${moveY}px) scale(0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+      ], {
+        duration: 800 + Math.random() * 500, // مدة عشوائية
+        easing: 'ease-out'
+      });
+
+      nameContainer.appendChild(confetti);
+
+      // مسح القصاصة بعد انتهاء حركتها لتنظيف الذاكرة
+      setTimeout(() => confetti.remove(), 1300);
+    }
+
+    // تتبع حركة الماوس للكمبيوتر
+    nameContainer.addEventListener('mousemove', (e) => {
+      const rect = nameContainer.getBoundingClientRect();
+      spawnConfetti(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    // تتبع حركة الإصبع للموبايل
+    nameContainer.addEventListener('touchmove', (e) => {
+      const rect = nameContainer.getBoundingClientRect();
+      const touch = e.touches[0];
+      spawnConfetti(touch.clientX - rect.left, touch.clientY - rect.top);
+    });
+
+    // ==========================================
+    // 🚚 سكربت أزرار الشاحنات 🚚
+    // ==========================================
     document.querySelectorAll('.ship-btn').forEach(button => {
       button.addEventListener('click', function(e) {
         e.preventDefault();
         const targetUrl = this.getAttribute('data-url');
-        
         if (this.classList.contains('animating')) return;
-        
         this.classList.add('animating');
         
         const content = this.querySelector('.btn-content');
@@ -340,17 +338,13 @@
           content.style.transform = 'translateX(150%)';
           content.style.opacity = '0';
         }
-        
-        setTimeout(() => {
-          window.location.href = targetUrl;
-        }, 1700);
+        setTimeout(() => window.location.href = targetUrl, 1700);
       });
     });
 
     function resetButtonsState() {
       document.querySelectorAll('.ship-btn').forEach(button => {
         button.classList.remove('animating');
-        
         const content = button.querySelector('.btn-content');
         if (content) {
           content.style.transform = 'translateX(0)';
@@ -359,31 +353,23 @@
       });
     }
 
-    window.addEventListener('pageshow', function(event) {
-      resetButtonsState();
-    });
-
+    window.addEventListener('pageshow', resetButtonsState);
     window.addEventListener('DOMContentLoaded', resetButtonsState);
 
+    // ==========================================
+    // 🌙 سكربت تبديل الوضع الليلي 🌙
+    // ==========================================
     const themeToggleBtn = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
-    const popoutIcon = document.getElementById('popoutIcon');
     const currentTheme = localStorage.getItem('theme');
 
     if (currentTheme === 'light') {
       document.body.classList.add('light-theme');
       themeIcon.textContent = '☀️';
-    } else {
-      themeIcon.textContent = '🌙';
     }
 
     themeToggleBtn.addEventListener('click', () => {
-      themeToggleBtn.classList.add('popout-active');
-      const outgoingIcon = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
-      popoutIcon.textContent = outgoingIcon;
-
       document.body.classList.toggle('light-theme');
-      
       let theme = 'dark';
       if (document.body.classList.contains('light-theme')) {
         theme = 'light';
@@ -391,12 +377,7 @@
       } else {
         themeIcon.textContent = '🌙';
       }
-      
       localStorage.setItem('theme', theme);
-      
-      setTimeout(() => {
-        themeToggleBtn.classList.remove('popout-active');
-      }, 400);
     });
   </script>
 
