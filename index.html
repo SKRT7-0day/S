@@ -53,7 +53,7 @@
         margin-bottom: 16px !important;
       }
 
-      .button {
+      .button-link {
         display: block;
         width: 100%;
         border-radius: 16px !important;
@@ -63,21 +63,19 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         transition: transform 0.2s ease, box-shadow 0.2s ease !important;
       }
-      .button:hover {
+      .button-link:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(0,0,0,0.2);
       }
 
-      /* ==========================================
-         🎉 ستايل حاوية الاسم التفاعلية 🎉
-         ========================================== */
+      /* حاوية الاسم التفاعلية */
       .celebration-container {
         position: relative;
         display: inline-block;
         margin: 15px auto;
         padding: 10px 30px;
         text-align: center;
-        cursor: crosshair; /* تغيير شكل الماوس ليدل على التفاعل */
+        cursor: crosshair;
       }
       
       .celebration-name {
@@ -90,7 +88,7 @@
         -webkit-text-fill-color: transparent;
         display: inline-block;
         animation: celebrateColors 3s linear infinite, partyPulse 1.2s ease-in-out infinite alternate;
-        pointer-events: none; /* لمنع إعاقة تتبع الماوس */
+        pointer-events: none;
       }
 
       @keyframes celebrateColors {
@@ -102,7 +100,6 @@
         0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); }
         100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); }
       }
-      /* ========================================== */
 
       p {
         color: var(--sub-text) !important;
@@ -115,27 +112,103 @@
         margin-top: 50px;
       }
 
-      /* زر تبديل الوضع */
-      .theme-toggle-btn {
-        position: relative;
-        background: var(--card-bg);
-        border: 1px solid var(--btn-border);
-        color: var(--text-color);
-        padding: 6px 12px;
-        border-radius: 14px;
-        cursor: pointer;
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: fit-content;
-        margin: 0 auto 30px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        user-select: none;
-        transition: background-color 0.3s, color 0.3s, transform 0.2s;
-        -webkit-tap-highlight-color: transparent;
+      /* ==========================================
+         🔘 كود زر تبديل الوضع الجديد (3D Toggle) 🔘
+         ========================================== */
+      .theme-toggle-container {
+        text-align: center;
+        margin: 10px auto 40px; /* توسيط الزر وإعطائه مساحة */
       }
-      .theme-toggle-btn:hover { transform: translateY(-2px); }
+
+      .toggle {
+        display: inline-block;
+        position: relative;
+        height: 100px;
+        width: 100px;
+      }
+
+      .toggle:before {
+        box-shadow: 0;
+        border-radius: 84.5px;
+        background: #fff;
+        position: absolute;
+        margin-left: -36px;
+        margin-top: -36px;
+        opacity: 0.2;
+        height: 72px;
+        width: 72px;
+        left: 50%;
+        top: 50%;
+        content: ""; /* تم إضافة content لكي يظهر العنصر */
+        pointer-events: none;
+      }
+
+      .toggle input:checked ~ .label {
+        color: rgba(255,0,0,0.8);
+      }
+
+      .toggle .button {
+        transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+        box-shadow: 0 15px 25px -4px rgba(0, 0, 0, 0.5), inset 0 -3px 4px -1px rgba(0, 0, 0, 0.2), 0 -10px 15px -1px rgba(255, 255, 255, 0.6), inset 0 3px 4px -1px rgba(255, 255, 255, 0.2), inset 0 0 5px 1px rgba(255, 255, 255, 0.8), inset 0 20px 30px 0 rgba(255, 255, 255, 0.2);
+        border-radius: 68.8px;
+        position: absolute;
+        background: #eaeaea;
+        margin-left: -34.4px;
+        margin-top: -34.4px;
+        display: block;
+        height: 68.8px;
+        width: 68.8px;
+        left: 50%;
+        top: 50%;
+        pointer-events: none;
+      }
+
+      .toggle .label {
+        transition: color 300ms ease-out;
+        line-height: 101px;
+        text-align: center;
+        position: absolute;
+        font-weight: 700;
+        font-size: 28px;
+        display: block;
+        opacity: 0.9;
+        height: 100%;
+        width: 100%;
+        color: rgba(0, 0, 0, 0.9);
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .toggle input {
+        opacity: 0;
+        position: absolute;
+        cursor: pointer;
+        z-index: 1;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+        margin: 0;
+      }
+
+      .toggle input:active ~ .button {
+        filter: blur(0.5px);
+        box-shadow: 0 12px 25px -4px rgba(0, 0, 0, 0.4), inset 0 -8px 30px 1px rgba(255, 255, 255, 0.9), 0 -10px 15px -1px rgba(255, 255, 255, 0.6), inset 0 8px 25px 0 rgba(0, 0, 0, 0.4), inset 0 0 10px 1px rgba(255, 255, 255, 0.6);
+      }
+
+      .toggle input:active ~ .label {
+        font-size: 26px;
+        color: rgba(0, 0, 0, 0.45);
+      }
+
+      .toggle input:checked ~ .button {
+        filter: blur(0.5px);
+        box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.4), inset 0 -8px 25px -1px rgba(255, 255, 255, 0.9), 0 -10px 15px -1px rgba(255, 255, 255, 0.6), inset 0 8px 20px 0 rgba(0, 0, 0, 0.2), inset 0 0 5px 1px rgba(255, 255, 255, 0.6);
+      }
+
+      .toggle input:checked ~ .label {
+        color: rgba(0, 0, 0, 0.8);
+      }
 
       /* ==========================================
          🚚 كود الأنميشن للشاحنات 🚚
@@ -210,50 +283,53 @@
 
         <p>Developer & Discord Server Manager. Welcome to my space.</p>
 
-        <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle Theme">
-          <span id="themeIcon">🌙</span> 
-          <span class="toggle-text">Mode</span>
-        </button>
+        <div class="theme-toggle-container">
+          <div class="toggle">
+            <input type="checkbox" id="themeCheckbox" aria-label="Toggle Theme">
+            <span class="button"></span>
+            <span class="label" id="themeIconLabel">🌙</span>
+          </div>
+        </div>
 
         <div class="button-stack" role="navigation">
 
           <div class="button-wrapper">
-            <button class="button button-discord ship-btn" data-url="https://discord.gg/Vk8WJhpQW4" role="button">
+            <button class="button-link button-discord ship-btn" data-url="https://discord.gg/Vk8WJhpQW4" role="button">
               <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/discord.svg" alt="Discord Logo">Discord</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
-            <button class="button button-instagram ship-btn" data-url="https://www.instagram.com/skrt7_66?igsh=bWZzeHdhNDJtOGo2" role="button">
+            <button class="button-link button-instagram ship-btn" data-url="https://www.instagram.com/skrt7_66?igsh=bWZzeHdhNDJtOGo2" role="button">
               <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/instagram.svg" alt="Instagram Logo">Instagram</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
-            <button class="button button-github ship-btn" data-url="https://github.com/SKRT7-0day" role="button">
+            <button class="button-link button-github ship-btn" data-url="https://github.com/SKRT7-0day" role="button">
               <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/github.svg" alt="GitHub Logo">GitHub</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
-            <button class="button button-yt ship-btn" data-url="https://www.youtube.com/@SKRT7-v5h" role="button">
+            <button class="button-link button-yt ship-btn" data-url="https://www.youtube.com/@SKRT7-v5h" role="button">
               <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/youtube.svg" alt="YouTube Logo">YouTube</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
-            <button class="button button-spotify ship-btn" data-url="https://open.spotify.com/user/315dy6lskacyrxfg42pk7x5atm44?si=9SMX0LY6QUeOpEpVEjsmMQ" role="button">
+            <button class="button-link button-spotify ship-btn" data-url="https://open.spotify.com/user/315dy6lskacyrxfg42pk7x5atm44?si=9SMX0LY6QUeOpEpVEjsmMQ" role="button">
               <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/spotify.svg" alt="Spotify Logo">Spotify</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
           </div>
 
           <div class="button-wrapper">
-            <button class="button button-faceb ship-btn" style="background-color: #1877F2 !important; color: white !important;" data-url="https://www.facebook.com/share/18giPaZseb/" role="button">
+            <button class="button-link button-faceb ship-btn" style="background-color: #1877F2 !important; color: white !important;" data-url="https://www.facebook.com/share/18giPaZseb/" role="button">
               <div class="btn-content"><img class="icon" aria-hidden="true" src="images/icons/facebook.svg" alt="Facebook Logo">Facebook</div>
               <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
             </button>
@@ -271,13 +347,12 @@
 
   <script>
     // ==========================================
-    // 🖱️ سكربت تفاعل القصاصات مع الماوس واللمس 🖱️
+    // 🖱️ سكربت تفاعل القصاصات مع الماوس واللمس
     // ==========================================
     const nameContainer = document.getElementById('interactiveName');
     const colors = ['#ff007f', '#a855f7', '#3b82f6', '#ffd700', '#00ffcc'];
 
     function spawnConfetti(x, y) {
-      // تقليل عدد القصاصات للحفاظ على الأداء
       if(Math.random() > 0.6) return; 
 
       const confetti = document.createElement('span');
@@ -285,38 +360,32 @@
       confetti.style.width = '7px';
       confetti.style.height = '7px';
       confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.borderRadius = (Math.random() > 0.5) ? '50%' : '2px'; // دوائر ومربعات
+      confetti.style.borderRadius = (Math.random() > 0.5) ? '50%' : '2px';
       confetti.style.pointerEvents = 'none';
       confetti.style.left = x + 'px';
       confetti.style.top = y + 'px';
       confetti.style.zIndex = '10';
 
-      // مسار عشوائي لكل قصاصة
       const moveX = (Math.random() - 0.5) * 120; 
       const moveY = (Math.random() - 1) * 100; 
 
-      // تشغيل الأنميشن
       confetti.animate([
         { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
         { transform: `translate(${moveX}px, ${moveY}px) scale(0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
       ], {
-        duration: 800 + Math.random() * 500, // مدة عشوائية
+        duration: 800 + Math.random() * 500,
         easing: 'ease-out'
       });
 
       nameContainer.appendChild(confetti);
-
-      // مسح القصاصة بعد انتهاء حركتها لتنظيف الذاكرة
       setTimeout(() => confetti.remove(), 1300);
     }
 
-    // تتبع حركة الماوس للكمبيوتر
     nameContainer.addEventListener('mousemove', (e) => {
       const rect = nameContainer.getBoundingClientRect();
       spawnConfetti(e.clientX - rect.left, e.clientY - rect.top);
     });
 
-    // تتبع حركة الإصبع للموبايل
     nameContainer.addEventListener('touchmove', (e) => {
       const rect = nameContainer.getBoundingClientRect();
       const touch = e.touches[0];
@@ -324,7 +393,7 @@
     });
 
     // ==========================================
-    // 🚚 سكربت أزرار الشاحنات 🚚
+    // 🚚 سكربت أزرار الشاحنات
     // ==========================================
     document.querySelectorAll('.ship-btn').forEach(button => {
       button.addEventListener('click', function(e) {
@@ -357,26 +426,34 @@
     window.addEventListener('DOMContentLoaded', resetButtonsState);
 
     // ==========================================
-    // 🌙 سكربت تبديل الوضع الليلي 🌙
+    // 🔘 سكربت زر الوضع الليلي الجديد (Checkbox Logic)
     // ==========================================
-    const themeToggleBtn = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
+    const themeCheckbox = document.getElementById('themeCheckbox');
+    const themeIconLabel = document.getElementById('themeIconLabel');
     const currentTheme = localStorage.getItem('theme');
 
+    // التحقق من الوضع المحفوظ عند تحميل الصفحة
     if (currentTheme === 'light') {
       document.body.classList.add('light-theme');
-      themeIcon.textContent = '☀️';
+      themeCheckbox.checked = true; // تفعيل الزر ليتوافق مع وضع النهار
+      themeIconLabel.textContent = '☀️';
+    } else {
+      themeIconLabel.textContent = '🌙';
     }
 
-    themeToggleBtn.addEventListener('click', () => {
+    // التفاعل عند الضغط على الزر
+    themeCheckbox.addEventListener('change', () => {
       document.body.classList.toggle('light-theme');
+      
       let theme = 'dark';
       if (document.body.classList.contains('light-theme')) {
         theme = 'light';
-        themeIcon.textContent = '☀️';
+        themeIconLabel.textContent = '☀️';
       } else {
-        themeIcon.textContent = '🌙';
+        themeIconLabel.textContent = '🌙';
       }
+      
+      // حفظ الخيار للمرات القادمة
       localStorage.setItem('theme', theme);
     });
   </script>
