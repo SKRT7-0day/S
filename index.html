@@ -216,7 +216,7 @@
     @keyframes auroraWave { 0% { transform: translateY(-100%) translateX(-50%); } 100% { transform: translateY(-100%) translateX(50%); } }
 
     /* ==========================================
-       🚚 أزرار الشاحنات (روابط التواصل) - معدلة ومصلحة
+       🚚 أزرار الشاحنات (روابط التواصل) - تم إصلاح موضع الصندوق والأنيميشن بالكامل
        ========================================== */
     .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
     
@@ -233,14 +233,23 @@
       transition: opacity 0.3s, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
     }
     
-    /* جعل الحاوية تبدأ مخفية تماماً على يسار الزر بشكل دقيق وثابت */
+    /* إلغاء الفليكس وتثبيت مساحة محددة للشاحنة والصندوق بالـ absolute لضبط الدقة */
     .truck-container { 
       position: absolute; top: 0; left: -80px; width: 80px; height: 100%; 
-      display: flex; align-items: center; justify-content: center; pointer-events: none; 
+      pointer-events: none; 
     }
     
-    .truck { font-size: 1.6rem; z-index: 2; position: relative; }
-    .box { font-size: 1.1rem; position: absolute; left: 24px; top: -30px; opacity: 0; z-index: 1; }
+    /* تعديل وضع الشاحنة لتكون في النصف الأيمن من حاويتها المتحركة */
+    .truck { 
+      font-size: 1.6rem; z-index: 2; position: absolute; 
+      left: 28px; top: 50%; transform: translateY(-50%); 
+    }
+    
+    /* تعديل وضع الصندوق الافتراضي ليكون خلف الشاحنة تماماً (يسارها) */
+    .box { 
+      font-size: 1.1rem; position: absolute; 
+      left: 10px; top: -30px; opacity: 0; z-index: 1; 
+    }
 
     .ship-btn.animating .btn-content { transform: translateX(100%); opacity: 0; }
     .ship-btn.animating .truck-container { animation: drive 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
@@ -254,11 +263,12 @@
       100% { left: 100%; } 
     }
     
+    /* تعديل أنيميشن السقوط ليستقر الصندوق فوق الشاحنة ويتحرك معها بدون الاندفاع للأمام وتخريب الشكل */
     @keyframes drop { 
       0% { opacity: 0; transform: translateY(0); } 
-      30% { opacity: 1; transform: translateY(42px); } 
-      65% { opacity: 1; transform: translateY(42px); } 
-      100% { opacity: 0; transform: translate(100px, 42px); } 
+      30% { opacity: 1; transform: translateY(44px); } 
+      65% { opacity: 1; transform: translateY(44px); } 
+      100% { opacity: 0; transform: translateY(44px); } 
     }
 
     .discord { background: #5865F2; } 
@@ -531,4 +541,3 @@
   </script>
 </body>
 </html>
-
