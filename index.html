@@ -15,6 +15,7 @@
       --card-bg: #1F222F;
       --sub-text: #94A3B8;
       --btn-border: rgba(255, 255, 255, 0.03);
+      --blob-color: #E4E6EB; /* لون أنيميشن التحميل في الوضع المظلم */
     }
 
     .light-theme {
@@ -23,6 +24,7 @@
       --card-bg: #E2E8F0;
       --sub-text: #64748B;
       --btn-border: rgba(0, 0, 0, 0.05);
+      --blob-color: #1d1d1d; /* لون أنيميشن التحميل في الوضع الفاتح */
     }
 
     body {
@@ -86,7 +88,7 @@
     .theme-switch-wrapper { margin: 25px auto 40px; display: flex; justify-content: center; }
 
     .theme-switch {
-      --toggle-size: 20px; /* تم تصغير الحجم قليلاً ليتناسب مع الهاتف */
+      --toggle-size: 20px;
       --container-width: 5.625em;
       --container-height: 2.5em;
       --container-radius: 0.38em;
@@ -168,7 +170,7 @@
     .theme-switch__clouds {
       width: 1.25em; height: 1.25em; background-color: var(--clouds-color); border-radius: var(--container-radius);
       position: absolute; bottom: -0.625em; left: 0.312em;
-      box-shadow: 0.937em 0.312em var(--clouds-color), -0.312em -0.312em var(--back-clouds-color), 1.437em 0.375em var(--clouds-color), 0.5em -0.125em var(--back-clouds-color), 2.187em 0 var(--clouds-color), 1.25em -0.062em var(--back-clouds-color), 2.937em 0.312em var(--clouds-color), 2em -0.312em var(--back-clouds-color), 3.625em -0.062em var(--clouds-color), 2.625em 0em var(--back-clouds-color), 4.5em -0.312em var(--clouds-color), 3.375em -0.437em var(--back-clouds-color), 4.625em -1.75em 0 0.437em var(--clouds-color), 4em -0.625em var(--back-clouds-color), 4.125em -2.125em 0 0.437em var(--back-clouds-color);
+      box-shadow: 0.937em 0.312em var(--clouds-color), -0.312em -0.312em var(--back-clouds-color), 1.437em 0.375em var(--clouds-color), 0.5em -0.125em var(--back-clouds-color), 2.187em 0 var(--clouds-color), 1.25em -0.062em var(--back-clouds-color), 2.937em 0.312em var(--clouds-color), 2em -0.312em var(--back-clouds-color), 3.625em -0.062em var(--clouds-color), 2.625em 0em var(--back-clouds-color), 4.5em -0.312em var(--clouds-color), 3.375em -0.437em var(--back-clouds-color), 4.625em -1.75em 0 0.437em var(--clouds-color), 4em -0.625em var(--back-clouds-color), 4.125em -2.125em 0 0.437em var(--clouds-color);
       transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25); filter: url(#sketchy-sm);
     }
 
@@ -217,26 +219,138 @@
        🚚 أزرار الشاحنات (روابط التواصل)
        ========================================== */
     .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+    
     .ship-btn {
       position: relative; overflow: hidden; cursor: pointer; height: 55px; border-radius: 15px; border: none;
-      font-weight: bold; font-size: 1rem; color: #fff; background-color: var(--card-bg); transition: transform 0.2s;
+      font-weight: bold; font-size: 1rem; color: #fff; transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .ship-btn:hover { transform: translateY(-2px); }
-    .btn-content { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; transition: opacity 0.2s, transform 0.3s; }
-    .truck-container { position: absolute; top: 0; left: -100px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-start; pointer-events: none; }
-    .truck { font-size: 1.5rem; z-index: 2; }
-    .box { font-size: 1rem; margin-left: -10px; opacity: 0; transform: translateY(-25px); z-index: 1; }
+    
+    .ship-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+    
+    .btn-content { 
+      display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; 
+      transition: opacity 0.3s, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    }
+    
+    .truck-container { 
+      position: absolute; top: 0; left: -100%; width: 100%; height: 100%; 
+      display: flex; align-items: center; justify-content: center; pointer-events: none; 
+    }
+    
+    .truck { font-size: 1.6rem; z-index: 2; position: relative; }
+    .box { font-size: 1.1rem; position: absolute; left: 35%; top: -30px; opacity: 0; z-index: 1; }
 
-    .ship-btn.animating .btn-content { transform: translateX(150%); opacity: 0; }
-    .ship-btn.animating .truck-container { animation: drive 1.6s ease forwards; }
-    .ship-btn.animating .box { animation: drop 1.6s ease forwards; }
+    .ship-btn.animating .btn-content { transform: translateX(100%); opacity: 0; }
+    .ship-btn.animating .truck-container { animation: drive 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .ship-btn.animating .box { animation: drop 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
-    @keyframes drive { 0% { left: -60px; } 30% { left: 40%; } 60% { left: 45%; } 100% { left: 110%; } }
-    @keyframes drop { 0%, 25% { opacity: 0; transform: translateY(-25px); } 40%, 60% { opacity: 1; transform: translateY(4px); } 100% { opacity: 0; transform: translateX(15px); } }
+    @keyframes drive { 
+      0% { transform: translateX(0); } 
+      35% { transform: translateX(130%); } 
+      65% { transform: translateX(140%); } 
+      100% { transform: translateX(250%); } 
+    }
+    
+    @keyframes drop { 
+      0% { opacity: 0; transform: translateY(0); } 
+      30% { opacity: 1; transform: translateY(48px); } 
+      65% { opacity: 1; transform: translateY(48px); } 
+      100% { opacity: 0; transform: translate(120px, 48px); } 
+    }
 
-    /* ألوان الأزرار */
-    .discord { background: #5865F2; } .instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-    .github { background: #171515; } .youtube { background: #FF0000; } .spotify { background: #1DB954; color: #000; } .facebook { background: #1877F2; }
+    .discord { background: #5865F2; } 
+    .instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+    .github { background: #171515; } 
+    .youtube { background: #FF0000; } 
+    .spotify { background: #1DB954; color: #fff; } 
+    .facebook { background: #1877F2; }
+
+    /* ==========================================
+       ⏳ شاشة التحميل الفخمة (Uiverse.io)
+       ========================================== */
+    .loading-screen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: var(--bg-color);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    
+    .loading-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .blobs {
+      width: 300px;
+      height: 300px;
+      position: absolute;
+      overflow: hidden;
+      border-radius: 70px;
+      transform-style: preserve-3d;
+    }
+
+    .blobs .blob-center {
+      transform-style: preserve-3d;
+      position: absolute;
+      background: var(--blob-color);
+      top: 50%; left: 50%;
+      width: 30px; height: 30px;
+      transform-origin: left top;
+      transform: scale(0.9) translate(-50%, -50%);
+      animation: blob-grow_2 linear 3.4s infinite;
+      border-radius: 50%;
+      box-shadow: 0 -10px 40px -5px var(--blob-color);
+    }
+
+    .blob {
+      position: absolute;
+      background: var(--blob-color);
+      top: 50%; left: 50%;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      animation: blobs_2 ease-out 3.4s infinite;
+      transform: scale(0.9) translate(-50%, -50%);
+      transform-origin: center top;
+      opacity: 0;
+    }
+
+    .blob:nth-child(1) { -webkit-animation-delay: 0.2s; animation-delay: 0.2s; }
+    .blob:nth-child(2) { -webkit-animation-delay: 0.4s; animation-delay: 0.4s; }
+    .blob:nth-child(3) { -webkit-animation-delay: 0.6s; animation-delay: 0.6s; }
+    .blob:nth-child(4) { -webkit-animation-delay: 0.8s; animation-delay: 0.8s; }
+    .blob:nth-child(5) { -webkit-animation-delay: 1s; animation-delay: 1s; }
+
+    @keyframes blobs_2 {
+      0% { opacity: 0; transform: scale(0) translate(calc(-330px - 50%), -50%); }
+      1% { opacity: 1; }
+      35%, 65% { opacity: 1; transform: scale(0.9) translate(-50%, -50%); }
+      99% { opacity: 1; }
+      100% { opacity: 0; transform: scale(0) translate(calc(330px - 50%), -50%); }
+    }
+
+    @keyframes blob-grow_2 {
+      0%, 39% { transform: scale(0) translate(-50%, -50%); }
+      40%, 42% { transform: scale(1, 0.9) translate(-50%, -50%); }
+      43%, 44% { transform: scale(1.2, 1.1) translate(-50%, -50%); }
+      45%, 46% { transform: scale(1.3, 1.2) translate(-50%, -50%); }
+      47%, 48% { transform: scale(1.4, 1.3) translate(-50%, -50%); }
+      52% { transform: scale(1.5, 1.4) translate(-50%, -50%); }
+      54% { transform: scale(1.7, 1.6) translate(-50%, -50%); }
+      58% { transform: scale(1.8, 1.7) translate(-50%, -50%); }
+      68%, 70% { transform: scale(1.7, 1.5) translate(-50%, -50%); }
+      78% { transform: scale(1.6, 1.4) translate(-50%, -50%); }
+      80%, 81% { transform: scale(1.5, 1.4) translate(-50%, -50%); }
+      82%, 83% { transform: scale(1.4, 1.3) translate(-50%, -50%); }
+      84%, 85% { transform: scale(1.3, 1.2) translate(-50%, -50%); }
+      86%, 87% { transform: scale(1.2, 1.1) translate(-50%, -50%); }
+      90%, 91% { transform: scale(1, 0.9) translate(-50%, -50%); }
+      92%, 100% { transform: scale(0) translate(-50%, -50%); }
+    }
   </style>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -250,8 +364,19 @@
 </head> 
 
 <body>
+
+  <div class="loading-screen" id="loadingScreen">
+    <div class="blobs">
+      <div class="blob-center"></div>
+      <div class="blob"></div>
+      <div class="blob"></div>
+      <div class="blob"></div>
+      <div class="blob"></div>
+      <div class="blob"></div>
+    </div>
+  </div>
+
   <div class="container">
-    
     <img class="avatar" src="images/avatar.png" alt="SKRT7">
     <div>
       <div class="celebration-container" id="interactiveName">
@@ -289,37 +414,36 @@
     </div>
 
     <div class="button-stack">
-  <button class="ship-btn discord" data-url="https://discord.gg/Vk8WJhpQW4">
-    <div class="btn-content"><i class="fa-brands fa-discord" style="margin-right: 8px; font-size: 1.2rem;"></i> Discord</div>
-    <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-  </button>
+      <button class="ship-btn discord" data-url="https://discord.gg/Vk8WJhpQW4">
+        <div class="btn-content"><i class="fa-brands fa-discord" style="margin-right: 8px; font-size: 1.2rem;"></i> Discord</div>
+        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+      </button>
 
-  <button class="ship-btn instagram" data-url="https://www.instagram.com/skrt7_66">
-    <div class="btn-content"><i class="fa-brands fa-instagram" style="margin-right: 8px; font-size: 1.2rem;"></i> Instagram</div>
-    <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-  </button>
+      <button class="ship-btn instagram" data-url="https://www.instagram.com/skrt7_66">
+        <div class="btn-content"><i class="fa-brands fa-instagram" style="margin-right: 8px; font-size: 1.2rem;"></i> Instagram</div>
+        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+      </button>
 
-  <button class="ship-btn github" data-url="https://github.com/SKRT7-0day">
-    <div class="btn-content"><i class="fa-brands fa-github" style="margin-right: 8px; font-size: 1.2rem;"></i> GitHub</div>
-    <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-  </button>
+      <button class="ship-btn github" data-url="https://github.com/SKRT7-0day">
+        <div class="btn-content"><i class="fa-brands fa-github" style="margin-right: 8px; font-size: 1.2rem;"></i> GitHub</div>
+        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+      </button>
 
-  <button class="ship-btn youtube" data-url="https://www.youtube.com/@SKRT7-v5h">
-    <div class="btn-content"><i class="fa-brands fa-youtube" style="margin-right: 8px; font-size: 1.2rem;"></i> YouTube</div>
-    <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-  </button>
-  
-  <button class="ship-btn spotify" data-url="#">
-    <div class="btn-content"><i class="fa-brands fa-spotify" style="margin-right: 8px; font-size: 1.2rem;"></i> Spotify</div>
-    <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-  </button>
+      <button class="ship-btn youtube" data-url="https://www.youtube.com/@SKRT7-v5h">
+        <div class="btn-content"><i class="fa-brands fa-youtube" style="margin-right: 8px; font-size: 1.2rem;"></i> YouTube</div>
+        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+      </button>
+      
+      <button class="ship-btn spotify" data-url="#">
+        <div class="btn-content"><i class="fa-brands fa-spotify" style="margin-right: 8px; font-size: 1.2rem;"></i> Spotify</div>
+        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+      </button>
 
-  <button class="ship-btn facebook" data-url="https://www.facebook.com/share/18giPaZseb/">
-    <div class="btn-content"><i class="fa-brands fa-facebook" style="margin-right: 8px; font-size: 1.2rem;"></i> Facebook</div>
-    <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-  </button>
-</div>
-
+      <button class="ship-btn facebook" data-url="https://www.facebook.com/share/18giPaZseb/">
+        <div class="btn-content"><i class="fa-brands fa-facebook" style="margin-right: 8px; font-size: 1.2rem;"></i> Facebook</div>
+        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+      </button>
+    </div>
 
     <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 20px;">
       © 2026 SKRT7. ALL RIGHTS RESERVED.
@@ -360,12 +484,11 @@
     // 2. زر تبديل الوضع (مربوط بالكلاس الخاص بك)
     const themeCheckbox = document.getElementById('themeCheckbox');
     
-    // التحقق من الوضع المحفوظ سابقاً
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-theme');
-      themeCheckbox.checked = false; // نهاري (شمس)
+      themeCheckbox.checked = false; 
     } else {
-      themeCheckbox.checked = true; // ليلي (قمر ونجوم)
+      themeCheckbox.checked = true; 
     }
 
     themeCheckbox.addEventListener('change', () => {
@@ -373,7 +496,26 @@
       localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
     });
 
-    // 3. أنيميشن الشاحنات
+    // 3. التحكم بشاشة التحميل والرجوع بالصفحة وأنيميشن الأزرار
+    const loadingScreen = document.getElementById('loadingScreen');
+
+    // إخفاء شاشة التحميل عند فتح الموقع لأول مرة
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        loadingScreen.classList.add('fade-out');
+      }, 800); // وقت ظهور الأنيميشن عند أول دخول
+    });
+
+    // إجبار المتصفح على إعادة التحميل وإظهار الأنيميشن عند العودة بزر الرجوع (Back)
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+        loadingScreen.classList.remove('fade-out');
+        window.location.reload(); 
+      }
+      document.querySelectorAll('.ship-btn').forEach(b => b.classList.remove('animating'));
+    });
+
+    // تشغيل أنيميشن الشاحنات عند الضغط
     document.querySelectorAll('.ship-btn').forEach(button => {
       button.addEventListener('click', function(e) {
         e.preventDefault();
@@ -383,10 +525,6 @@
         this.classList.add('animating');
         setTimeout(() => window.location.href = url, 1600);
       });
-    });
-
-    window.addEventListener('pageshow', () => {
-      document.querySelectorAll('.ship-btn').forEach(b => b.classList.remove('animating'));
     });
   </script>
 </body>
