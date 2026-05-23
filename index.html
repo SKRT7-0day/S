@@ -1,390 +1,169 @@
 <!DOCTYPE html>
-<html class="theme-dark" lang="en">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SKRT7 | Bio</title>
-  
-  <style>
-    /* ==========================================
-       🎨 التنسيقات الأساسية للموقع
-       ========================================== */
-    :root {
-      --bg-color: #07080B;
-      --text-color: #E4E6EB;
-      --card-bg: #1F222F;
-      --sub-text: #94A3B8;
-      --btn-border: rgba(255, 255, 255, 0.03);
-    }
-
-    .light-theme {
-      --bg-color: #F8FAFC;
-      --text-color: #0F172A;
-      --card-bg: #E2E8F0;
-      --sub-text: #64748B;
-      --btn-border: rgba(0, 0, 0, 0.05);
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
-      font-family: sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
-
-    .container { margin-top: 10vh; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKRT7 Space</title>
     
-    .avatar {
-      border: 3px solid var(--card-bg);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      transition: transform 0.3s ease;
-      width: 128px;
-      height: 128px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 15px;
-    }
-    .avatar:hover { transform: scale(1.05); }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    /* ==========================================
-       ✨ اسم وتأثير القصاصات
-       ========================================== */
-    .celebration-container {
-      position: relative;
-      display: inline-block;
-      margin: 10px auto;
-      padding: 10px 30px;
-      cursor: crosshair;
-    }
-    
-    .celebration-name {
-      font-size: 3rem;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      background: linear-gradient(45deg, #ff007f, #a855f7, #3b82f6, #ffd700, #ff007f);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: inline-block;
-      animation: celebrateColors 3s linear infinite, partyPulse 1.2s ease-in-out infinite alternate;
-      pointer-events: none;
-      margin: 0;
-    }
+    <style>
+        /* === إعدادات الصفحة الأساسية === */
+        body {
+            background-color: #0f0f13; /* لون الخلفية الداكن */
+            color: white;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
 
-    @keyframes celebrateColors { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-    @keyframes partyPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); } 100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); } }
+        /* ضع أكواد تصميم صورتك الشخصية (البروفايل) وزر الثيم (الليل/النهار) الخاصة بك هنا */
 
-    p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
 
-    /* ==========================================
-       🌙 زر الوضع الليلي الجديد (الغيوم والنجوم)
-       ========================================== */
-    .theme-switch-wrapper { margin: 25px auto 40px; display: flex; justify-content: center; }
+        /* === أكواد الأزرار وحركة الشاحنة === */
+        .button-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* المسافة بين الأزرار */
+            width: 100%;
+            max-width: 320px;
+            margin-top: 30px;
+        }
 
-    .theme-switch {
-      --toggle-size: 20px; /* تم تصغير الحجم قليلاً ليتناسب مع الهاتف */
-      --container-width: 5.625em;
-      --container-height: 2.5em;
-      --container-radius: 0.38em;
-      --container-light-bg: #5caad4;
-      --container-night-bg: #1b1e36;
-      --circle-container-diameter: 3.375em;
-      --sun-moon-diameter: 2.125em;
-      --sun-bg: #f5c518;
-      --moon-bg: #d8d4c0;
-      --spot-color: #9b9787;
-      --circle-container-offset: calc((var(--circle-container-diameter) - var(--container-height)) / 2 * -1);
-      --stars-color: #fff8e1;
-      --clouds-color: #f4f4f4;
-      --back-clouds-color: #bacfe0;
-      --transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
-      --circle-transition: 0.3s cubic-bezier(0, -0.02, 0.35, 1.17);
-      display: inline-block;
-    }
+        .ship-btn {
+            position: relative;
+            width: 100%;
+            height: 55px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            overflow: hidden;
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            transition: transform 0.2s ease, opacity 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
 
-    .theme-switch, .theme-switch *, .theme-switch *::before, .theme-switch *::after {
-      box-sizing: border-box; margin: 0; padding: 0; font-size: var(--toggle-size);
-    }
+        .ship-btn:active {
+            transform: scale(0.96); /* تأثير الضغط على الزر */
+        }
 
-    .theme-switch__container {
-      width: var(--container-width); height: var(--container-height); background-color: var(--container-light-bg);
-      border-radius: var(--container-radius); overflow: hidden; cursor: pointer; position: relative;
-      background-image: linear-gradient(to bottom, var(--container-light-bg) 0%, #4a92bd 100%);
-      transition: all var(--transition); box-shadow: 0 0 0 2.5px #1a1a1a, 3px 4px 0 2.5px rgba(26, 26, 26, 0.22);
-      transform: rotate(-0.7deg); filter: url(#sketchy);
-    }
+        /* ألوان الأزرار وتدرجاتها */
+        .discord { background-color: #5865F2; }
+        .instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .github { background-color: #181717; }
+        .youtube { background-color: #FF0000; }
+        .spotify { background-color: #1DB954; }
+        .facebook { background-color: #1877F2; }
 
-    .theme-switch__container::before {
-      content: ""; position: absolute; z-index: 1; inset: 0;
-      background-image: repeating-linear-gradient(-50deg, transparent, transparent 7px, rgba(255, 255, 255, 0.04) 7px, rgba(255, 255, 255, 0.04) 8px);
-      border-radius: inherit; pointer-events: none;
-    }
+        /* محتوى الزر (النص + الأيقونة) */
+        .btn-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.3s ease;
+        }
 
-    .theme-switch__checkbox { display: none; }
+        /* الشاحنة المخفية داخل الزر */
+        .truck-container {
+            position: absolute;
+            top: 0;
+            left: -100%; /* تبدأ من خارج الزر يساراً */
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            opacity: 0;
+        }
 
-    .theme-switch__circle-container {
-      width: var(--circle-container-diameter); height: var(--circle-container-diameter); background-color: rgba(255, 255, 255, 0.1);
-      position: absolute; left: var(--circle-container-offset); top: var(--circle-container-offset); border-radius: var(--container-radius);
-      box-shadow: inset 0 0 0 3.375em rgba(255, 255, 255, 0.1), inset 0 0 0 3.375em rgba(255, 255, 255, 0.1), 0 0 0 0.625em rgba(255, 255, 255, 0.1), 0 0 0 1.25em rgba(255, 255, 255, 0.1);
-      display: flex; transition: var(--circle-transition); pointer-events: none;
-    }
+        /* ماذا يحدث عند إضافة كلاس 'animating' بواسطة الجافاسكريبت */
+        .ship-btn.animating .btn-content {
+            opacity: 0; /* إخفاء النص والأيقونة */
+        }
 
-    .theme-switch__circle-container::before {
-      content: ""; position: absolute; width: calc(var(--circle-container-diameter) + 1.5em); height: calc(var(--circle-container-diameter) + 1.5em);
-      left: -0.75em; top: -0.75em; border-radius: 50%;
-      background: conic-gradient(transparent 0deg, transparent 8deg, rgba(245, 197, 24, 0.52) 8deg, rgba(245, 197, 24, 0.52) 22deg, transparent 22deg, transparent 53deg, rgba(245, 197, 24, 0.52) 53deg, rgba(245, 197, 24, 0.52) 67deg, transparent 67deg, transparent 98deg, rgba(245, 197, 24, 0.52) 98deg, rgba(245, 197, 24, 0.52) 112deg, transparent 112deg, transparent 143deg, rgba(245, 197, 24, 0.52) 143deg, rgba(245, 197, 24, 0.52) 157deg, transparent 157deg, transparent 188deg, rgba(245, 197, 24, 0.52) 188deg, rgba(245, 197, 24, 0.52) 202deg, transparent 202deg, transparent 233deg, rgba(245, 197, 24, 0.52) 233deg, rgba(245, 197, 24, 0.52) 247deg, transparent 247deg, transparent 278deg, rgba(245, 197, 24, 0.52) 278deg, rgba(245, 197, 24, 0.52) 292deg, transparent 292deg, transparent 323deg, rgba(245, 197, 24, 0.52) 323deg, rgba(245, 197, 24, 0.52) 337deg, transparent 337deg, transparent 360deg);
-      animation: rotateSunRays 14s linear infinite; opacity: 1; transition: opacity var(--transition); pointer-events: none; filter: url(#sketchy-sm);
-    }
+        .ship-btn.animating .truck-container {
+            opacity: 1; /* إظهار الشاحنة */
+            animation: driveTruck 1.5s forwards ease-in-out; /* تشغيل الحركة */
+        }
 
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container::before { opacity: 0; }
-    @keyframes rotateSunRays { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-    .theme-switch__sun-moon-container {
-      pointer-events: auto; position: relative; z-index: 2; width: var(--sun-moon-diameter); height: var(--sun-moon-diameter);
-      margin: auto; border-radius: var(--container-radius); background-color: var(--sun-bg);
-      box-shadow: 0.062em 0.062em 0.062em 0em rgba(254, 255, 239, 0.61) inset, 0em -0.062em 0.062em 0em #a1872a inset, 0.1em 0.13em 0 0.04em #1a1a1a;
-      filter: url(#sketchy-sm) drop-shadow(0.062em 0.125em 0.125em rgba(0, 0, 0, 0.25)) drop-shadow(0em 0.062em 0.125em rgba(0, 0, 0, 0.25));
-      overflow: hidden; transition: var(--transition); transform: scale(1);
-    }
-
-    .theme-switch__sun-moon-container:hover { transform: scale(1.1) rotate(5deg); }
-
-    .theme-switch__moon {
-      transform: translateX(100%); width: 100%; height: 100%; background-color: var(--moon-bg); border-radius: inherit;
-      box-shadow: 0.062em 0.062em 0.062em 0em rgba(254, 255, 239, 0.61) inset, 0em -0.062em 0.062em 0em #969696 inset;
-      transition: all var(--transition), transform 0.3s ease; position: relative;
-    }
-
-    .theme-switch__moon:hover { transform: rotate(15deg); }
-    .theme-switch__spot { position: absolute; top: 0.75em; left: 0.312em; width: 0.75em; height: 0.75em; border-radius: var(--container-radius); background-color: var(--spot-color); box-shadow: 0em 0.0312em 0.062em rgba(0, 0, 0, 0.25) inset; transition: background-color 0.3s ease; filter: url(#sketchy-sm); }
-    .theme-switch__spot:nth-of-type(2) { width: 0.375em; height: 0.375em; top: 0.937em; left: 1.375em; }
-    .theme-switch__spot:nth-last-of-type(3) { width: 0.25em; height: 0.25em; top: 0.312em; left: 0.812em; }
-    .theme-switch__moon:hover .theme-switch__spot { background-color: #7a7f8c; }
-
-    .theme-switch__clouds {
-      width: 1.25em; height: 1.25em; background-color: var(--clouds-color); border-radius: var(--container-radius);
-      position: absolute; bottom: -0.625em; left: 0.312em;
-      box-shadow: 0.937em 0.312em var(--clouds-color), -0.312em -0.312em var(--back-clouds-color), 1.437em 0.375em var(--clouds-color), 0.5em -0.125em var(--back-clouds-color), 2.187em 0 var(--clouds-color), 1.25em -0.062em var(--back-clouds-color), 2.937em 0.312em var(--clouds-color), 2em -0.312em var(--back-clouds-color), 3.625em -0.062em var(--clouds-color), 2.625em 0em var(--back-clouds-color), 4.5em -0.312em var(--clouds-color), 3.375em -0.437em var(--back-clouds-color), 4.625em -1.75em 0 0.437em var(--clouds-color), 4em -0.625em var(--back-clouds-color), 4.125em -2.125em 0 0.437em var(--back-clouds-color);
-      transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25); filter: url(#sketchy-sm);
-    }
-
-    .theme-switch__stars-container { position: absolute; color: var(--stars-color); top: -100%; left: 0.312em; width: 2.75em; height: auto; transition: var(--transition); }
-    .theme-switch__checkbox:checked + .theme-switch__container { background-color: var(--container-night-bg); background-image: linear-gradient(to bottom, var(--container-night-bg) 0%, #252a4a 100%); }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container { left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter)); }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container:hover { left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter) - 0.187em); }
-    .theme-switch__circle-container:hover { left: calc(var(--circle-container-offset) + 0.187em); }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__moon { transform: translate(0); }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__clouds { bottom: -4.062em; }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__stars-container { top: 50%; transform: translateY(-50%); }
-    .theme-switch__container:hover .theme-switch__clouds { transform: translateX(15px) scale(1.02); }
-    .theme-switch__sun-moon-container::after { content: ""; position: absolute; inset: -5px; background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%); border-radius: 50%; opacity: 0; transition: opacity 0.3s ease; }
-    .theme-switch__sun-moon-container:hover::after { opacity: 1; }
-    .theme-switch__shooting-star { position: absolute; width: 2px; height: 2px; background: white; top: 20%; left: -10%; opacity: 0; transition: opacity 0.3s ease; }
-    .theme-switch__shooting-star-2 { position: absolute; width: 1px; height: 1px; background: white; top: 35%; left: -10%; opacity: 0; transition: opacity 0.3s ease; }
-    .theme-switch__meteor { position: absolute; width: 3px; height: 3px; background: #ffd700; border-radius: 50%; top: -10%; left: 50%; opacity: 0; filter: blur(1px); transition: opacity 0.3s ease; }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__shooting-star { animation: shootingStar 2s linear infinite; opacity: 1; }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__shooting-star-2 { animation: shootingStar 3s linear infinite 1s; opacity: 1; }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__meteor { animation: meteor 4s linear infinite 2s; opacity: 1; }
-
-    @keyframes shootingStar { 0% { transform: translateX(0) translateY(0) rotate(45deg); opacity: 1; } 100% { transform: translateX(150px) translateY(150px) rotate(45deg); opacity: 0; } }
-    @keyframes meteor { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(150px) scale(0.3); opacity: 0; } }
-
-    .theme-switch__stars-cluster { position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s ease; }
-    .theme-switch__stars-cluster .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; box-shadow: 0 0 4px 1px white; }
-    .theme-switch__stars-cluster .star:nth-child(1) { top: 20%; left: 20%; animation: twinkle 1s infinite ease-in-out; }
-    .theme-switch__stars-cluster .star:nth-child(2) { top: 30%; left: 55%; animation: twinkle 1s infinite ease-in-out 0.3s; }
-    .theme-switch__stars-cluster .star:nth-child(3) { top: 40%; left: 80%; animation: twinkle 1s infinite ease-in-out 0.6s; }
-    .theme-switch__stars-cluster .star:nth-child(4) { top: 60%; left: 30%; animation: twinkle 1s infinite ease-in-out 0.9s; }
-    .theme-switch__stars-cluster .star:nth-child(5) { top: 70%; left: 65%; animation: twinkle 1s infinite ease-in-out 1.2s; }
-    .theme-switch__aurora { position: absolute; top: 0; left: 0; right: 0; height: 20px; background: linear-gradient(90deg, rgba(0,255,255,0) 0%, rgba(0,255,255,0.2) 25%, rgba(128,0,255,0.2) 50%, rgba(0,255,255,0.2) 75%, rgba(0,255,255,0) 100%); opacity: 0; filter: blur(4px); transform: translateY(-100%); transition: opacity 0.3s ease; }
-    .theme-switch__comets { position: absolute; inset: 0; overflow: hidden; opacity: 0; transition: opacity 0.3s ease; }
-    .theme-switch__comets .comet { position: absolute; width: 2px; height: 2px; background: linear-gradient(90deg, white 0%, transparent 90%); border-radius: 50%; filter: blur(1px); }
-    .theme-switch__comets .comet:nth-child(1) { top: 30%; left: -10%; animation: cometMove 4s linear infinite; }
-    .theme-switch__comets .comet:nth-child(2) { top: 50%; left: -10%; animation: cometMove 6s linear infinite 2s; }
-
-    @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-    @keyframes cometMove { 0% { transform: translateX(0) translateY(0) rotate(-45deg) scale(1); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateX(200px) translateY(200px) rotate(-45deg) scale(0.2); opacity: 0; } }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__stars-cluster { opacity: 1; }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__aurora { opacity: 1; animation: auroraWave 8s linear infinite; }
-    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__comets { opacity: 1; }
-    @keyframes auroraWave { 0% { transform: translateY(-100%) translateX(-50%); } 100% { transform: translateY(-100%) translateX(50%); } }
-
-    /* ==========================================
-       🚚 أزرار الشاحنات (روابط التواصل)
-       ========================================== */
-    .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
-    .ship-btn {
-      position: relative; overflow: hidden; cursor: pointer; height: 55px; border-radius: 15px; border: none;
-      font-weight: bold; font-size: 1rem; color: #fff; background-color: var(--card-bg); transition: transform 0.2s;
-    }
-    .ship-btn:hover { transform: translateY(-2px); }
-    .btn-content { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; transition: opacity 0.2s, transform 0.3s; }
-    .truck-container { position: absolute; top: 0; left: -100px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-start; pointer-events: none; }
-    .truck { font-size: 1.5rem; z-index: 2; }
-    .box { font-size: 1rem; margin-left: -10px; opacity: 0; transform: translateY(-25px); z-index: 1; }
-
-    .ship-btn.animating .btn-content { transform: translateX(150%); opacity: 0; }
-    .ship-btn.animating .truck-container { animation: drive 1.6s ease forwards; }
-    .ship-btn.animating .box { animation: drop 1.6s ease forwards; }
-
-    @keyframes drive { 0% { left: -60px; } 30% { left: 40%; } 60% { left: 45%; } 100% { left: 110%; } }
-    @keyframes drop { 0%, 25% { opacity: 0; transform: translateY(-25px); } 40%, 60% { opacity: 1; transform: translateY(4px); } 100% { opacity: 0; transform: translateX(15px); } }
-
-    /* ألوان الأزرار */
-    .discord { background: #5865F2; } .instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-    .github { background: #171515; } .youtube { background: #FF0000; } .spotify { background: #1DB954; color: #000; } .facebook { background: #1877F2; }
-  </style>
-
-  <svg style="display: none;">
-    <defs>
-      <filter id="sketchy"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
-      <filter id="sketchy-sm"><feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="2" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
-    </defs>
-  </svg>
+        /* مسار حركة الشاحنة */
+        @keyframes driveTruck {
+            0% { left: -50%; }
+            40% { left: 0%; } /* تقف الشاحنة في المنتصف قليلاً */
+            60% { left: 0%; }
+            100% { left: 100%; } /* تخرج من اليمين */
+        }
+    </style>
 </head>
-
 <body>
-  <div class="container">
-    
-    <img class="avatar" src="images/avatar.png" alt="SKRT7">
-    <div>
-      <div class="celebration-container" id="interactiveName">
-        <h1 class="celebration-name">SKRT7.</h1>
-      </div>
-    </div>
-    <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
-
-    <div class="theme-switch-wrapper">
-      <label class="theme-switch">
-        <input type="checkbox" class="theme-switch__checkbox" id="themeCheckbox">
-        <div class="theme-switch__container">
-          <div class="theme-switch__circle-container">
-            <div class="theme-switch__sun-moon-container">
-              <div class="theme-switch__moon">
-                <div class="theme-switch__spot"></div>
-                <div class="theme-switch__spot"></div>
-                <div class="theme-switch__spot"></div>
-              </div>
-            </div>
-          </div>
-          <div class="theme-switch__clouds"></div>
-          <div class="theme-switch__shooting-star"></div>
-          <div class="theme-switch__shooting-star-2"></div>
-          <div class="theme-switch__meteor"></div>
-          <div class="theme-switch__stars-cluster">
-            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
-          </div>
-          <div class="theme-switch__aurora"></div>
-          <div class="theme-switch__comets">
-            <div class="comet"></div><div class="comet"></div>
-          </div>
-        </div>
-      </label>
-    </div>
 
     <div class="button-stack">
-      <button class="ship-btn discord" data-url="https://discord.gg/Vk8WJhpQW4">
-        <div class="btn-content">Discord</div>
-        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-      </button>
+        <button class="ship-btn discord" data-url="https://discord.gg/Vk8WJhpQW4">
+            <div class="btn-content"><i class="fa-brands fa-discord" style="margin-right: 10px; font-size: 1.3rem;"></i> Discord</div>
+            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+        </button>
 
-      <button class="ship-btn instagram" data-url="https://www.instagram.com/skrt7_66">
-        <div class="btn-content">Instagram</div>
-        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-      </button>
+        <button class="ship-btn instagram" data-url="https://www.instagram.com/skrt7_66">
+            <div class="btn-content"><i class="fa-brands fa-instagram" style="margin-right: 10px; font-size: 1.3rem;"></i> Instagram</div>
+            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+        </button>
 
-      <button class="ship-btn github" data-url="https://github.com/SKRT7-0day">
-        <div class="btn-content">GitHub</div>
-        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-      </button>
+        <button class="ship-btn github" data-url="https://github.com/SKRT7-0day">
+            <div class="btn-content"><i class="fa-brands fa-github" style="margin-right: 10px; font-size: 1.3rem;"></i> GitHub</div>
+            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+        </button>
 
-      <button class="ship-btn youtube" data-url="https://www.youtube.com/@SKRT7-v5h">
-        <div class="btn-content">YouTube</div>
-        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-      </button>
-      
-      <button class="ship-btn spotify" data-url="#">
-        <div class="btn-content">Spotify</div>
-        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-      </button>
+        <button class="ship-btn youtube" data-url="https://www.youtube.com/@SKRT7-v5h">
+            <div class="btn-content"><i class="fa-brands fa-youtube" style="margin-right: 10px; font-size: 1.3rem;"></i> YouTube</div>
+            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+        </button>
+        
+        <button class="ship-btn spotify" data-url="#">
+            <div class="btn-content"><i class="fa-brands fa-spotify" style="margin-right: 10px; font-size: 1.3rem;"></i> Spotify</div>
+            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+        </button>
 
-      <button class="ship-btn facebook" data-url="https://www.facebook.com/share/18giPaZseb/">
-        <div class="btn-content">Facebook</div>
-        <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
-      </button>
+        <button class="ship-btn facebook" data-url="https://www.facebook.com/share/18giPaZseb/">
+            <div class="btn-content"><i class="fa-brands fa-facebook" style="margin-right: 10px; font-size: 1.3rem;"></i> Facebook</div>
+            <div class="truck-container"><span class="truck">🚚</span><span class="box">📦</span></div>
+        </button>
     </div>
 
-    <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 20px;">
-      © 2026 SKRT7. ALL RIGHTS RESERVED.
-    </footer>
-
-  </div>
-
-  <script>
-    // 1. القصاصات التفاعلية للاسم
-    const nameContainer = document.getElementById('interactiveName');
-    const colors = ['#ff007f', '#a855f7', '#3b82f6', '#ffd700', '#00ffcc'];
-
-    function spawnConfetti(e) {
-      if(Math.random() > 0.6) return; 
-      const rect = nameContainer.getBoundingClientRect();
-      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-
-      const confetti = document.createElement('span');
-      confetti.style.position = 'absolute'; confetti.style.width = '7px'; confetti.style.height = '7px';
-      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.borderRadius = (Math.random() > 0.5) ? '50%' : '2px';
-      confetti.style.pointerEvents = 'none'; confetti.style.left = x + 'px'; confetti.style.top = y + 'px';
-      
-      const moveX = (Math.random() - 0.5) * 120; const moveY = (Math.random() - 1) * 100; 
-
-      confetti.animate([
-        { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
-        { transform: `translate(${moveX}px, ${moveY}px) scale(0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
-      ], { duration: 800 + Math.random() * 500, easing: 'ease-out' });
-
-      nameContainer.appendChild(confetti);
-      setTimeout(() => confetti.remove(), 1300);
-    }
-    nameContainer.addEventListener('mousemove', spawnConfetti);
-    nameContainer.addEventListener('touchmove', spawnConfetti);
-
-    // 2. زر تبديل الوضع (مربوط بالكلاس الخاص بك)
-    const themeCheckbox = document.getElementById('themeCheckbox');
-    
-    // التحقق من الوضع المحفوظ سابقاً
-    if (localStorage.getItem('theme') === 'light') {
-      document.body.classList.add('light-theme');
-      themeCheckbox.checked = false; // نهاري (شمس)
-    } else {
-      themeCheckbox.checked = true; // ليلي (قمر ونجوم)
-    }
-
-    themeCheckbox.addEventListener('change', () => {
-      document.body.classList.toggle('light-theme');
-      localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-    });
-
-    // 3. أنيميشن الشاحنات
-    document.querySelectorAll('.ship-btn').forEach(button => {
-      button.addEventListener('click', function(e) {
-        e.preventDefault();
-        const url = this.getAttribute('data-url');
-        if (this.classList.contains('animating') || url === '#') return;
-        
-        this.classList.add('animating');
-        setTimeout(() => window.location.href = url, 1600);
-      });
-    });
-
-    window.addEventListener('pageshow', () => {
-      document.querySelectorAll('.ship-btn').forEach(b => b.classList.remove('animating'));
-    });
-  </script>
+    <script>
+        document.querySelectorAll('.ship-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // منع المتصفح من الانتقال الفوري للرابط
+                e.preventDefault(); 
+                
+                const targetUrl = this.getAttribute('data-url');
+                
+                // إضافة الكلاس لتشغيل حركة الشاحنة
+                this.classList.add('animating');
+                
+                // تحديد وقت الانتظار (1.5 ثانية) لإنهاء الحركة ثم الانتقال
+                setTimeout(() => {
+                    if(targetUrl && targetUrl !== "#") {
+                        window.location.href = targetUrl;
+                    }
+                    
+                    // إعادة الزر لشكله الطبيعي في حال ضغط المستخدم على زر "الرجوع" بالمتصفح
+                    setTimeout(() => {
+                        this.classList.remove('animating');
+                    }, 500);
+                    
+                }, 1500); 
+            });
+        });
+    </script>
 </body>
 </html>
+
