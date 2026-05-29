@@ -4,76 +4,451 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SKRT7 | Bio</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
-    /* التنسيقات الأساسية */
-    :root { --bg-color: #07080B; --text-color: #E4E6EB; --card-bg: #1F222F; --sub-text: #94A3B8; }
-    .light-theme { --bg-color: #F8FAFC; --text-color: #0F172A; --card-bg: #E2E8F0; --sub-text: #64748B; }
-    body { background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.4s, color 0.3s; font-family: sans-serif; text-align: center; margin: 0; padding: 0; overflow-x: hidden; }
+    /* ==========================================
+       🎨 التنسيقات الأساسية
+       ========================================== */
+    :root {
+      --bg-color: #07080B;
+      --text-color: #E4E6EB;
+      --card-bg: #1F222F;
+      --sub-text: #94A3B8;
+    }
+
+    .light-theme {
+      --bg-color: #F8FAFC;
+      --text-color: #0F172A;
+      --card-bg: #E2E8F0;
+      --sub-text: #64748B;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
     .container { margin-top: 10vh; }
-    .avatar { border: 3px solid var(--card-bg); box-shadow: 0 8px 32px rgba(0,0,0,0.4); transition: transform 0.3s ease; width: 128px; height: 128px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; }
     
-    /* تأثيرات الاسم والأزرار */
+    .avatar {
+      border: 3px solid var(--card-bg);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease;
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+    .avatar:hover { transform: scale(1.05); }
+
+    /* ==========================================
+       ✨ اسم وتأثير القصاصات
+       ========================================== */
     .celebration-container { position: relative; display: inline-block; margin: 10px auto; padding: 10px 30px; cursor: crosshair; }
-    .celebration-name { font-size: 3rem; font-weight: 900; background: linear-gradient(45deg, #ff007f, #a855f7, #3b82f6, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    
-    /* زر GitHub */
-    .github-star-badge { position: fixed; bottom: 30px; left: 30px; z-index: 1000; display: inline-flex; align-items: center; padding: 0 16px; height: 40px; border-radius: 8px; background: #121213; color: white; text-decoration: none; border: 2px solid #333; }
-    
-    /* الأزرار الأخرى */
+    .celebration-name {
+      font-size: 3rem; font-weight: 900; letter-spacing: -0.03em;
+      background: linear-gradient(45deg, #ff007f, #a855f7, #3b82f6, #ffd700, #ff007f);
+      background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: inline-block; animation: celebrateColors 3s linear infinite, partyPulse 1.2s ease-in-out infinite alternate;
+      pointer-events: none; margin: 0;
+    }
+    @keyframes celebrateColors { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+    @keyframes partyPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); } 100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); } }
+    p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
+
+    /* ==========================================
+       🌙 زر الوضع الليلي (الغيوم والنجوم الفخم)
+       ========================================== */
+    .theme-switch-wrapper { margin: 25px auto 40px; display: flex; justify-content: center; }
+
+    .theme-switch {
+      --toggle-size: 20px;
+      --container-width: 5.625em;
+      --container-height: 2.5em;
+      --container-radius: 0.38em;
+      --container-light-bg: #5caad4;
+      --container-night-bg: #1b1e36;
+      --circle-container-diameter: 3.375em;
+      --sun-moon-diameter: 2.125em;
+      --sun-bg: #f5c518;
+      --moon-bg: #d8d4c0;
+      --spot-color: #9b9787;
+      --circle-container-offset: calc((var(--circle-container-diameter) - var(--container-height)) / 2 * -1);
+      --stars-color: #fff8e1;
+      --clouds-color: #f4f4f4;
+      --back-clouds-color: #bacfe0;
+      --transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25);
+      --circle-transition: 0.3s cubic-bezier(0, -0.02, 0.35, 1.17);
+      display: inline-block;
+    }
+
+    .theme-switch, .theme-switch *, .theme-switch *::before, .theme-switch *::after { box-sizing: border-box; margin: 0; padding: 0; font-size: var(--toggle-size); }
+    .theme-switch__container {
+      width: var(--container-width); height: var(--container-height); background-color: var(--container-light-bg);
+      border-radius: var(--container-radius); overflow: hidden; cursor: pointer; position: relative;
+      background-image: linear-gradient(to bottom, var(--container-light-bg) 0%, #4a92bd 100%);
+      transition: all var(--transition); box-shadow: 0 0 0 2.5px #1a1a1a, 3px 4px 0 2.5px rgba(26, 26, 26, 0.22);
+      transform: rotate(-0.7deg); filter: url(#sketchy);
+    }
+    .theme-switch__container::before {
+      content: ""; position: absolute; z-index: 1; inset: 0;
+      background-image: repeating-linear-gradient(-50deg, transparent, transparent 7px, rgba(255, 255, 255, 0.04) 7px, rgba(255, 255, 255, 0.04) 8px);
+      border-radius: inherit; pointer-events: none;
+    }
+    .theme-switch__checkbox { display: none; }
+    .theme-switch__circle-container {
+      width: var(--circle-container-diameter); height: var(--circle-container-diameter); background-color: rgba(255, 255, 255, 0.1);
+      position: absolute; left: var(--circle-container-offset); top: var(--circle-container-offset); border-radius: var(--container-radius);
+      box-shadow: inset 0 0 0 3.375em rgba(255, 255, 255, 0.1), inset 0 0 0 3.375em rgba(255, 255, 255, 0.1), 0 0 0 0.625em rgba(255, 255, 255, 0.1), 0 0 0 1.25em rgba(255, 255, 255, 0.1);
+      display: flex; transition: var(--circle-transition); pointer-events: none;
+    }
+    .theme-switch__circle-container::before {
+      content: ""; position: absolute; width: calc(var(--circle-container-diameter) + 1.5em); height: calc(var(--circle-container-diameter) + 1.5em);
+      left: -0.75em; top: -0.75em; border-radius: 50%;
+      background: conic-gradient(transparent 0deg, transparent 8deg, rgba(245, 197, 24, 0.52) 8deg, rgba(245, 197, 24, 0.52) 22deg, transparent 22deg, transparent 53deg, rgba(245, 197, 24, 0.52) 53deg, rgba(245, 197, 24, 0.52) 67deg, transparent 67deg, transparent 98deg, rgba(245, 197, 24, 0.52) 98deg, rgba(245, 197, 24, 0.52) 112deg, transparent 112deg, transparent 143deg, rgba(245, 197, 24, 0.52) 143deg, rgba(245, 197, 24, 0.52) 157deg, transparent 157deg, transparent 188deg, rgba(245, 197, 24, 0.52) 188deg, rgba(245, 197, 24, 0.52) 202deg, transparent 202deg, transparent 233deg, rgba(245, 197, 24, 0.52) 233deg, rgba(245, 197, 24, 0.52) 247deg, transparent 247deg, transparent 278deg, rgba(245, 197, 24, 0.52) 278deg, rgba(245, 197, 24, 0.52) 292deg, transparent 292deg, transparent 323deg, rgba(245, 197, 24, 0.52) 323deg, rgba(245, 197, 24, 0.52) 337deg, transparent 337deg, transparent 360deg);
+      animation: rotateSunRays 14s linear infinite; opacity: 1; transition: opacity var(--transition); pointer-events: none; filter: url(#sketchy-sm);
+    }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container::before { opacity: 0; }
+    @keyframes rotateSunRays { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .theme-switch__sun-moon-container {
+      pointer-events: auto; position: relative; z-index: 2; width: var(--sun-moon-diameter); height: var(--sun-moon-diameter);
+      margin: auto; border-radius: var(--container-radius); background-color: var(--sun-bg);
+      box-shadow: 0.062em 0.062em 0.062em 0em rgba(254, 255, 239, 0.61) inset, 0em -0.062em 0.062em 0em #a1872a inset, 0.1em 0.13em 0 0.04em #1a1a1a;
+      filter: url(#sketchy-sm) drop-shadow(0.062em 0.125em 0.125em rgba(0, 0, 0, 0.25)) drop-shadow(0em 0.062em 0.125em rgba(0, 0, 0, 0.25));
+      overflow: hidden; transition: var(--transition); transform: scale(1);
+    }
+    .theme-switch__sun-moon-container:hover { transform: scale(1.1) rotate(5deg); }
+    .theme-switch__moon {
+      transform: translateX(100%); width: 100%; height: 100%; background-color: var(--moon-bg); border-radius: inherit;
+      box-shadow: 0.062em 0.062em 0.062em 0em rgba(254, 255, 239, 0.61) inset, 0em -0.062em 0.062em 0em #969696 inset;
+      transition: all var(--transition), transform 0.3s ease; position: relative;
+    }
+    .theme-switch__moon:hover { transform: rotate(15deg); }
+    .theme-switch__spot { position: absolute; top: 0.75em; left: 0.312em; width: 0.75em; height: 0.75em; border-radius: var(--container-radius); background-color: var(--spot-color); box-shadow: 0em 0.0312em 0.062em rgba(0, 0, 0, 0.25) inset; transition: background-color 0.3s ease; filter: url(#sketchy-sm); }
+    .theme-switch__spot:nth-of-type(2) { width: 0.375em; height: 0.375em; top: 0.937em; left: 1.375em; }
+    .theme-switch__spot:nth-last-of-type(3) { width: 0.25em; height: 0.25em; top: 0.312em; left: 0.812em; }
+    .theme-switch__moon:hover .theme-switch__spot { background-color: #7a7f8c; }
+    .theme-switch__clouds {
+      width: 1.25em; height: 1.25em; background-color: var(--clouds-color); border-radius: var(--container-radius);
+      position: absolute; bottom: -0.625em; left: 0.312em;
+      box-shadow: 0.937em 0.312em var(--clouds-color), -0.312em -0.312em var(--back-clouds-color), 1.437em 0.375em var(--clouds-color), 0.5em -0.125em var(--back-clouds-color), 2.187em 0 var(--clouds-color), 1.25em -0.062em var(--back-clouds-color), 2.937em 0.312em var(--clouds-color), 2em -0.312em var(--back-clouds-color), 3.625em -0.062em var(--clouds-color), 2.625em 0em var(--back-clouds-color), 4.5em -0.312em var(--clouds-color), 3.375em -0.437em var(--back-clouds-color), 4.625em -1.75em 0 0.437em var(--clouds-color), 4em -0.625em var(--back-clouds-color), 4.125em -2.125em 0 0.437em var(--clouds-color);
+      transition: 0.5s cubic-bezier(0, -0.02, 0.4, 1.25); filter: url(#sketchy-sm);
+    }
+    .theme-switch__stars-container { position: absolute; color: var(--stars-color); top: -100%; left: 0.312em; width: 2.75em; height: auto; transition: var(--transition); }
+    .theme-switch__checkbox:checked + .theme-switch__container { background-color: var(--container-night-bg); background-image: linear-gradient(to bottom, var(--container-night-bg) 0%, #252a4a 100%); }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container { left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter)); }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__circle-container:hover { left: calc(100% - var(--circle-container-offset) - var(--circle-container-diameter) - 0.187em); }
+    .theme-switch__circle-container:hover { left: calc(var(--circle-container-offset) + 0.187em); }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__moon { transform: translate(0); }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__clouds { bottom: -4.062em; }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__stars-container { top: 50%; transform: translateY(-50%); }
+    .theme-switch__container:hover .theme-switch__clouds { transform: translateX(15px) scale(1.02); }
+    .theme-switch__sun-moon-container::after { content: ""; position: absolute; inset: -5px; background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%); border-radius: 50%; opacity: 0; transition: opacity 0.3s ease; }
+    .theme-switch__sun-moon-container:hover::after { opacity: 1; }
+    .theme-switch__shooting-star { position: absolute; width: 2px; height: 2px; background: white; top: 20%; left: -10%; opacity: 0; transition: opacity 0.3s ease; }
+    .theme-switch__shooting-star-2 { position: absolute; width: 1px; height: 1px; background: white; top: 35%; left: -10%; opacity: 0; transition: opacity 0.3s ease; }
+    .theme-switch__meteor { position: absolute; width: 3px; height: 3px; background: #ffd700; border-radius: 50%; top: -10%; left: 50%; opacity: 0; filter: blur(1px); transition: opacity 0.3s ease; }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__shooting-star { animation: shootingStar 2s linear infinite; opacity: 1; }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__shooting-star-2 { animation: shootingStar 3s linear infinite 1s; opacity: 1; }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__meteor { animation: meteor 4s linear infinite 2s; opacity: 1; }
+    @keyframes shootingStar { 0% { transform: translateX(0) translateY(0) rotate(45deg); opacity: 1; } 100% { transform: translateX(150px) translateY(150px) rotate(45deg); opacity: 0; } }
+    @keyframes meteor { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(150px) scale(0.3); opacity: 0; } }
+    .theme-switch__stars-cluster { position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s ease; }
+    .theme-switch__stars-cluster .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; box-shadow: 0 0 4px 1px white; }
+    .theme-switch__stars-cluster .star:nth-child(1) { top: 20%; left: 20%; animation: twinkle 1s infinite ease-in-out; }
+    .theme-switch__stars-cluster .star:nth-child(2) { top: 30%; left: 55%; animation: twinkle 1s infinite ease-in-out 0.3s; }
+    .theme-switch__stars-cluster .star:nth-child(3) { top: 40%; left: 80%; animation: twinkle 1s infinite ease-in-out 0.6s; }
+    .theme-switch__stars-cluster .star:nth-child(4) { top: 60%; left: 30%; animation: twinkle 1s infinite ease-in-out 0.9s; }
+    .theme-switch__stars-cluster .star:nth-child(5) { top: 70%; left: 65%; animation: twinkle 1s infinite ease-in-out 1.2s; }
+    .theme-switch__aurora { position: absolute; top: 0; left: 0; right: 0; height: 20px; background: linear-gradient(90deg, rgba(0,255,255,0) 0%, rgba(0,255,255,0.2) 25%, rgba(128,0,255,0.2) 50%, rgba(0,255,255,0.2) 75%, rgba(0,255,255,0) 100%); opacity: 0; filter: blur(4px); transform: translateY(-100%); transition: opacity 0.3s ease; }
+    .theme-switch__comets { position: absolute; inset: 0; overflow: hidden; opacity: 0; transition: opacity 0.3s ease; }
+    .theme-switch__comets .comet { position: absolute; width: 2px; height: 2px; background: linear-gradient(90deg, white 0%, transparent 90%); border-radius: 50%; filter: blur(1px); }
+    .theme-switch__comets .comet:nth-child(1) { top: 30%; left: -10%; animation: cometMove 4s linear infinite; }
+    .theme-switch__comets .comet:nth-child(2) { top: 50%; left: -10%; animation: cometMove 6s linear infinite 2s; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+    @keyframes cometMove { 0% { transform: translateX(0) translateY(0) rotate(-45deg) scale(1); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateX(200px) translateY(200px) rotate(-45deg) scale(0.2); opacity: 0; } }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__stars-cluster { opacity: 1; }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__aurora { opacity: 1; animation: auroraWave 8s linear infinite; }
+    .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__comets { opacity: 1; }
+    @keyframes auroraWave { 0% { transform: translateY(-100%) translateX(-50%); } 100% { transform: translateY(-100%) translateX(50%); } }
+
+    /* ==========================================
+       🔗 أزرار الروابط الأساسية
+       ========================================== */
     .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
-    .ship-btn { text-decoration: none; display: flex; align-items: center; justify-content: center; height: 55px; border-radius: 15px; color: #fff; font-weight: bold; }
     
-    /* اللودر */
-    .loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
-    .fade-out { opacity: 0; visibility: hidden; }
+    .ship-btn {
+      text-decoration: none; display: flex; align-items: center; justify-content: center;
+      height: 55px; border-radius: 15px; border: none; font-weight: bold; font-size: 1rem; color: #fff;
+      transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .ship-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+    .ship-btn i { margin-right: 10px; font-size: 1.2rem; }
+
+    .discord { background: #5865F2; } 
+    .instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .github { background: #171515; } 
+    .youtube { background: #FF0000; } 
+    .spotify { background: #1DB954; } 
+    .facebook { background: #1877F2; }
+
+    /* ==========================================
+       ⏳ كود صفحة التحميل (اللودر المعزول)
+       ========================================== */
+    .loading-screen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: var(--bg-color);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+
+    .loading-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .container-loader {
+      --size: 300px;
+      width: var(--size);
+      height: var(--size);
+      position: relative;
+      transform: scale(0.5) translateX(-50%);
+    }
+
+    .ball {
+      position: absolute; width: calc(var(--size) + var(--i)); height: calc(var(--size) + var(--i));
+      background-color: var(--color); border-radius: 50%; animation: move 5s linear infinite;
+      transform-origin: var(--size); mix-blend-mode: hard-light; animation-duration: var(--d); filter: blur(58px);
+    }
+
+    .ball:nth-child(even) { animation-direction: reverse; }
+
+    @keyframes move { 0% { transform: rotate(0deg); } 100% { transform: rotate(359deg); } }
+
+    /* ==========================================
+       ⭐ زر تقييم مشروع جيت هاب المعزول (يسار الشاشة)
+       ========================================== */
+    .github-star-badge {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      z-index: 1000;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: transform 0.2s, background-color 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      height: 40px;
+      padding: 0 16px;
+      
+      /* ألوان الإطار المتدرج مثل Uiverse */
+      background-image: linear-gradient(#121213, #121213), linear-gradient(90deg, hsl(0, 100%, 63%), hsl(90, 100%, 63%), hsl(210, 100%, 63%), hsl(195, 100%, 63%), hsl(270, 100%, 63%), hsl(0, 100%, 63%));
+      background-clip: padding-box, border-box;
+      background-origin: padding-box, border-box;
+      border: 2px solid transparent;
+      background-size: 100% 100%, 200% 100%;
+      animation: rainbowShift 3s linear infinite;
+    }
+
+    .github-star-badge::before {
+      content: "";
+      position: absolute;
+      bottom: -20%;
+      left: 50%;
+      z-index: -1;
+      height: 20%;
+      width: 60%;
+      transform: translateX(-50%);
+      background-image: linear-gradient(90deg, hsl(0, 100%, 63%), hsl(90, 100%, 63%), hsl(210, 100%, 63%), hsl(195, 100%, 63%), hsl(270, 100%, 63%), hsl(0, 100%, 63%));
+      background-size: 200% 100%;
+      filter: blur(10px);
+      animation: rainbowShift 3s linear infinite;
+    }
+
+    .github-star-badge:hover { transform: scale(1.05); }
+    .github-star-badge:active { transform: scale(0.95); }
+
+    .github-star-badge-content { display: flex; align-items: center; color: white; }
+    .github-star-badge-content svg { width: 16px; height: 16px; fill: white; margin-right: 6px; }
+
+    .github-star-divider {
+      display: flex; align-items: center; gap: 4px; margin-left: 12px; color: white; font-weight: bold;
+    }
+    .github-star-divider svg { width: 16px; height: 16px; color: #6b7280; transition: color 0.2s; fill: currentColor; }
+    .github-star-badge:hover .github-star-divider svg { color: #fde047; }
+
+    @keyframes rainbowShift {
+      0% { background-position: 0% 0%; }
+      100% { background-position: -200% 0%; }
+    }
+
+    @media (max-width: 768px) {
+      .github-star-badge { bottom: 20px; left: 20px; padding: 0 12px; height: 36px; }
+    }
   </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head> 
 
 <body>
 
+  <!-- SVG Filters لزر الوضع الليلي -->
+  <svg style="display: none;">
+    <defs>
+      <filter id="sketchy"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
+      <filter id="sketchy-sm"><feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="2" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
+    </defs>
+  </svg>
+
+  <!-- شاشة التحميل المعزولة -->
   <div class="loading-screen" id="loadingScreen">
-    <div style="font-size: 2rem;">Loading...</div>
+    <div class="container-loader">
+      <div class="ball" style="--i: 20px; --color: #ff0055; --d: 3s;"></div>
+      <div class="ball" style="--i: 50px; --color: #00ffaa; --d: 4s;"></div>
+      <div class="ball" style="--i: 80px; --color: #00ccff; --d: 5s;"></div>
+      <div class="ball" style="--i: 110px; --color: #ffaa00; --d: 3.5s;"></div>
+    </div>
   </div>
 
+  <!-- زر دعم مشروع جيت هاب (معزول ومرتب في اليسار) -->
   <a href="https://github.com/SKRT7-0day/littlelink" target="_blank" class="github-star-badge">
-    <i class="fa-brands fa-github" style="margin-right: 8px;"></i> Star on GitHub <span>| 11</span>
+    <div class="github-star-badge-content">
+      <svg viewBox="0 0 438.549 438.549">
+        <path d="M409.132 114.573c-19.608-33.596-46.205-60.194-79.798-79.8-33.598-19.607-70.277-29.408-110.063-29.408-39.781 0-76.472 9.804-110.063 29.408-33.596 19.605-60.192 46.204-79.8 79.8C9.803 148.168 0 184.854 0 224.63c0 47.78 13.94 90.745 41.827 128.906 27.884 38.164 63.906 64.572 108.063 79.227 5.14.954 8.945.283 11.419-1.996 2.475-2.282 3.711-5.14 3.711-8.562 0-.571-.049-5.708-.144-15.417a2549.81 2549.81 0 01-.144-25.406l-6.567 1.136c-4.187.767-9.469 1.092-15.846 1-6.374-.089-12.991-.757-19.842-1.999-6.854-1.231-13.229-4.086-19.13-8.559-5.898-4.473-10.085-10.328-12.56-17.556l-2.855-6.57c-1.903-4.374-4.899-9.233-8.992-14.559-4.093-5.331-8.232-8.945-12.419-10.848l-1.999-1.431c-1.332-.951-2.568-2.098-3.711-3.429-1.142-1.331-1.997-2.663-2.568-3.997-.572-1.335-.098-2.43 1.427-3.289 1.525-.859 4.281-1.276 8.28-1.276l5.708.853c3.807.763 8.516 3.042 14.133 6.851 5.614 3.806 10.229 8.754 13.846 14.842 4.38 7.806 9.657 13.754 15.846 17.847 6.184 4.093 12.419 6.136 18.699 6.136 6.28 0 11.704-.476 16.274-1.423 4.565-.952 8.848-2.383 12.847-4.285 1.713-12.758 6.377-22.559 13.988-29.41-10.848-1.14-20.601-2.857-29.264-5.14-8.658-2.286-17.605-5.996-26.835-11.14-9.235-5.137-16.896-11.516-22.985-19.126-6.09-7.614-11.088-17.61-14.987-29.979-3.901-12.374-5.852-26.648-5.852-42.826 0-23.035 7.52-42.637 22.557-58.817-7.044-17.318-6.379-36.732 1.997-58.24 5.52-1.715 13.706-.428 24.554 3.853 10.85 4.283 18.794 7.952 23.84 10.994 5.046 3.041 9.089 5.618 12.135 7.708 17.705-4.947 35.976-7.421 54.818-7.421s37.117 2.474 54.823 7.421l10.849-6.849c7.419-4.57 16.18-8.758 26.262-12.565 10.088-3.805 17.802-4.853 23.134-3.138 8.562 21.509 9.325 40.922 2.279 58.24 15.036 16.18 22.559 35.787 22.559 58.817 0 16.178-1.958 30.497-5.853 42.966-3.9 12.471-8.941 22.457-15.125 29.979-6.191 7.521-13.901 13.85-23.131 18.986-9.232 5.14-18.182 8.85-26.84 11.136-8.662 2.286-18.415 4.004-29.263 5.146 9.894 8.562 14.842 22.077 14.842 40.539v60.237c0 3.422 1.19 6.279 3.572 8.562 2.379 2.279 6.136 2.95 11.276 1.995 44.163-14.653 80.185-41.062 108.068-79.226 27.88-38.161 41.825-81.126 41.825-128.906-.01-39.771-9.818-76.454-29.414-110.049z" fill="#fff"></path>
+      </svg>
+      <span>Star on GitHub</span>
+    </div>
+    <div class="github-star-divider">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path clip-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" fill-rule="evenodd"></path>
+      </svg>
+      <span>11</span>
+    </div>
   </a>
 
   <div class="container">
     <img class="avatar" src="images/avatar.png" alt="SKRT7">
-    <div class="celebration-container" id="interactiveName">
-      <h1 class="celebration-name">SKRT7.</h1>
+    
+    <div>
+      <div class="celebration-container" id="interactiveName">
+        <h1 class="celebration-name">SKRT7.</h1>
+      </div>
     </div>
-    <p>Developer & Discord Server Manager.</p>
+    <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
 
+    <!-- زر الوضع الليلي الفخم -->
+    <div class="theme-switch-wrapper">
+      <label class="theme-switch">
+        <input type="checkbox" class="theme-switch__checkbox" id="themeCheckbox">
+        <div class="theme-switch__container">
+          <div class="theme-switch__circle-container">
+            <div class="theme-switch__sun-moon-container">
+              <div class="theme-switch__moon">
+                <div class="theme-switch__spot"></div>
+                <div class="theme-switch__spot"></div>
+                <div class="theme-switch__spot"></div>
+              </div>
+            </div>
+          </div>
+          <div class="theme-switch__clouds"></div>
+          <div class="theme-switch__shooting-star"></div>
+          <div class="theme-switch__shooting-star-2"></div>
+          <div class="theme-switch__meteor"></div>
+          <div class="theme-switch__stars-cluster">
+            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+          </div>
+          <div class="theme-switch__aurora"></div>
+          <div class="theme-switch__comets">
+            <div class="comet"></div><div class="comet"></div>
+          </div>
+        </div>
+      </label>
+    </div>
+
+    <!-- الأزرار (روابط مباشرة ونظيفة) -->
     <div class="button-stack">
-      <a href="https://discord.gg/Vk8WJhpQW4" class="ship-btn" style="background:#5865F2">Discord</a>
-      <a href="https://www.instagram.com/skrt7_66" class="ship-btn" style="background:#E1306C">Instagram</a>
-      <a href="https://github.com/SKRT7-0day" class="ship-btn" style="background:#171515">GitHub</a>
+      <a href="https://discord.gg/Vk8WJhpQW4" target="_blank" class="ship-btn discord"><i class="fa-brands fa-discord"></i> Discord</a>
+      <a href="https://www.instagram.com/skrt7_66" target="_blank" class="ship-btn instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
+      <a href="https://github.com/SKRT7-0day" target="_blank" class="ship-btn github"><i class="fa-brands fa-github"></i> GitHub</a>
+      <a href="https://www.youtube.com/@SKRT7-v5h" target="_blank" class="ship-btn youtube"><i class="fa-brands fa-youtube"></i> YouTube</a>
+      <a href="#" class="ship-btn spotify"><i class="fa-brands fa-spotify"></i> Spotify</a>
+      <a href="https://www.facebook.com/share/18giPaZseb/" target="_blank" class="ship-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
     </div>
 
-    <footer style="margin-top: 50px; color: var(--sub-text);">
-      © 2026 SKRT7. <br>
-      <a href="https://statcounter.com/p13262504/?guest=1" style="color:inherit">View Stats</a>
+    <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 20px;">
+      © 2026 SKRT7. ALL RIGHTS RESERVED.
     </footer>
   </div>
 
-  <script type="text/javascript">
-    var sc_project=13262504; 
-    var sc_invisible=0; 
-    var sc_security="42e94328"; 
-    var scJsHost = "https://";
-    document.write("<sc"+"ript type='text/javascript' src='" + scJsHost+ "statcounter.com/counter/counter.js'></"+"script>");
-  </script>
-  <noscript>
-    <div class="statcounter"><a href="https://statcounter.com/" target="_blank"><img src="https://c.statcounter.com/13262504/0/42e94328/0/" alt="Web Analytics"></a></div>
-  </noscript>
-
   <script>
-    // إخفاء اللودر
+    // 1. القصاصات التفاعلية للاسم
+    const nameContainer = document.getElementById('interactiveName');
+    const colors = ['#ff007f', '#a855f7', '#3b82f6', '#ffd700', '#00ffcc'];
+
+    function spawnConfetti(e) {
+      if(Math.random() > 0.6) return; 
+      const rect = nameContainer.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
+      const confetti = document.createElement('span');
+      confetti.style.position = 'absolute'; confetti.style.width = '7px'; confetti.style.height = '7px';
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.borderRadius = (Math.random() > 0.5) ? '50%' : '2px';
+      confetti.style.pointerEvents = 'none'; confetti.style.left = x + 'px'; confetti.style.top = y + 'px';
+      
+      const moveX = (Math.random() - 0.5) * 120; const moveY = (Math.random() - 1) * 100; 
+
+      confetti.animate([
+        { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
+        { transform: `translate(${moveX}px, ${moveY}px) scale(0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+      ], { duration: 800 + Math.random() * 500, easing: 'ease-out' });
+
+      nameContainer.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 1300);
+    }
+    nameContainer.addEventListener('mousemove', spawnConfetti);
+    nameContainer.addEventListener('touchmove', spawnConfetti);
+
+    // 2. زر تبديل الوضع الليلي
+    const themeCheckbox = document.getElementById('themeCheckbox');
+    
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-theme');
+      themeCheckbox.checked = false; 
+    } else {
+      themeCheckbox.checked = true; 
+    }
+
+    themeCheckbox.addEventListener('change', () => {
+      document.body.classList.toggle('light-theme');
+      localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+    });
+
+    // 3. التحكم بشاشة التحميل (اللودر) وإخفائها
     window.addEventListener('load', () => {
-      setTimeout(() => document.getElementById('loadingScreen').classList.add('fade-out'), 1000);
+      setTimeout(() => {
+        const loader = document.getElementById('loadingScreen');
+        if (loader) {
+          loader.classList.add('fade-out');
+        }
+      }, 2500);
     });
   </script>
 </body>
