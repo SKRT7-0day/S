@@ -45,6 +45,7 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 15px;
+      background-color: var(--card-bg); /* لون خلفية مؤقت قبل تحميل الصورة */
     }
     .avatar:hover { transform: scale(1.05); }
 
@@ -368,7 +369,8 @@
   </a>
 
   <div class="container">
-    <img class="avatar" src="images/avatar.png" alt="SKRT7">
+    <!-- تم تعديل هذا السطر بإضافة id وتفريغ مسار src -->
+    <img class="avatar" id="discordAvatar" src="" alt="SKRT7">
     
     <div>
       <div class="celebration-container" id="interactiveName">
@@ -482,7 +484,7 @@
       }, 2500);
     });
 
-    // 4. سحب وتحديث حالة ديسكورد عبر Lanyard API تلقائياً
+    // 4. سحب وتحديث حالة ديسكورد وصورة البروفايل عبر Lanyard API تلقائياً
     const discordId = "1217944125555474565";
     async function getDiscordStatus() {
       try {
@@ -492,7 +494,16 @@
           const status = json.data.discord_status;
           const dot = document.getElementById('statusDot');
           const text = document.getElementById('statusText');
+          const avatarElement = document.getElementById('discordAvatar'); // تم إضافة هذا السطر لاستهداف الصورة
           
+          // تم إضافة هذا القسم لجلب الصورة من سيرفرات ديسكورد تلقائياً
+          const discordUser = json.data.discord_user;
+          if (discordUser && discordUser.avatar) {
+            const isAnimated = discordUser.avatar.startsWith('a_');
+            const fileExtension = isAnimated ? 'gif' : 'png';
+            avatarElement.src = `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.${fileExtension}?size=512`;
+          }
+
           // خريطة ألوان ديسكورد الرسمية لحالتك
           const statusColors = {
             online: '#43b581',  // أخضر
@@ -530,4 +541,3 @@
   </script>
 </body>
 </html>
-
