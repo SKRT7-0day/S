@@ -6,231 +6,75 @@
   <title>SKRT7 | Bio</title>
   
   <style>
-    /* ==========================================
-       🎨 التنسيقات الأساسية
-       ========================================== */
     :root {
       --bg-color: #07080B;
       --text-color: #E4E6EB;
       --card-bg: #1F222F;
       --sub-text: #94A3B8;
     }
-
     .light-theme {
       --bg-color: #F8FAFC;
       --text-color: #0F172A;
       --card-bg: #E2E8F0;
       --sub-text: #64748B;
     }
-
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
-      font-family: sans-serif;
+      transition: background-color 0.4s ease, color 0.3s ease;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
+      margin: 0; padding: 0;
     }
 
-    .container { margin-top: 10vh; }
+    .container { margin-top: 10vh; padding-bottom: 50px; }
     
-    /* ==========================================
-       🛡️ حاوية الحساب (الأفاتار + الديكور + الحالة)
-       ========================================== */
-    .avatar-wrapper {
-      position: relative;
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 25px auto;
-      transition: transform 0.3s ease;
-    }
-    .avatar-wrapper:hover { transform: scale(1.05); }
+    /* الأفاتار والديكور */
+    .avatar-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto 25px auto; }
+    .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background-color: var(--card-bg); z-index: 1; opacity: 0; transition: opacity 0.5s; }
+    .avatar-decoration { position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; pointer-events: none; z-index: 2; opacity: 0; transition: opacity 0.5s; display: none; }
+    .avatar-status-badge { position: absolute; bottom: 0px; right: 0px; width: 32px; height: 32px; background-color: var(--bg-color); border-radius: 50%; z-index: 3; display: flex; align-items: center; justify-content: center; }
+    .avatar-status-badge svg { width: 100%; height: 100%; }
 
-    .avatar {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      background-color: var(--card-bg);
-      position: relative;
-      z-index: 1;
-      opacity: 0; 
-      transition: opacity 0.5s ease;
-    }
+    /* الحالة والأزرار */
+    .discord-status-card { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--card-bg); color: var(--text-color); padding: 8px 18px; border-radius: 20px; margin: 0 auto 20px auto; font-size: 0.9rem; }
+    .status-custom-emoji { width: 20px; height: 20px; border-radius: 4px; object-fit: contain; }
+    .celebration-name { font-size: 3rem; font-weight: 900; background: linear-gradient(45deg, #ff007f, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+    
+    .theme-switch-wrapper { margin: 15px auto; }
+    .theme-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+    .theme-switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--card-bg); border-radius: 34px; border: 1px solid var(--sub-text); transition: .4s; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 3px; background-color: var(--text-color); border-radius: 50%; transition: .4s; }
+    input:checked + .slider { background-color: #5865F2; }
+    input:checked + .slider:before { transform: translateX(24px); background-color: #fff; }
 
-    /* 🪄 إعدادات الديكور - تم إصلاح الحجم والتموضع */
-    .avatar-decoration {
-      position: absolute;
-      top: -10%;
-      left: -10%;
-      width: 120%;
-      height: 120%;
-      pointer-events: none;
-      z-index: 2;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      display: none;
-    }
+    .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .ship-btn { text-decoration: none; display: flex; align-items: center; justify-content: center; height: 50px; border-radius: 12px; font-weight: bold; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.2s; }
+    .ship-btn:hover { transform: scale(1.02); }
+    .discord { background: #5865F2; } .instagram { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); } .github { background: #171515; } .youtube { background: #FF0000; } .spotify { background: #1DB954; } .facebook { background: #1877F2; }
 
-    /* 🟢 علامة الحالة (قمر، متصل) */
-    .avatar-status-badge {
-      position: absolute;
-      bottom: 0px;
-      right: 0px;
-      width: 32px;
-      height: 32px;
-      background-color: var(--bg-color); 
-      border-radius: 50%;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px; 
-      box-sizing: border-box;
-      transition: background-color 0.4s;
-    }
-    .avatar-status-badge svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* ==========================================
-       💬 شريط الحالة السفلي
-       ========================================== */
-    .discord-status-card {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: var(--card-bg);
-      color: var(--text-color);
-      padding: 8px 18px;
-      border-radius: 20px;
-      margin: 0 auto 20px auto;
-      font-size: 0.9rem;
-      font-weight: 500;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: background-color 0.4s, color 0.3s;
-    }
-    .status-custom-emoji {
-      width: 20px;
-      height: 20px;
-      border-radius: 4px;
-      object-fit: contain;
-    }
-
-    /* ==========================================
-       ✨ تأثيرات الاسم والقصاصات
-       ========================================== */
-    .celebration-container { position: relative; display: inline-block; margin: 10px auto; padding: 10px 30px; }
-    .celebration-name {
-      font-size: 3rem; font-weight: 900; letter-spacing: -0.03em;
-      background: linear-gradient(45deg, #ff007f, #a855f7, #3b82f6, #ffd700, #ff007f);
-      background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      display: inline-block; animation: celebrateColors 3s linear infinite;
-      margin: 0;
-    }
-    @keyframes celebrateColors { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-    p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
-
-    /* ==========================================
-       🌙 زر الوضع الليلي (تم إرجاعه للشكل البسيط والناجح)
-       ========================================== */
-    .theme-switch-wrapper {
-      margin: 15px auto 30px;
-      display: flex;
-      justify-content: center;
-    }
-    .theme-switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 26px;
-    }
-    .theme-switch input { 
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: var(--card-bg);
-      transition: .4s;
-      border-radius: 34px;
-      border: 1px solid var(--sub-text);
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 4px;
-      bottom: 3px;
-      background-color: var(--text-color);
-      transition: .4s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: #5865F2; /* لون ديسكورد عند التفعيل */
-      border-color: #5865F2;
-    }
-    input:checked + .slider:before {
-      transform: translateX(24px);
-      background-color: #fff;
-    }
-
-    /* ==========================================
-       🔗 الأزرار
-       ========================================== */
-    .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
-    .ship-btn { text-decoration: none; display: flex; align-items: center; justify-content: center; height: 55px; border-radius: 15px; border: none; font-weight: bold; font-size: 1rem; color: #fff; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .ship-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
-    .ship-btn i { margin-right: 10px; font-size: 1.2rem; }
-    .discord { background: #5865F2; } .instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); } .github { background: #171515; } .youtube { background: #FF0000; } .spotify { background: #1DB954; } .facebook { background: #1877F2; }
-
-    /* ==========================================
-       ⏳ شاشة التحميل
-       ========================================== */
-    .loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease, visibility 0.8s; }
-    .loading-screen.fade-out { opacity: 0; visibility: hidden; }
-
+    /* زر GitHub السفلي */
+    .github-star-wrapper { position: fixed; bottom: 20px; left: 20px; z-index: 100; }
+    .star-btn { display: flex; align-items: center; background: #1f222f; padding: 8px 15px; border-radius: 8px; border: 1px solid #333; color: #fff; font-size: 0.8rem; text-decoration: none; }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head> 
 
 <body>
 
-  <!-- شاشة التحميل -->
-  <div class="loading-screen" id="loadingScreen">
-    <div style="color: #fff; font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;">LOADING...</div>
-  </div>
-
   <div class="container">
-    
-    <!-- 🛡️ منطقة الأفاتار -->
     <div class="avatar-wrapper">
-      <img class="avatar" id="discordAvatar" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="SKRT7">
+      <img class="avatar" id="discordAvatar" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Avatar">
       <img class="avatar-decoration" id="avatarDecoration" src="" alt="Decoration">
       <div class="avatar-status-badge" id="avatarStatusBadge"></div>
     </div>
     
-    <div>
-      <div class="celebration-container" id="interactiveName">
-        <h1 class="celebration-name">SKRT7.</h1>
-      </div>
-    </div>
-    <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
+    <h1 class="celebration-name">SKRT7.</h1>
+    <p style="color: var(--sub-text);">Developer & Discord Server Manager. Welcome to my space.</p>
 
-    <!-- 💬 شريط الحالة -->
-    <div class="discord-status-card" id="statusCardWrapper">
-      <span id="statusText">Loading...</span>
-    </div>
+    <div class="discord-status-card" id="statusCardWrapper">Loading...</div>
 
-    <!-- 🌙 زر الوضع الليلي البسيط -->
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
         <input type="checkbox" id="themeCheckbox">
@@ -238,7 +82,6 @@
       </label>
     </div>
 
-    <!-- الأزرار -->
     <div class="button-stack">
       <a href="https://discord.gg/Vk8WJhpQW4" target="_blank" class="ship-btn discord"><i class="fa-brands fa-discord"></i> Discord</a>
       <a href="https://www.instagram.com/skrt7_66" target="_blank" class="ship-btn instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
@@ -247,14 +90,17 @@
       <a href="#" class="ship-btn spotify"><i class="fa-brands fa-spotify"></i> Spotify</a>
       <a href="https://www.facebook.com/share/18giPaZseb/" target="_blank" class="ship-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
     </div>
+  </div>
 
-    <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 20px;">
-      © 2026 SKRT7. ALL RIGHTS RESERVED.
-    </footer>
+  <!-- زر GitHub السفلي -->
+  <div class="github-star-wrapper">
+    <a href="https://github.com/SKRT7-0day" target="_blank" class="star-btn">
+      <i class="fa-brands fa-github" style="margin-right: 8px;"></i> Star on GitHub ★ 11
+    </a>
   </div>
 
   <script>
-    // 1. الوضع الليلي
+    // الوضع الليلي
     const themeCheckbox = document.getElementById('themeCheckbox');
     if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-theme'); themeCheckbox.checked = false; } 
     else { themeCheckbox.checked = true; }
@@ -263,82 +109,35 @@
       localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
     });
 
-    // 2. إخفاء اللودر
-    window.addEventListener('load', () => {
-      setTimeout(() => { document.getElementById('loadingScreen').classList.add('fade-out'); }, 1000);
-    });
-
-    // 3. كود Lanyard 
-    const discordId = "1217944125555474565";
-    
+    // جلب بيانات ديسكورد
     async function getDiscordStatus() {
       try {
-        const res = await fetch(`https://api.lanyard.rest/v1/users/${discordId}`);
+        const res = await fetch(`https://api.lanyard.rest/v1/users/1217944125555474565`);
         const json = await res.json();
-        
-        if (json.success && json.data) {
-          const status = json.data.discord_status;
-          const discordUser = json.data.discord_user;
-          const avatarElement = document.getElementById('discordAvatar');
-          const decorationElement = document.getElementById('avatarDecoration');
-          const badgeElement = document.getElementById('avatarStatusBadge');
-          const statusCardWrapper = document.getElementById('statusCardWrapper');
+        if (json.success) {
+          const { discord_user, discord_status, activities } = json.data;
+          document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.${discord_user.avatar.startsWith('a_') ? 'gif' : 'png'}?size=512`;
+          document.getElementById('discordAvatar').style.opacity = '1';
           
-          avatarElement.onload = () => { avatarElement.style.opacity = '1'; };
-          decorationElement.onload = () => { decorationElement.style.opacity = '1'; };
-
-          // جلب الصورة الشخصية
-          if (discordUser && discordUser.avatar) {
-            const isAnimated = discordUser.avatar.startsWith('a_');
-            avatarElement.src = `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.${isAnimated ? 'gif' : 'png'}?size=512`;
+          if (discord_user.avatar_decoration_data) {
+            const dec = document.getElementById('avatarDecoration');
+            dec.src = `https://cdn.discordapp.com/avatar-decoration-presets/${discord_user.avatar_decoration_data.asset}.png?size=256`;
+            dec.style.display = 'block'; dec.style.opacity = '1';
           }
 
-          // جلب الديكور (تم تعديل الحجم في الـ CSS ليناسب الأبعاد)
-          if (discordUser && discordUser.avatar_decoration_data && discordUser.avatar_decoration_data.asset) {
-            decorationElement.src = `https://cdn.discordapp.com/avatar-decoration-presets/${discordUser.avatar_decoration_data.asset}.png?size=256`;
-            decorationElement.style.display = 'block';
-          } else {
-            decorationElement.style.display = 'none';
-          }
-
-          // أيقونات الحالة (قمر، متصل..)
-          const svgs = {
-            online: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#23a559"/></svg>`,
-            idle: `<svg viewBox="0 0 24 24"><path fill="#f0b232" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2c.238 0 .473.008.705.024-1.996 1.58-3.279 4.01-3.279 6.726 0 4.78 3.874 8.654 8.654 8.654 2.193 0 4.195-.815 5.719-2.164A9.97 9.97 0 0 1 12 22Z"/></svg>`,
-            dnd: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#f23f43"/><rect x="6" y="10" width="12" height="4" rx="2" fill="var(--bg-color)"/></svg>`,
-            offline: `<svg viewBox="0 0 24 24"><path fill="#80848e" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"/></svg>`
-          };
-          badgeElement.innerHTML = svgs[status] || svgs['offline'];
-
-          // معالجة نص الحالة (تم إضافة onerror لإخفاء الصورة المكسورة)
-          const customStatus = json.data.activities.find(act => act.type === 4);
-          let statusHTML = '';
-          
+          const statusCard = document.getElementById('statusCardWrapper');
+          const customStatus = activities.find(a => a.type === 4);
           if (customStatus) {
-            if (customStatus.emoji && customStatus.emoji.id) {
-              const emojiUrl = `https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.${customStatus.emoji.animated ? 'gif' : 'png'}?size=44`;
-              // هنا تم إضافة onerror="this.style.display='none'"
-              statusHTML += `<img src="${emojiUrl}" class="status-custom-emoji" alt="emoji" onerror="this.style.display='none'">`;
-            } else if (customStatus.emoji && customStatus.emoji.name) {
-               statusHTML += `<span style="margin-right: 5px;">${customStatus.emoji.name}</span>`;
-            }
-            if (customStatus.state) {
-              statusHTML += `<span>${customStatus.state}</span>`;
-            }
-          } else {
-            const statusNames = { online: 'Online', idle: 'Idle', dnd: 'Do Not Disturb', offline: 'Offline' };
-            statusHTML = `<span>${statusNames[status] || 'Offline'}</span>`;
+            let html = '';
+            if (customStatus.emoji?.id) html += `<img src="https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.${customStatus.emoji.animated ? 'gif' : 'png'}?size=44" class="status-custom-emoji" onerror="this.style.display='none'">`;
+            html += `<span>${customStatus.state || ''}</span>`;
+            statusCard.innerHTML = html;
           }
-
-          statusCardWrapper.innerHTML = statusHTML;
         }
-      } catch (err) {
-        console.error("Error fetching Discord status:", err);
-      }
+      } catch (e) { console.error(e); }
     }
-    
     getDiscordStatus();
-    setInterval(getDiscordStatus, 15000); 
+    setInterval(getDiscordStatus, 30000);
   </script>
 </body>
 </html>
