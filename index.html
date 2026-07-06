@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="theme-dark" lang="en">
 <head>
@@ -47,31 +48,6 @@
       margin-bottom: 15px;
     }
     .avatar:hover { transform: scale(1.05); }
-
-    /* ==========================================
-       🟢 كود حالة الديسكورد المباشرة (Lanyard)
-       ========================================== */
-    .discord-status-card {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--card-bg);
-      color: var(--text-color);
-      padding: 8px 16px;
-      border-radius: 20px;
-      margin: 0 auto 20px auto;
-      font-size: 0.9rem;
-      font-weight: 500;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: background-color 0.4s, color 0.3s;
-    }
-    .status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background-color: #747f8d;
-      transition: background-color 0.3s, box-shadow 0.3s;
-    }
 
     /* ==========================================
        ✨ اسم وتأثير القصاصات
@@ -377,12 +353,6 @@
     </div>
     <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
 
-    <!-- شريط عرض حالة ديسكورد المباشرة -->
-    <div class="discord-status-card">
-      <div class="status-dot" id="statusDot"></div>
-      <span id="statusText">جاري تحميل الحالة...</span>
-    </div>
-
     <!-- زر الوضع الليلي الفخم -->
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
@@ -481,52 +451,6 @@
         }
       }, 2500);
     });
-
-    // 4. سحب وتحديث حالة ديسكورد عبر Lanyard API تلقائياً
-    const discordId = "1217944125555474565";
-    async function getDiscordStatus() {
-      try {
-        const res = await fetch(`https://api.lanyard.rest/v1/users/${discordId}`);
-        const json = await res.json();
-        if (json.success && json.data) {
-          const status = json.data.discord_status;
-          const dot = document.getElementById('statusDot');
-          const text = document.getElementById('statusText');
-          
-          // خريطة ألوان ديسكورد الرسمية لحالتك
-          const statusColors = {
-            online: '#43b581',  // أخضر
-            idle: '#faa61a',    // خامل/أصفر
-            dnd: '#f04747',     // مشغول/أحمر
-            offline: '#747f8d'  // أوفلاين/رمادي
-          };
-          
-          // تطبيق اللون والتوهج الجمالي (Glow) بناءً على الحالة الحالية
-          const currentColor = statusColors[status] || '#747f8d';
-          dot.style.backgroundColor = currentColor;
-          dot.style.boxShadow = `0 0 10px ${currentColor}`;
-          
-          // إذا كنت تملك "Custom Status" نصي مكتوب، سيتم عرضه، غير ذلك يعرض الحالة الافتراضية
-          const customStatus = json.data.activities.find(act => act.type === 4);
-          if (customStatus && customStatus.state) {
-            text.innerText = customStatus.state;
-          } else {
-            const statusNames = {
-              online: 'متصل الآن',
-              idle: 'خامل',
-              dnd: 'الرجاء عدم الإزعاج',
-              offline: 'غير متصل بالإنترنت'
-            };
-            text.innerText = statusNames[status] || 'غير متصل بالإنترنت';
-          }
-        }
-      } catch (err) {
-        console.error("Lanyard Error:", err);
-      }
-    }
-    // تشغيل الفحص فوراً وتحديثه تلقائياً كل 15 ثانية دون الحاجة لعمل ريفريش للصفحة
-    getDiscordStatus();
-    setInterval(getDiscordStatus, 15000);
   </script>
 </body>
 </html>
