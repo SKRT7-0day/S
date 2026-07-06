@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="theme-dark" lang="en">
 <head>
@@ -37,6 +36,16 @@
 
     .container { margin-top: 10vh; }
     
+    /* ==========================================
+       🟢 حاوية الأفتار + حالة الاتصال + الديكوريشن
+       ========================================== */
+    .avatar-wrapper {
+      position: relative;
+      width: 128px;
+      height: 128px;
+      margin: 0 auto 15px;
+    }
+
     .avatar {
       border: 3px solid var(--card-bg);
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
@@ -45,9 +54,57 @@
       height: 128px;
       border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 15px;
+      margin-bottom: 0;
+      display: block;
     }
     .avatar:hover { transform: scale(1.05); }
+
+    /* الديكوريشن (avatar decoration) لو عندك واحد فعال بديسكورد */
+    .avatar-decoration {
+      position: absolute;
+      top: -12%;
+      left: -12%;
+      width: 124%;
+      height: 124%;
+      pointer-events: none;
+      display: none;
+    }
+
+    /* دائرة حالة الاتصال */
+    .status-dot {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 4px solid var(--bg-color);
+      background-color: #80848e;
+      transition: background-color 0.3s ease;
+      z-index: 3;
+    }
+    .status-online  { background-color: #23a55a; }
+    .status-idle    { background-color: #f0b232; }
+    .status-dnd     { background-color: #f23f43; }
+    .status-offline { background-color: #80848e; }
+
+    /* نص النشاط الحالي (لعبة / برنامج شغال) */
+    .discord-activity {
+      color: var(--sub-text);
+      font-size: 0.8rem;
+      margin: -8px 0 12px;
+      min-height: 1.1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .discord-activity .dot-anim {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #23a55a; display: inline-block;
+      animation: pulseDot 1.4s ease-in-out infinite;
+    }
+    @keyframes pulseDot { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 
     /* ==========================================
        ✨ اسم وتأثير القصاصات
@@ -344,7 +401,13 @@
   </a>
 
   <div class="container">
-    <img class="avatar" src="images/avatar.png" alt="SKRT7">
+
+    <!-- الأفتار + حالة الاتصال + الديكوريشن -->
+    <div class="avatar-wrapper">
+      <img class="avatar" id="discordAvatar" src="images/avatar.png" alt="SKRT7">
+      <img class="avatar-decoration" id="avatarDecoration" alt="">
+      <span class="status-dot status-offline" id="statusDot" title="Offline"></span>
+    </div>
     
     <div>
       <div class="celebration-container" id="interactiveName">
@@ -352,6 +415,9 @@
       </div>
     </div>
     <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
+
+    <!-- نص النشاط الحالي من ديسكورد -->
+    <div class="discord-activity" id="discordActivity"></div>
 
     <!-- زر الوضع الليلي الفخم -->
     <div class="theme-switch-wrapper">
@@ -451,6 +517,63 @@
         }
       }, 2500);
     });
+
+    // ==========================================
+    // 4. Discord Presence عبر Lanyard API
+    // ملاحظة مهمة: لازم تكون منضم لسيرفر Lanyard حتى يشتغل:
+    // https://discord.gg/lanyard
+    // ==========================================
+    const DISCORD_ID = "1217944125555474565";
+
+    async function updateDiscordPresence() {
+      try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
+        const json = await res.json();
+        if (!json.success) return;
+
+        const data = json.data;
+        const user = data.discord_user;
+
+        // تحديث الأفتار مباشرة من ديسكورد
+        const avatarImg = document.getElementById('discordAvatar');
+        if (user && user.avatar) {
+          avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+        }
+
+        // الأفتار ديكوريشن (إذا مفعّل بحسابك)
+        const decoEl = document.getElementById('avatarDecoration');
+        if (user && user.avatar_decoration_data && user.avatar_decoration_data.asset) {
+          decoEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png?size=256`;
+          decoEl.style.display = 'block';
+        } else {
+          decoEl.style.display = 'none';
+        }
+
+        // دائرة حالة الاتصال (online / idle / dnd / offline)
+        const statusDot = document.getElementById('statusDot');
+        const status = data.discord_status || 'offline';
+        statusDot.className = 'status-dot status-' + status;
+        statusDot.title = status;
+
+        // النشاط الحالي (لعبة / برنامج) - نتجاهل نوع "Custom Status" (type 4) إذا فيه نشاط ثاني
+        const activityEl = document.getElementById('discordActivity');
+        if (data.activities && data.activities.length > 0) {
+          const realActivity = data.activities.find(a => a.type !== 4) || data.activities[0];
+          const label = realActivity.name || '';
+          activityEl.innerHTML = label
+            ? `<span class="dot-anim"></span> ${label}`
+            : '';
+        } else {
+          activityEl.innerHTML = '';
+        }
+
+      } catch (err) {
+        console.error('Lanyard fetch failed:', err);
+      }
+    }
+
+    updateDiscordPresence();
+    setInterval(updateDiscordPresence, 15000); // تحديث كل 15 ثانية
   </script>
 </body>
 </html>
