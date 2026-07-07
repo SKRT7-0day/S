@@ -6,9 +6,6 @@
   <title>SKRT7 | Bio</title>
   
   <style>
-    /* ==========================================
-       🎨 التنسيقات الأساسية
-       ========================================== */
     :root {
       --bg-color: #07080B;
       --text-color: #E4E6EB;
@@ -36,9 +33,6 @@
 
     .container { margin-top: 10vh; }
     
-    /* ==========================================
-       🟢 حاوية الأفتار + حالة الاتصال + الديكوريشن
-       ========================================== */
     .avatar-wrapper {
       position: relative;
       width: 128px;
@@ -59,7 +53,6 @@
     }
     .avatar:hover { transform: scale(1.05); }
 
-    /* الديكوريشن (avatar decoration) لو عندك واحد فعال بديسكورد */
     .avatar-decoration {
       position: absolute;
       top: -12%;
@@ -70,7 +63,6 @@
       display: none;
     }
 
-    /* دائرة حالة الاتصال */
     .status-dot {
       position: absolute;
       bottom: 2px;
@@ -81,34 +73,73 @@
       border: 4px solid var(--bg-color);
       background-color: #80848e;
       transition: background-color 0.3s ease;
+      overflow: hidden;
       z-index: 3;
     }
-    .status-online  { background-color: #23a55a; }
-    .status-idle    { background-color: #f0b232; }
-    .status-dnd     { background-color: #f23f43; }
-    .status-offline { background-color: #80848e; }
 
-    /* نص النشاط الحالي (لعبة / برنامج شغال) */
+    .status-online { background-color: #23a55a; }
+
+    .status-idle {
+      background-color: #f0b232;
+      position: absolute;
+    }
+    .status-idle::after {
+      content: "";
+      position: absolute;
+      width: 70%;
+      height: 70%;
+      border-radius: 50%;
+      background-color: var(--bg-color);
+      top: -18%;
+      left: -18%;
+      transition: background-color 0.3s ease;
+    }
+
+    .status-dnd { background-color: #f23f43; }
+    .status-dnd::after {
+      content: "";
+      position: absolute;
+      width: 58%;
+      height: 22%;
+      background-color: #fff;
+      border-radius: 2px;
+      top: 39%;
+      left: 21%;
+    }
+
+    .status-offline { background-color: #80848e; }
+    .status-offline::after {
+      content: "";
+      position: absolute;
+      width: 46%;
+      height: 46%;
+      border-radius: 50%;
+      background-color: var(--bg-color);
+      top: 27%;
+      left: 27%;
+      transition: background-color 0.3s ease;
+    }
+
     .discord-activity {
-      color: var(--sub-text);
-      font-size: 0.8rem;
-      margin: -8px 0 12px;
-      min-height: 1.1em;
+      color: var(--text-color);
+      font-size: 0.85rem;
+      margin: -6px 0 14px;
+      min-height: 1.2em;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      transition: color 0.3s ease;
     }
-    .discord-activity .dot-anim {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: #23a55a; display: inline-block;
-      animation: pulseDot 1.4s ease-in-out infinite;
+    .discord-activity img {
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
     }
     @keyframes pulseDot { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-    /* ==========================================
-       ✨ اسم وتأثير القصاصات
-       ========================================== */
     .celebration-container { position: relative; display: inline-block; margin: 10px auto; padding: 10px 30px; cursor: crosshair; }
     .celebration-name {
       font-size: 3rem; font-weight: 900; letter-spacing: -0.03em;
@@ -121,9 +152,6 @@
     @keyframes partyPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); } 100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); } }
     p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
 
-    /* ==========================================
-       🌙 زر الوضع الليلي (الغيوم والنجوم الفخم)
-       ========================================== */
     .theme-switch-wrapper { margin: 25px auto 40px; display: flex; justify-content: center; }
 
     .theme-switch {
@@ -237,9 +265,6 @@
     .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__comets { opacity: 1; }
     @keyframes auroraWave { 0% { transform: translateY(-100%) translateX(-50%); } 100% { transform: translateY(-100%) translateX(50%); } }
 
-    /* ==========================================
-       🔗 أزرار الروابط الأساسية
-       ========================================== */
     .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
     
     .ship-btn {
@@ -257,9 +282,6 @@
     .spotify { background: #1DB954; } 
     .facebook { background: #1877F2; }
 
-    /* ==========================================
-       ⏳ كود صفحة التحميل (اللودر المعزول)
-       ========================================== */
     .loading-screen {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -294,9 +316,6 @@
 
     @keyframes move { 0% { transform: rotate(0deg); } 100% { transform: rotate(359deg); } }
 
-    /* ==========================================
-       ⭐ زر تقييم مشروع جيت هاب المعزول (يسار الشاشة)
-       ========================================== */
     .github-star-badge {
       position: fixed;
       bottom: 30px;
@@ -315,7 +334,6 @@
       height: 40px;
       padding: 0 16px;
       
-      /* ألوان الإطار المتدرج مثل Uiverse */
       background-image: linear-gradient(#121213, #121213), linear-gradient(90deg, hsl(0, 100%, 63%), hsl(90, 100%, 63%), hsl(210, 100%, 63%), hsl(195, 100%, 63%), hsl(270, 100%, 63%), hsl(0, 100%, 63%));
       background-clip: padding-box, border-box;
       background-origin: padding-box, border-box;
@@ -366,7 +384,6 @@
 
 <body>
 
-  <!-- SVG Filters لزر الوضع الليلي -->
   <svg style="display: none;">
     <defs>
       <filter id="sketchy"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
@@ -374,7 +391,6 @@
     </defs>
   </svg>
 
-  <!-- شاشة التحميل المعزولة -->
   <div class="loading-screen" id="loadingScreen">
     <div class="container-loader">
       <div class="ball" style="--i: 20px; --color: #ff0055; --d: 3s;"></div>
@@ -384,7 +400,6 @@
     </div>
   </div>
 
-  <!-- زر دعم مشروع جيت هاب (معزول ومرتب في اليسار) -->
   <a href="https://github.com/SKRT7-0day/littlelink" target="_blank" class="github-star-badge">
     <div class="github-star-badge-content">
       <svg viewBox="0 0 438.549 438.549">
@@ -402,7 +417,6 @@
 
   <div class="container">
 
-    <!-- الأفتار + حالة الاتصال + الديكوريشن -->
     <div class="avatar-wrapper">
       <img class="avatar" id="discordAvatar" src="images/avatar.png" alt="SKRT7">
       <img class="avatar-decoration" id="avatarDecoration" alt="">
@@ -416,10 +430,8 @@
     </div>
     <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
 
-    <!-- نص النشاط الحالي من ديسكورد -->
-    <div class="discord-activity" id="discordActivity"></div>
+    <div class="discord-activity" id="discordCustomStatus"></div>
 
-    <!-- زر الوضع الليلي الفخم -->
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
         <input type="checkbox" class="theme-switch__checkbox" id="themeCheckbox">
@@ -448,7 +460,6 @@
       </label>
     </div>
 
-    <!-- الأزرار (روابط مباشرة ونظيفة) -->
     <div class="button-stack">
       <a href="https://discord.gg/Vk8WJhpQW4" target="_blank" class="ship-btn discord"><i class="fa-brands fa-discord"></i> Discord</a>
       <a href="https://www.instagram.com/skrt7_66" target="_blank" class="ship-btn instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
@@ -464,7 +475,6 @@
   </div>
 
   <script>
-    // 1. القصاصات التفاعلية للاسم
     const nameContainer = document.getElementById('interactiveName');
     const colors = ['#ff007f', '#a855f7', '#3b82f6', '#ffd700', '#00ffcc'];
 
@@ -493,7 +503,6 @@
     nameContainer.addEventListener('mousemove', spawnConfetti);
     nameContainer.addEventListener('touchmove', spawnConfetti);
 
-    // 2. زر تبديل الوضع الليلي
     const themeCheckbox = document.getElementById('themeCheckbox');
     
     if (localStorage.getItem('theme') === 'light') {
@@ -506,9 +515,15 @@
     themeCheckbox.addEventListener('change', () => {
       document.body.classList.toggle('light-theme');
       localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+      
+      const statusDot = document.getElementById('statusDot');
+      if (statusDot) {
+        void statusDot.offsetHeight; 
+        statusDot.style.filter = 'brightness(1.01)';
+        setTimeout(() => statusDot.style.filter = '', 10);
+      }
     });
 
-    // 3. التحكم بشاشة التحميل (اللودر) وإخفائها
     window.addEventListener('load', () => {
       setTimeout(() => {
         const loader = document.getElementById('loadingScreen');
@@ -518,11 +533,6 @@
       }, 2500);
     });
 
-    // ==========================================
-    // 4. Discord Presence عبر Lanyard API
-    // ملاحظة مهمة: لازم تكون منضم لسيرفر Lanyard حتى يشتغل:
-    // https://discord.gg/lanyard
-    // ==========================================
     const DISCORD_ID = "1217944125555474565";
 
     async function updateDiscordPresence() {
@@ -534,13 +544,11 @@
         const data = json.data;
         const user = data.discord_user;
 
-        // تحديث الأفتار مباشرة من ديسكورد
         const avatarImg = document.getElementById('discordAvatar');
         if (user && user.avatar) {
           avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
         }
 
-        // الأفتار ديكوريشن (إذا مفعّل بحسابك)
         const decoEl = document.getElementById('avatarDecoration');
         if (user && user.avatar_decoration_data && user.avatar_decoration_data.asset) {
           decoEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png?size=256`;
@@ -549,23 +557,38 @@
           decoEl.style.display = 'none';
         }
 
-        // دائرة حالة الاتصال (online / idle / dnd / offline)
         const statusDot = document.getElementById('statusDot');
         const status = data.discord_status || 'offline';
-        statusDot.className = 'status-dot status-' + status;
-        statusDot.title = status;
+        
+        statusDot.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
+        
+        statusDot.classList.add('status-' + status);
+        
+        const statusLabels = {
+          'online': '🟢 Online',
+          'idle': '🌙 Idle (Away)',
+          'dnd': '🔴 Do Not Disturb',
+          'offline': '⚫ Offline'
+        };
+        statusDot.title = statusLabels[status] || 'Unknown';
 
-        // النشاط الحالي (لعبة / برنامج) - نتجاهل نوع "Custom Status" (type 4) إذا فيه نشاط ثاني
-        const activityEl = document.getElementById('discordActivity');
+        const customStatusEl = document.getElementById('discordCustomStatus');
+        let customStatusText = '';
+        
         if (data.activities && data.activities.length > 0) {
-          const realActivity = data.activities.find(a => a.type !== 4) || data.activities[0];
-          const label = realActivity.name || '';
-          activityEl.innerHTML = label
-            ? `<span class="dot-anim"></span> ${label}`
-            : '';
-        } else {
-          activityEl.innerHTML = '';
+          const customStatus = data.activities.find(a => a.type === 4); 
+          if (customStatus && customStatus.state) {
+            customStatusText = customStatus.state;
+            if (customStatus.emoji) {
+              const emojiStr = customStatus.emoji.id 
+                ? `<img src="https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.png" style="width:16px;height:16px;margin-right:4px;vertical-align:middle;" alt="">`
+                : customStatus.emoji.name || '';
+              customStatusText = emojiStr + customStatusText;
+            }
+          }
         }
+        
+        customStatusEl.innerHTML = customStatusText ? customStatusText : '';
 
       } catch (err) {
         console.error('Lanyard fetch failed:', err);
@@ -573,7 +596,7 @@
     }
 
     updateDiscordPresence();
-    setInterval(updateDiscordPresence, 15000); // تحديث كل 15 ثانية
+    setInterval(updateDiscordPresence, 5000);
   </script>
 </body>
 </html>
