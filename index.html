@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="theme-dark" lang="en">
 <head>
@@ -62,26 +61,6 @@
       height: 124%;
       pointer-events: none;
       display: none;
-      animation: floatingSticker 3s ease-in-out infinite;
-    }
-
-    @keyframes floatingSticker {
-      0%, 100% { 
-        transform: translateY(0px) rotate(0deg);
-        filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
-      }
-      25% { 
-        transform: translateY(-8px) rotate(2deg);
-        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
-      }
-      50% { 
-        transform: translateY(-4px) rotate(-1deg);
-        filter: drop-shadow(0 6px 14px rgba(0,0,0,0.25));
-      }
-      75% { 
-        transform: translateY(-10px) rotate(1deg);
-        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
-      }
     }
 
     .status-dot {
@@ -141,72 +120,10 @@
       transition: background-color 0.3s ease;
     }
 
-    .custom-status-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin: 8px 0 16px;
-      flex-wrap: wrap;
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-      animation: slideInCustomStatus 0.4s ease-out;
-    }
-
-    @keyframes slideInCustomStatus {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .status-avatar-preview {
-      position: relative;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 2px solid var(--card-bg);
-      overflow: hidden;
-      background-color: var(--card-bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .status-avatar-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .status-avatar-preview .mini-status {
-      position: absolute;
-      bottom: -2px;
-      right: -2px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 2px solid var(--bg-color);
-      background-color: #80848e;
-      transition: background-color 0.3s ease;
-    }
-
-    .status-avatar-preview .mini-status.online { background-color: #23a55a; }
-    .status-avatar-preview .mini-status.idle { background-color: #f0b232; }
-    .status-avatar-preview .mini-status.dnd { background-color: #f23f43; }
-    .status-avatar-preview .mini-status.offline { background-color: #80848e; }
-
     .discord-activity {
       color: var(--text-color);
       font-size: 0.85rem;
-      margin: 0;
+      margin: -6px 0 14px;
       min-height: 1.2em;
       display: flex;
       align-items: center;
@@ -513,13 +430,7 @@
     </div>
     <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
 
-    <div class="custom-status-container" id="customStatusContainer">
-      <div class="status-avatar-preview" id="statusAvatarPreview">
-        <img id="miniAvatar" src="images/avatar.png" alt="">
-        <div class="mini-status offline" id="miniStatusDot"></div>
-      </div>
-      <div class="discord-activity" id="discordCustomStatus"></div>
-    </div>
+    <div class="discord-activity" id="discordCustomStatus"></div>
 
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
@@ -650,6 +561,7 @@
         const status = data.discord_status || 'offline';
         
         statusDot.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
+        
         statusDot.classList.add('status-' + status);
         
         const statusLabels = {
@@ -659,15 +571,6 @@
           'offline': '⚫ Offline'
         };
         statusDot.title = statusLabels[status] || 'Unknown';
-
-        const miniAvatarImg = document.getElementById('miniAvatar');
-        if (user && user.avatar) {
-          miniAvatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
-        }
-
-        const miniStatusDot = document.getElementById('miniStatusDot');
-        miniStatusDot.classList.remove('online', 'idle', 'dnd', 'offline');
-        miniStatusDot.classList.add(status);
 
         const customStatusEl = document.getElementById('discordCustomStatus');
         let customStatusText = '';
@@ -687,22 +590,14 @@
         
         customStatusEl.innerHTML = customStatusText ? customStatusText : '';
 
-        const container = document.getElementById('customStatusContainer');
-        if (customStatusText) {
-          container.style.opacity = '1';
-          container.style.visibility = 'visible';
-        } else {
-          container.style.opacity = '0.6';
-          container.style.visibility = 'visible';
-        }
-
       } catch (err) {
         console.error('Lanyard fetch failed:', err);
       }
     }
 
     updateDiscordPresence();
-    setInterval(updateDiscordPresence, 5000); 
+    setInterval(updateDiscordPresence, 5000);
   </script>
 </body>
 </html>
+
