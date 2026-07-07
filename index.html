@@ -61,6 +61,26 @@
       height: 124%;
       pointer-events: none;
       display: none;
+      animation: floatingSticker 3s ease-in-out infinite;
+    }
+
+    @keyframes floatingSticker {
+      0%, 100% { 
+        transform: translateY(0px) rotate(0deg);
+        filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+      }
+      25% { 
+        transform: translateY(-8px) rotate(2deg);
+        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+      }
+      50% { 
+        transform: translateY(-4px) rotate(-1deg);
+        filter: drop-shadow(0 6px 14px rgba(0,0,0,0.25));
+      }
+      75% { 
+        transform: translateY(-10px) rotate(1deg);
+        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+      }
     }
 
     .status-dot {
@@ -120,10 +140,72 @@
       transition: background-color 0.3s ease;
     }
 
+    .custom-status-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 8px 0 16px;
+      flex-wrap: wrap;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      animation: slideInCustomStatus 0.4s ease-out;
+    }
+
+    @keyframes slideInCustomStatus {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .status-avatar-preview {
+      position: relative;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--card-bg);
+      overflow: hidden;
+      background-color: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .status-avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .status-avatar-preview .mini-status {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--bg-color);
+      background-color: #80848e;
+      transition: background-color 0.3s ease;
+    }
+
+    .status-avatar-preview .mini-status.online { background-color: #23a55a; }
+    .status-avatar-preview .mini-status.idle { background-color: #f0b232; }
+    .status-avatar-preview .mini-status.dnd { background-color: #f23f43; }
+    .status-avatar-preview .mini-status.offline { background-color: #80848e; }
+
     .discord-activity {
       color: var(--text-color);
       font-size: 0.85rem;
-      margin: -6px 0 14px;
+      margin: 0;
       min-height: 1.2em;
       display: flex;
       align-items: center;
@@ -143,7 +225,7 @@
     .celebration-container { position: relative; display: inline-block; margin: 10px auto; padding: 10px 30px; cursor: crosshair; }
     .celebration-name {
       font-size: 3rem; font-weight: 900; letter-spacing: -0.03em;
-      background: linear-gradient(45deg, #ff007f, #a855f7, #3b82f6, #ffd700, #ff007f);
+      background: var(--gradient-color, linear-gradient(45deg, #ff007f, #a855f7, #3b82f6, #ffd700, #ff007f));
       background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       display: inline-block; animation: celebrateColors 3s linear infinite, partyPulse 1.2s ease-in-out infinite alternate;
       pointer-events: none; margin: 0;
@@ -430,7 +512,13 @@
     </div>
     <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
 
-    <div class="discord-activity" id="discordCustomStatus"></div>
+    <div class="custom-status-container" id="customStatusContainer">
+      <div class="status-avatar-preview" id="statusAvatarPreview">
+        <img id="miniAvatar" src="images/avatar.png" alt="">
+        <div class="mini-status offline" id="miniStatusDot"></div>
+      </div>
+      <div class="discord-activity" id="discordCustomStatus"></div>
+    </div>
 
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
@@ -539,22 +627,48 @@
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
         const json = await res.json();
-        if (!json.success) return;
+        if (!json.success) {
+          console.warn('Lanyard API returned success: false');
+          return;
+        }
 
         const data = json.data;
         const user = data.discord_user;
 
+        console.log('Discord data updated:', { avatar: user?.avatar, accent_color: user?.accent_color });
+
         const avatarImg = document.getElementById('discordAvatar');
         if (user && user.avatar) {
           avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+          avatarImg.style.display = 'block';
+        } else {
+          avatarImg.style.display = 'block'; 
+        }
+
+        if (user && user.accent_color) {
+          const accentColor = '#' + user.accent_color.toString(16).padStart(6, '0').toUpperCase();
+          
+          const r = parseInt(accentColor.slice(1, 3), 16);
+          const g = parseInt(accentColor.slice(3, 5), 16);
+          const b = parseInt(accentColor.slice(5, 7), 16);
+          
+          const lighterColor = `rgb(${Math.min(r + 50, 255)}, ${Math.min(g + 50, 255)}, ${Math.min(b + 50, 255)})`;
+          const darkerColor = `rgb(${Math.max(r - 50, 0)}, ${Math.max(g - 50, 0)}, ${Math.max(b - 50, 0)})`;
+          
+          const gradient = `linear-gradient(45deg, ${accentColor}, ${lighterColor}, ${accentColor}, ${darkerColor}, ${accentColor})`;
+          
+          document.documentElement.style.setProperty('--gradient-color', gradient);
         }
 
         const decoEl = document.getElementById('avatarDecoration');
         if (user && user.avatar_decoration_data && user.avatar_decoration_data.asset) {
-          decoEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png?size=256`;
+          const decoUrl = `https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png?size=256`;
+          decoEl.src = decoUrl;
           decoEl.style.display = 'block';
+          decoEl.style.visibility = 'visible';
         } else {
           decoEl.style.display = 'none';
+          decoEl.style.visibility = 'hidden';
         }
 
         const statusDot = document.getElementById('statusDot');
@@ -571,6 +685,15 @@
           'offline': '⚫ Offline'
         };
         statusDot.title = statusLabels[status] || 'Unknown';
+
+        const miniAvatarImg = document.getElementById('miniAvatar');
+        if (user && user.avatar) {
+          miniAvatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+        }
+
+        const miniStatusDot = document.getElementById('miniStatusDot');
+        miniStatusDot.classList.remove('online', 'idle', 'dnd', 'offline');
+        miniStatusDot.classList.add(status);
 
         const customStatusEl = document.getElementById('discordCustomStatus');
         let customStatusText = '';
@@ -590,15 +713,23 @@
         
         customStatusEl.innerHTML = customStatusText ? customStatusText : '';
 
+        const container = document.getElementById('customStatusContainer');
+        if (customStatusText) {
+          container.style.opacity = '1';
+          container.style.visibility = 'visible';
+        } else {
+          container.style.opacity = '0.6';
+          container.style.visibility = 'visible';
+        }
+
       } catch (err) {
         console.error('Lanyard fetch failed:', err);
       }
     }
 
     updateDiscordPresence();
-    setInterval(updateDiscordPresence, 5000);
+    setInterval(updateDiscordPresence, 5000); 
   </script>
 </body>
 </html>
-
 
