@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="theme-dark" lang="en">
 <head>
@@ -6,9 +7,6 @@
   <title>SKRT7 | Bio</title>
   
   <style>
-    /* ==========================================
-       🎨 التنسيقات الأساسية
-       ========================================== */
     :root {
       --bg-color: #07080B;
       --text-color: #E4E6EB;
@@ -36,9 +34,6 @@
 
     .container { margin-top: 10vh; }
     
-    /* ==========================================
-       🟢 حاوية الأفتار + حالة الاتصال + الديكوريشن
-       ========================================== */
     .avatar-wrapper {
       position: relative;
       width: 128px;
@@ -59,7 +54,6 @@
     }
     .avatar:hover { transform: scale(1.05); }
 
-    /* الديكوريشن (avatar decoration) لو عندك واحد فعال بديسكورد */
     .avatar-decoration {
       position: absolute;
       top: -12%;
@@ -90,7 +84,6 @@
       }
     }
 
-    /* دائرة حالة الاتصال - نفس أشكال أيقونات ديسكورد الحقيقية */
     .status-dot {
       position: absolute;
       bottom: 2px;
@@ -105,10 +98,8 @@
       z-index: 3;
     }
 
-    /* أونلاين: دائرة خضراء صافية */
     .status-online { background-color: #23a55a; }
 
-    /* آواي: هلال (قمر) أصفر عن طريق قص دائرة بلون الخلفية */
     .status-idle {
       background-color: #f0b232;
       position: absolute;
@@ -125,7 +116,6 @@
       transition: background-color 0.3s ease;
     }
 
-    /* عدم الإزعاج: دائرة حمراء مع خط أبيض بالنص */
     .status-dnd { background-color: #f23f43; }
     .status-dnd::after {
       content: "";
@@ -138,7 +128,6 @@
       left: 21%;
     }
 
-    /* أوفلاين: دائرة رمادية مع حلقة (دونات) بلون الخلفية بالمنتصف */
     .status-offline { background-color: #80848e; }
     .status-offline::after {
       content: "";
@@ -152,7 +141,6 @@
       transition: background-color 0.3s ease;
     }
 
-    /* الـ Profile Preview Indicator (Avatar Mini) */
     .custom-status-container {
       display: flex;
       align-items: center;
@@ -215,7 +203,6 @@
     .status-avatar-preview .mini-status.dnd { background-color: #f23f43; }
     .status-avatar-preview .mini-status.offline { background-color: #80848e; }
 
-    /* نص الحالة المخصصة (Custom Status) من ديسكورد */
     .discord-activity {
       color: var(--text-color);
       font-size: 0.85rem;
@@ -236,9 +223,6 @@
     }
     @keyframes pulseDot { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-    /* ==========================================
-       ✨ اسم وتأثير القصاصات
-       ========================================== */
     .celebration-container { position: relative; display: inline-block; margin: 10px auto; padding: 10px 30px; cursor: crosshair; }
     .celebration-name {
       font-size: 3rem; font-weight: 900; letter-spacing: -0.03em;
@@ -251,9 +235,6 @@
     @keyframes partyPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); } 100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); } }
     p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
 
-    /* ==========================================
-       🌙 زر الوضع الليلي (الغيوم والنجوم الفخم)
-       ========================================== */
     .theme-switch-wrapper { margin: 25px auto 40px; display: flex; justify-content: center; }
 
     .theme-switch {
@@ -367,9 +348,6 @@
     .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__comets { opacity: 1; }
     @keyframes auroraWave { 0% { transform: translateY(-100%) translateX(-50%); } 100% { transform: translateY(-100%) translateX(50%); } }
 
-    /* ==========================================
-       🔗 أزرار الروابط الأساسية
-       ========================================== */
     .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
     
     .ship-btn {
@@ -387,9 +365,6 @@
     .spotify { background: #1DB954; } 
     .facebook { background: #1877F2; }
 
-    /* ==========================================
-       ⏳ كود صفحة التحميل (اللودر المعزول)
-       ========================================== */
     .loading-screen {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -424,9 +399,6 @@
 
     @keyframes move { 0% { transform: rotate(0deg); } 100% { transform: rotate(359deg); } }
 
-    /* ==========================================
-       ⭐ زر تقييم مشروع جيت هاب المعزول (يسار الشاشة)
-       ========================================== */
     .github-star-badge {
       position: fixed;
       bottom: 30px;
@@ -445,7 +417,6 @@
       height: 40px;
       padding: 0 16px;
       
-      /* ألوان الإطار المتدرج مثل Uiverse */
       background-image: linear-gradient(#121213, #121213), linear-gradient(90deg, hsl(0, 100%, 63%), hsl(90, 100%, 63%), hsl(210, 100%, 63%), hsl(195, 100%, 63%), hsl(270, 100%, 63%), hsl(0, 100%, 63%));
       background-clip: padding-box, border-box;
       background-origin: padding-box, border-box;
@@ -496,7 +467,6 @@
 
 <body>
 
-  <!-- SVG Filters لزر الوضع الليلي -->
   <svg style="display: none;">
     <defs>
       <filter id="sketchy"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
@@ -504,7 +474,6 @@
     </defs>
   </svg>
 
-  <!-- شاشة التحميل المعزولة -->
   <div class="loading-screen" id="loadingScreen">
     <div class="container-loader">
       <div class="ball" style="--i: 20px; --color: #ff0055; --d: 3s;"></div>
@@ -514,7 +483,6 @@
     </div>
   </div>
 
-  <!-- زر دعم مشروع جيت هاب (معزول ومرتب في اليسار) -->
   <a href="https://github.com/SKRT7-0day/littlelink" target="_blank" class="github-star-badge">
     <div class="github-star-badge-content">
       <svg viewBox="0 0 438.549 438.549">
@@ -532,7 +500,6 @@
 
   <div class="container">
 
-    <!-- الأفتار + حالة الاتصال + الديكوريشن -->
     <div class="avatar-wrapper">
       <img class="avatar" id="discordAvatar" src="images/avatar.png" alt="SKRT7">
       <img class="avatar-decoration" id="avatarDecoration" alt="">
@@ -546,7 +513,6 @@
     </div>
     <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
 
-    <!-- الحالة المخصصة مع Profile Preview (صورة صغيرة من Discord) -->
     <div class="custom-status-container" id="customStatusContainer">
       <div class="status-avatar-preview" id="statusAvatarPreview">
         <img id="miniAvatar" src="images/avatar.png" alt="">
@@ -555,7 +521,6 @@
       <div class="discord-activity" id="discordCustomStatus"></div>
     </div>
 
-    <!-- زر الوضع الليلي الفخم -->
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
         <input type="checkbox" class="theme-switch__checkbox" id="themeCheckbox">
@@ -584,7 +549,6 @@
       </label>
     </div>
 
-    <!-- الأزرار (روابط مباشرة ونظيفة) -->
     <div class="button-stack">
       <a href="https://discord.gg/Vk8WJhpQW4" target="_blank" class="ship-btn discord"><i class="fa-brands fa-discord"></i> Discord</a>
       <a href="https://www.instagram.com/skrt7_66" target="_blank" class="ship-btn instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
@@ -600,7 +564,6 @@
   </div>
 
   <script>
-    // 1. القصاصات التفاعلية للاسم
     const nameContainer = document.getElementById('interactiveName');
     const colors = ['#ff007f', '#a855f7', '#3b82f6', '#ffd700', '#00ffcc'];
 
@@ -629,7 +592,6 @@
     nameContainer.addEventListener('mousemove', spawnConfetti);
     nameContainer.addEventListener('touchmove', spawnConfetti);
 
-    // 2. زر تبديل الوضع الليلي
     const themeCheckbox = document.getElementById('themeCheckbox');
     
     if (localStorage.getItem('theme') === 'light') {
@@ -643,17 +605,14 @@
       document.body.classList.toggle('light-theme');
       localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
       
-      // تحديث status dot الألوان عند تغيير الثيم
       const statusDot = document.getElementById('statusDot');
       if (statusDot) {
-        // إجبار إعادة رسم الـ pseudo-elements بقراءة الـ computed styles
-        void statusDot.offsetHeight; // Force reflow
+        void statusDot.offsetHeight; 
         statusDot.style.filter = 'brightness(1.01)';
         setTimeout(() => statusDot.style.filter = '', 10);
       }
     });
 
-    // 3. التحكم بشاشة التحميل (اللودر) وإخفائها
     window.addEventListener('load', () => {
       setTimeout(() => {
         const loader = document.getElementById('loadingScreen');
@@ -663,11 +622,6 @@
       }, 2500);
     });
 
-    // ==========================================
-    // 4. Discord Presence عبر Lanyard API
-    // ملاحظة مهمة: لازم تكون منضم لسيرفر Lanyard حتى يشتغل:
-    // https://discord.gg/lanyard
-    // ==========================================
     const DISCORD_ID = "1217944125555474565";
 
     async function updateDiscordPresence() {
@@ -679,13 +633,11 @@
         const data = json.data;
         const user = data.discord_user;
 
-        // تحديث الأفتار مباشرة من ديسكورد
         const avatarImg = document.getElementById('discordAvatar');
         if (user && user.avatar) {
           avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
         }
 
-        // الأفتار ديكوريشن (إذا مفعّل بحسابك)
         const decoEl = document.getElementById('avatarDecoration');
         if (user && user.avatar_decoration_data && user.avatar_decoration_data.asset) {
           decoEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png?size=256`;
@@ -694,17 +646,12 @@
           decoEl.style.display = 'none';
         }
 
-        // دائرة حالة الاتصال مع تحديث فوري (online / idle / dnd / offline)
         const statusDot = document.getElementById('statusDot');
         const status = data.discord_status || 'offline';
         
-        // إزالة جميع الـ classes القديمة أولاً
         statusDot.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
-        
-        // إضافة الـ class الجديد
         statusDot.classList.add('status-' + status);
         
-        // تحديث الـ title للإشارة الواضحة
         const statusLabels = {
           'online': '🟢 Online',
           'idle': '🌙 Idle (Away)',
@@ -713,27 +660,22 @@
         };
         statusDot.title = statusLabels[status] || 'Unknown';
 
-        // تحديث الـ Mini Avatar Preview (نفس الأفتار الرئيسي)
         const miniAvatarImg = document.getElementById('miniAvatar');
         if (user && user.avatar) {
           miniAvatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
         }
 
-        // تحديث الـ Mini Status Dot
         const miniStatusDot = document.getElementById('miniStatusDot');
         miniStatusDot.classList.remove('online', 'idle', 'dnd', 'offline');
         miniStatusDot.classList.add(status);
 
-        // عرض الـ Custom Status الفعلي
-        // نبحث عن تحديث الحالة (type 4 = Custom Status)
         const customStatusEl = document.getElementById('discordCustomStatus');
         let customStatusText = '';
         
         if (data.activities && data.activities.length > 0) {
-          const customStatus = data.activities.find(a => a.type === 4); // type 4 = Custom Status
+          const customStatus = data.activities.find(a => a.type === 4); 
           if (customStatus && customStatus.state) {
             customStatusText = customStatus.state;
-            // إذا فيه emoji برة الـ text
             if (customStatus.emoji) {
               const emojiStr = customStatus.emoji.id 
                 ? `<img src="https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.png" style="width:16px;height:16px;margin-right:4px;vertical-align:middle;" alt="">`
@@ -745,7 +687,6 @@
         
         customStatusEl.innerHTML = customStatusText ? customStatusText : '';
 
-        // إظهار/إخفاء الـ container بناءً على وجود custom status
         const container = document.getElementById('customStatusContainer');
         if (customStatusText) {
           container.style.opacity = '1';
@@ -761,8 +702,7 @@
     }
 
     updateDiscordPresence();
-    setInterval(updateDiscordPresence, 5000); // تحديث كل 5 ثواني للتجاوب السريع
+    setInterval(updateDiscordPresence, 5000); 
   </script>
 </body>
 </html>
-
