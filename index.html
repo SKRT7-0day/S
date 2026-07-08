@@ -61,25 +61,18 @@
       height: 124%;
       pointer-events: none;
       display: none;
-      animation: floatingSticker 3s ease-in-out infinite;
+      transform-origin: 50% 50%;
+      animation: floatingSticker 3.5s ease-in-out infinite;
     }
 
     @keyframes floatingSticker {
       0%, 100% { 
-        transform: translateY(0px) rotate(0deg);
-        filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
-      }
-      25% { 
-        transform: translateY(-8px) rotate(2deg);
-        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+        transform: scale(1) translateY(0px);
+        filter: drop-shadow(0 3px 8px rgba(0,0,0,0.2));
       }
       50% { 
-        transform: translateY(-4px) rotate(-1deg);
-        filter: drop-shadow(0 6px 14px rgba(0,0,0,0.25));
-      }
-      75% { 
-        transform: translateY(-10px) rotate(1deg);
-        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+        transform: scale(1.025) translateY(-2px);
+        filter: drop-shadow(0 6px 12px rgba(0,0,0,0.28));
       }
     }
 
@@ -632,7 +625,6 @@
         const status = data.discord_status || 'offline';
         
         statusDot.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
-        
         statusDot.classList.add('status-' + status);
         
         const statusLabels = {
@@ -681,7 +673,8 @@
     }
 
     updateDiscordPresence();
-    setInterval(updateDiscordPresence, 5000);
+    setInterval(updateDiscordPresence, 5000); 
   </script>
 </body>
 </html>
+
