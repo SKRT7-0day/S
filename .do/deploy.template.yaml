@@ -1,8 +1,0 @@
-spec:
-  name: littlelink
-  static_sites:
-    - name: littlelink
-      git:
-        branch: main
-        repo_clone_url: https://github.com/sethcottle/littlelink.git
-      output_dir: /
