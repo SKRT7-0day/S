@@ -1,6 +1,0 @@
-name = "s"
-compatibility_date = "2025-01-27"
-
-[assets]
-directory = "./"
-html_handling = "auto-trailing-slash"
