@@ -478,7 +478,6 @@
       <div class="discord-activity" id="discordCustomStatus"></div>
     </div>
 
-
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
         <input type="checkbox" class="theme-switch__checkbox" id="themeCheckbox">
@@ -633,6 +632,7 @@
         const status = data.discord_status || 'offline';
         
         statusDot.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
+        
         statusDot.classList.add('status-' + status);
         
         const statusLabels = {
@@ -653,7 +653,9 @@
             if (customStatus.emoji) {
               if (customStatus.emoji.id) {
                 const ext = customStatus.emoji.animated ? 'gif' : 'png';
-                const emojiStr = `<img src="https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.${ext}" style="width:18px;height:18px;margin-right:4px;vertical-align:middle;" alt="">`;
+                const altExt = customStatus.emoji.animated ? 'png' : 'gif';
+                const emojiId = customStatus.emoji.id;
+                const emojiStr = `<img src="https://cdn.discordapp.com/emojis/${emojiId}.${ext}" data-alt="https://cdn.discordapp.com/emojis/${emojiId}.${altExt}" data-tried="0" style="width:18px;height:18px;margin-right:4px;vertical-align:middle;" alt="" onerror="if(this.dataset.tried==='0'){this.dataset.tried='1';this.src=this.dataset.alt;}else{this.style.display='none';}">`;
                 customStatusText = emojiStr + customStatusText;
               } else if (customStatus.emoji.name) {
                 customStatusText = customStatus.emoji.name + ' ' + customStatusText;
@@ -679,8 +681,7 @@
     }
 
     updateDiscordPresence();
-    setInterval(updateDiscordPresence, 5000); 
+    setInterval(updateDiscordPresence, 5000);
   </script>
 </body>
 </html>
-
