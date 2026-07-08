@@ -1,30 +1,64 @@
-![Logo](https://i.postimg.cc/v8g9QDHb/8e92b9a5e0df61fe6d87b767ebfbd7ae.jpg)
+# SKRT7 — Bio Link Page
 
-# LittleLink
-The DIY self-hosted LinkTree alternative. LittleLink has more than 100 branded button styles you can easily use, with more regularly added by our community in this repo and in [LittleLink Extended](https://github.com/sethcottle/littlelink-extended).
+A personal bio/link-in-bio page with live Discord presence integration (via [Lanyard](https://github.com/Phineas/lanyard)), animated UI, and a dark/light theme toggle.
+
+🔗 **Live:** [s.skrt7.workers.dev](https://s.skrt7.workers.dev/)
+
+![Preview](https://i.postimg.cc/L6CkKvJQ/Picsart-26-07-08-19-02-19-729.jpg)
+
+## Features
+
+- 🟢 **Live Discord status** — online / idle / dnd / offline, updates automatically
+- 💬 **Custom status sync** — mirrors your Discord custom status text & emoji in real time
+- 🎨 **Dynamic accent color** — page gradient matches your Discord profile color
+- 🖼️ **Avatar + decoration sync** — pulls your current avatar and avatar decoration from Discord
+- 🌗 **Dark / light theme toggle** with animated sun-moon switch
+- ✨ **Interactive confetti** on hover/touch over the name
+- 🔗 **Social link buttons** (Discord, Instagram, GitHub, YouTube, Spotify, Facebook)
+- 📱 **Fully responsive**, mobile-first design
+- 🔍 **Discord embed support** — rich link preview (Open Graph + Twitter Card meta tags)
+
+## Project Structure
+
+```
+skrt7-bio/
+├── index.html          # Main page markup
+├── assets/
+│   ├── css/
+│   │   └── style.css   # All styling
+│   └── js/
+│       └── main.js     # Confetti, theme toggle, Discord presence (Lanyard)
+├── images/              # Local image assets (if any)
+└── README.md
+```
+
+## How it works
+
+Live Discord presence is powered by the [Lanyard API](https://github.com/Phineas/lanyard), a free service that exposes real-time Discord presence data.
+
+**Requirement:** the Discord account being displayed must be a member of the [Lanyard Discord server](https://discord.gg/lanyard) — Lanyard only tracks presence for members of its own server via the Discord gateway.
+
+The Discord user ID is set in `assets/js/main.js`:
+
+```js
+const DISCORD_ID = "1217944125555474565";
+```
+
+## Deployment
+
+This is a static site — deploy it anywhere that serves static files:
+
+- **Cloudflare Workers / Pages** (currently used)
+- GitHub Pages
+- Netlify / Vercel
+- Any static file host
+
+Just make sure the folder structure stays intact (`assets/css/style.css` and `assets/js/main.js` paths are relative).
+
+## License
+
+Personal project — feel free to fork for inspiration, but please don't republish as-is.
 
 ---
-### 🆕 LittleLink Button Builder
-Want to make your own buttons for LittleLink but you're not too sure where to start? [Check out our new Button Builder](https://builder.littlelink.io). This new builder lets you preview button styles and with a single click, copy the generated CSS code to put in `css/brands.css`, and copy the generated HTML code to put in `index.html`. This builder also helps automate accessibility features by checking contrast ratios and suggesting strokes when needed, ensuring your custom buttons maintain LittleLink's high standards for visibility in both light and dark themes. Design your buttons visually, preview them live, and get ready to go code. [Live Site](https://builder.littlelink.io) | [GitHub Repo](https://github.com/sethcottle/littlelink-button-builder)
 
----
-### 🌞 Themes and Accessibility
-LittleLink offers `auto`, `light`, and `dark` themes right out of the box. If the default color schemes don't match your preference, you can easily customize them by updating the values in `style.css`. You can set any of the themes right in `index.html`. To enhance visual accessibility in both `light` and `dark` modes, buttons lacking sufficient contrast with the background are outlined with an inverse stroke to ensure visibility. While LittleLink emphasizes accessibility, it's important to acknowledge that not all brands incorporated into LittleLink achieve this standard. Branded buttons that come into LittleLink always retain the original essence of the brand and some branded buttons might fall short of optimal accessibility in terms of contrast.
-
-![Theme](https://i.postimg.cc/Jn7DV4YM/lv-0-20260524201903.gif)
-
----
-### 🥇 Performance
-
-![Performance](https://cdn.cottle.cloud/GitHub/LittleLink/ranking.gif)
-
-LittleLink epitomizes simplicity and minimalism. When evaluating the [LittleLink sample page](https://littlelink.io/sample/seth) (which mirrors a typical LittleLink setup for an individual) through tools such as [Google PageSpeed Insights](https://pagespeed.web.dev/analysis/https-littlelink-io-sample-seth/17ex80ryq4?form_factor=mobile), showcases LittleLink's excellence with 100/100 in Performance, Accessibility, Best Practices, and SEO. My initial vision for LittleLink was to craft it from the fundamentals. LittleLink leverages it's own vanilla `css` to remove the unnecessary bloat you would get from using a large framework for a page that requires nothing more than simplicity.
-
----
-### ☁️ Deploy
-
-![Publish](https://cdn.cottle.cloud/GitHub/LittleLink/test/css/deploy.gif)
-
-No need for gulp, npm, or anything else to make LittleLink work—it uses the bare essentials. You can automatically fork and deploy LittleLink with [Cloudflare](https://workers.cloudflare.com/), [DigitalOcean](https://www.digitalocean.com/products/app-platform), [Vercel](https://vercel.com/), [Netlify](https://www.netlify.com/), or [Amplify](https://aws.amazon.com/amplify) using the buttons below. LittleLink is also easy to host through [GitHub Pages](https://pages.github.com/) or on your home lab server, CDN, or other frontend hosting services. To edit, all you need is a little basic HTML knowledge to add a link to the exisiting buttons or you can create your own. See our [adding custom buttons to your own fork wiki](https://github.com/sethcottle/littlelink/wiki/Adding-custom-buttons-to-your-own-fork). It's simple, promise. 🤞
-
-
+Made with ❤️ by [SKRT7](https://github.com/SKRT7-0day)
