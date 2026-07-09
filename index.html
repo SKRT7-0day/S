@@ -4,7 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SKRT7 | Bio</title>
+  <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/L6CkKvJQ/Picsart-26-07-08-19-02-19-729.jpg">
+  <link rel="shortcut icon" type="image/jpeg" href="https://i.postimg.cc/L6CkKvJQ/Picsart-26-07-08-19-02-19-729.jpg">
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/L6CkKvJQ/Picsart-26-07-08-19-02-19-729.jpg">
 
+  <!-- Open Graph / Discord Embed Meta Tags -->
   <meta property="og:title" content="SKRT7.">
   <meta property="og:description" content="Welcome!
 
@@ -17,12 +21,16 @@ Thanks for stopping by!">
   <meta property="og:site_name" content="SKRT7">
   <meta name="theme-color" content="#a855f7">
 
+  <!-- Twitter Card (Discord also reads these as fallback) -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="SKRT7.">
   <meta name="twitter:description" content="Welcome! This is your one-stop destination for all my official links and social media profiles.">
   <meta name="twitter:image" content="https://i.postimg.cc/L6CkKvJQ/Picsart-26-07-08-19-02-19-729.jpg">
-  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+/* ==========================================
+       Base Styles
+       ========================================== */
     :root {
       --bg-color: #07080B;
       --text-color: #E4E6EB;
@@ -50,6 +58,9 @@ Thanks for stopping by!">
 
     .container { margin-top: 10vh; }
     
+    /* ==========================================
+       Avatar Wrapper + Status Dot + Decoration
+       ========================================== */
     .avatar-wrapper {
       position: relative;
       width: 128px;
@@ -70,6 +81,7 @@ Thanks for stopping by!">
     }
     .avatar:hover { transform: scale(1.05); }
 
+    /* Avatar decoration if active on Discord */
     .avatar-decoration {
       position: absolute;
       top: -12%;
@@ -80,6 +92,7 @@ Thanks for stopping by!">
       display: none;
     }
 
+    /* Status dot styling matching real Discord status icons */
     .status-dot {
       position: absolute;
       bottom: 2px;
@@ -94,8 +107,10 @@ Thanks for stopping by!">
       z-index: 3;
     }
 
+    /* Online: Solid green circle */
     .status-online { background-color: #23a55a; }
 
+    /* Idle: Yellow moon crescent shaped with background color overlay */
     .status-idle {
       background-color: #f0b232;
       position: absolute;
@@ -112,6 +127,7 @@ Thanks for stopping by!">
       transition: background-color 0.3s ease;
     }
 
+    /* Do Not Disturb: Red circle with a white middle line */
     .status-dnd { background-color: #f23f43; }
     .status-dnd::after {
       content: "";
@@ -124,6 +140,7 @@ Thanks for stopping by!">
       left: 21%;
     }
 
+    /* Offline: Gray circle with a background color donut hole in the center */
     .status-offline { background-color: #80848e; }
     .status-offline::after {
       content: "";
@@ -137,6 +154,7 @@ Thanks for stopping by!">
       transition: background-color 0.3s ease;
     }
 
+    /* Custom Status Container */
     .custom-status-container {
       display: flex;
       align-items: center;
@@ -161,6 +179,7 @@ Thanks for stopping by!">
       }
     }
 
+    /* Discord Custom Status text styling */
     .discord-activity {
       color: var(--text-color);
       font-size: 0.85rem;
@@ -181,6 +200,9 @@ Thanks for stopping by!">
     }
     @keyframes pulseDot { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 
+    /* ==========================================
+       Name and Confetti Effect
+       ========================================== */
     .celebration-container { position: relative; display: inline-block; margin: 10px auto; padding: 10px 30px; cursor: crosshair; }
     .celebration-name {
       font-size: 3rem; font-weight: 900; letter-spacing: -0.03em;
@@ -193,6 +215,9 @@ Thanks for stopping by!">
     @keyframes partyPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); } 100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); } }
     p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
 
+    /* ==========================================
+       Premium Theme Switch (Clouds and Stars)
+       ========================================== */
     .theme-switch-wrapper { margin: 25px auto 40px; display: flex; justify-content: center; }
 
     .theme-switch {
@@ -306,6 +331,9 @@ Thanks for stopping by!">
     .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__comets { opacity: 1; }
     @keyframes auroraWave { 0% { transform: translateY(-100%) translateX(-50%); } 100% { transform: translateY(-100%) translateX(50%); } }
 
+    /* ==========================================
+       Core Link Buttons
+       ========================================== */
     .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
     
     .ship-btn {
@@ -323,6 +351,9 @@ Thanks for stopping by!">
     .spotify { background: #1DB954; } 
     .facebook { background: #1877F2; }
 
+    /* ==========================================
+       Loading Screen Code (Isolated Loader)
+       ========================================== */
     .loading-screen {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -357,6 +388,9 @@ Thanks for stopping by!">
 
     @keyframes move { 0% { transform: rotate(0deg); } 100% { transform: rotate(359deg); } }
 
+    /* ==========================================
+       Isolated GitHub Star Badge (Bottom Left)
+       ========================================== */
     .github-star-badge {
       position: fixed;
       bottom: 30px;
@@ -375,6 +409,7 @@ Thanks for stopping by!">
       height: 40px;
       padding: 0 16px;
       
+      /* Gradient border colors like Uiverse */
       background-image: linear-gradient(#121213, #121213), linear-gradient(90deg, hsl(0, 100%, 63%), hsl(90, 100%, 63%), hsl(210, 100%, 63%), hsl(195, 100%, 63%), hsl(270, 100%, 63%), hsl(0, 100%, 63%));
       background-clip: padding-box, border-box;
       background-origin: padding-box, border-box;
@@ -418,13 +453,13 @@ Thanks for stopping by!">
     @media (max-width: 768px) {
       .github-star-badge { bottom: 20px; left: 20px; padding: 0 12px; height: 36px; }
     }
-  </style>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </style>
 </head> 
 
 <body>
 
+  <!-- SVG Filters for Theme Switch -->
   <svg style="display: none;">
     <defs>
       <filter id="sketchy"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap></filter>
@@ -432,6 +467,7 @@ Thanks for stopping by!">
     </defs>
   </svg>
 
+  <!-- Isolated Loading Screen -->
   <div class="loading-screen" id="loadingScreen">
     <div class="container-loader">
       <div class="ball" style="--i: 20px; --color: #ff0055; --d: 3s;"></div>
@@ -441,6 +477,7 @@ Thanks for stopping by!">
     </div>
   </div>
 
+  <!-- GitHub Support Badge (Isolated left side) -->
   <a href="https://github.com/SKRT7-0day/littlelink" target="_blank" class="github-star-badge">
     <div class="github-star-badge-content">
       <svg viewBox="0 0 438.549 438.549">
@@ -458,6 +495,7 @@ Thanks for stopping by!">
 
   <div class="container">
 
+    <!-- Avatar + Status + Decoration -->
     <div class="avatar-wrapper">
       <img class="avatar" id="discordAvatar" src="images/avatar.png" alt="SKRT7">
       <img class="avatar-decoration" id="avatarDecoration" alt="">
@@ -471,10 +509,13 @@ Thanks for stopping by!">
     </div>
     <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
 
+    <!-- Discord Custom Status -->
     <div class="custom-status-container" id="customStatusContainer">
       <div class="discord-activity" id="discordCustomStatus"></div>
     </div>
 
+
+    <!-- Premium Theme Switch -->
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
         <input type="checkbox" class="theme-switch__checkbox" id="themeCheckbox">
@@ -503,6 +544,7 @@ Thanks for stopping by!">
       </label>
     </div>
 
+    <!-- Buttons (Clean and direct links) -->
     <div class="button-stack">
       <a href="https://discord.gg/Vk8WJhpQW4" target="_blank" class="ship-btn discord"><i class="fa-brands fa-discord"></i> Discord</a>
       <a href="https://www.instagram.com/skrt7_66" target="_blank" class="ship-btn instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
@@ -516,8 +558,8 @@ Thanks for stopping by!">
       © 2026 SKRT7. ALL RIGHTS RESERVED.
     </footer>
   </div>
-
   <script>
+// 1. Interactive Confetti for Name
     const nameContainer = document.getElementById('interactiveName');
     const colors = ['#ff007f', '#a855f7', '#3b82f6', '#ffd700', '#00ffcc'];
 
@@ -546,6 +588,7 @@ Thanks for stopping by!">
     nameContainer.addEventListener('mousemove', spawnConfetti);
     nameContainer.addEventListener('touchmove', spawnConfetti);
 
+    // 2. Theme Toggle Switch
     const themeCheckbox = document.getElementById('themeCheckbox');
     
     if (localStorage.getItem('theme') === 'light') {
@@ -559,14 +602,17 @@ Thanks for stopping by!">
       document.body.classList.toggle('light-theme');
       localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
       
+      // Update status dot filter on theme change
       const statusDot = document.getElementById('statusDot');
       if (statusDot) {
+        // Force reflow for pseudo-elements
         void statusDot.offsetHeight; 
         statusDot.style.filter = 'brightness(1.01)';
         setTimeout(() => statusDot.style.filter = '', 10);
       }
     });
 
+    // 3. Loading Screen (Loader) Control
     window.addEventListener('load', () => {
       setTimeout(() => {
         const loader = document.getElementById('loadingScreen');
@@ -576,6 +622,11 @@ Thanks for stopping by!">
       }, 2500);
     });
 
+    // ==========================================
+    // 4. Discord Presence via Lanyard API
+    // Important Note: You must be in the Lanyard Discord server for this to work:
+    // https://discord.gg/lanyard
+    // ==========================================
     const DISCORD_ID = "1217944125555474565";
 
     async function updateDiscordPresence() {
@@ -591,29 +642,35 @@ Thanks for stopping by!">
         const data = json.data;
         const user = data.discord_user;
 
+        // Update avatar directly from Discord
         const avatarImg = document.getElementById('discordAvatar');
         if (user && user.avatar) {
           avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
           avatarImg.style.display = 'block';
         } else {
-          avatarImg.style.display = 'block'; 
+          avatarImg.style.display = 'block'; // Show default avatar
         }
 
+        // ===== Apply Profile Accent Color =====
         if (user && user.accent_color) {
           const accentColor = '#' + user.accent_color.toString(16).padStart(6, '0').toUpperCase();
           
+          // Convert hex to RGB to get different shades
           const r = parseInt(accentColor.slice(1, 3), 16);
           const g = parseInt(accentColor.slice(3, 5), 16);
           const b = parseInt(accentColor.slice(5, 7), 16);
           
+          // Create a gradient from the actual color shades
           const lighterColor = `rgb(${Math.min(r + 50, 255)}, ${Math.min(g + 50, 255)}, ${Math.min(b + 50, 255)})`;
           const darkerColor = `rgb(${Math.max(r - 50, 0)}, ${Math.max(g - 50, 0)}, ${Math.max(b - 50, 0)})`;
           
           const gradient = `linear-gradient(45deg, ${accentColor}, ${lighterColor}, ${accentColor}, ${darkerColor}, ${accentColor})`;
           
+          // Apply gradient to the name
           document.documentElement.style.setProperty('--gradient-color', gradient);
         }
 
+        // Avatar decoration (if enabled on your account)
         const decoEl = document.getElementById('avatarDecoration');
         if (user && user.avatar_decoration_data && user.avatar_decoration_data.asset) {
           const decoUrl = `https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png?size=256`;
@@ -625,13 +682,17 @@ Thanks for stopping by!">
           decoEl.style.visibility = 'hidden';
         }
 
+        // Status dot with instant updates (online / idle / dnd / offline)
         const statusDot = document.getElementById('statusDot');
         const status = data.discord_status || 'offline';
         
+        // Remove all old classes first
         statusDot.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
         
+        // Add new class
         statusDot.classList.add('status-' + status);
         
+        // Update title attribute
         const statusLabels = {
           'online': '🟢 Online',
           'idle': '🌙 Idle (Away)',
@@ -640,6 +701,7 @@ Thanks for stopping by!">
         };
         statusDot.title = statusLabels[status] || 'Unknown';
 
+        // Display actual Custom Status (Find type 4 activity)
         const customStatusEl = document.getElementById('discordCustomStatus');
         let customStatusText = '';
         
@@ -647,6 +709,7 @@ Thanks for stopping by!">
           const customStatus = data.activities.find(a => a.type === 4); 
           if (customStatus && customStatus.state) {
             customStatusText = customStatus.state;
+            // Supports animated or static custom emojis
             if (customStatus.emoji) {
               if (customStatus.emoji.id) {
                 const ext = customStatus.emoji.animated ? 'gif' : 'png';
@@ -663,6 +726,7 @@ Thanks for stopping by!">
         
         customStatusEl.innerHTML = customStatusText ? customStatusText : '';
 
+        // Show/hide container based on custom status presence
         const container = document.getElementById('customStatusContainer');
         if (customStatusText) {
           container.style.opacity = '1';
@@ -678,7 +742,8 @@ Thanks for stopping by!">
     }
 
     updateDiscordPresence();
-    setInterval(updateDiscordPresence, 5000);
+    setInterval(updateDiscordPresence, 5000); // Update every 5 seconds for responsiveness
+
   </script>
 </body>
 </html>
