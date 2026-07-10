@@ -28,12 +28,30 @@
       margin: 0;
       padding: 0;
       transition: background-color 0.4s ease, color 0.3s ease;
+      overflow-x: hidden;
     }
 
     .container {
       max-width: 800px;
       margin: 0 auto;
       padding: 40px 20px;
+    }
+
+    /* أنيميشن دخول الصفحة */
+    @keyframes fadeSlideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-enter {
+      opacity: 0;
+      animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     }
 
     .header {
@@ -75,19 +93,27 @@
       border-radius: 15px;
       padding: 25px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
       display: flex;
       flex-direction: column;
+      border: 1px solid transparent;
+      opacity: 0; /* البداية مخفية للأنيميشن */
     }
+
+    /* تأخير بسيط لكل بطاقة عشان تطلع وحدة ورا الثانية */
+    .project-card:nth-child(1) { animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
+    .project-card:nth-child(2) { animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+    .project-card:nth-child(3) { animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards; }
 
     .project-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      border-color: rgba(168, 85, 247, 0.3);
     }
 
     .project-icon {
       font-size: 2rem;
-      color: var(--accent-color);
+      color: var(--text-color);
       margin-bottom: 15px;
     }
 
@@ -119,30 +145,35 @@
       border-radius: 20px;
       font-size: 0.8rem;
       font-weight: 500;
+      border: 1px solid rgba(168, 85, 247, 0.2);
     }
 
     .project-link {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       text-decoration: none;
       color: #fff;
-      background-color: var(--accent-color);
+      background-color: #2b3137; /* لون مقارب لـ GitHub */
       padding: 10px 20px;
       border-radius: 8px;
       font-weight: bold;
       font-size: 0.9rem;
       text-align: center;
-      transition: background-color 0.2s ease;
+      transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
     .project-link:hover {
-      background-color: #9333ea;
+      background-color: #24292e;
+      transform: scale(1.02);
     }
 
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <div class="container animate-enter">
     <div class="header">
       <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
       <h1>My Projects</h1>
@@ -150,54 +181,59 @@
 
     <div class="projects-grid">
       
-      <!-- Project 1 -->
+      <!-- Project 1: Fake View Script -->
       <div class="project-card">
-        <i class="fa-solid fa-robot project-icon"></i>
-        <h2 class="project-title">Discord Server Management & Bots</h2>
-        <p class="project-desc">Configuring and deploying advanced automation systems using Sapphire, NovaX, Arcane, and Carl-bot for roles and community engagement.</p>
+        <i class="fa-brands fa-github project-icon"></i>
+        <h2 class="project-title">Fake View Script</h2>
+        <p class="project-desc">سكربت مخصص لزيادة المشاهدات الوهمية بشكل تلقائي، مصمم للعمل باستقرار على بيئات الاستضافة المختلفة.</p>
         <div class="project-tags">
-          <span class="tag">Discord API</span>
+          <span class="tag">Python</span>
           <span class="tag">Automation</span>
-          <span class="tag">Community</span>
+          <span class="tag">Script</span>
         </div>
-        <a href="#" class="project-link">View Details</a>
+        <!-- استبدل YOUR_REPO_NAME باسم المستودع الفعلي -->
+        <a href="https://github.com/SKRT7-0day/YOUR_REPO_NAME" target="_blank" class="project-link">
+          <i class="fa-brands fa-github"></i> View on GitHub
+        </a>
       </div>
 
-      <!-- Project 2 -->
+      <!-- Project 2: Fake Stream Script -->
       <div class="project-card">
-        <i class="fa-solid fa-gamepad project-icon"></i>
-        <h2 class="project-title">Game Modding & Setup</h2>
-        <p class="project-desc">Technical modification setups for Android gaming, including SMAPI implementation for Stardew Valley and custom shaders for Minecraft Bedrock.</p>
-        <div class="project-tags">
-          <span class="tag">Android</span>
-          <span class="tag">SMAPI</span>
-          <span class="tag">Minecraft</span>
-        </div>
-        <a href="#" class="project-link">View Details</a>
-      </div>
-
-      <!-- Project 3 -->
-      <div class="project-card">
-        <i class="fa-solid fa-terminal project-icon"></i>
-        <h2 class="project-title">Automation & Deployment Scripts</h2>
-        <p class="project-desc">Developing and hosting 24/7 scripts using Node.js and Python. Utilizing Termux, Render, and Replit for consistent background deployment.</p>
+        <i class="fa-brands fa-github project-icon"></i>
+        <h2 class="project-title">Fake Stream Script</h2>
+        <p class="project-desc">أداة متقدمة لإدارة وإنشاء بثوث وهمية باستخدام خوادم الطرف الثالث، مع دعم للتشغيل المستمر 24/7.</p>
         <div class="project-tags">
           <span class="tag">Node.js</span>
-          <span class="tag">Python</span>
           <span class="tag">Termux</span>
+          <span class="tag">API</span>
         </div>
-        <a href="#" class="project-link">View Details</a>
+        <!-- استبدل YOUR_REPO_NAME باسم المستودع الفعلي -->
+        <a href="https://github.com/SKRT7-0day/YOUR_REPO_NAME" target="_blank" class="project-link">
+          <i class="fa-brands fa-github"></i> View on GitHub
+        </a>
+      </div>
+
+      <!-- Project 3: Empty Placeholder (تقدر تنسخه عشان تضيف مشاريع زيادة) -->
+      <div class="project-card">
+        <i class="fa-brands fa-github project-icon" style="opacity: 0.5;"></i>
+        <h2 class="project-title">Upcoming Project...</h2>
+        <p class="project-desc">مساحة مخصصة لمشروع جديد. سيتم إضافة الكود المصدري هنا قريباً.</p>
+        <div class="project-tags">
+          <span class="tag" style="background-color: transparent; border-color: var(--sub-text); color: var(--sub-text);">Coming Soon</span>
+        </div>
+        <a href="https://github.com/SKRT7-0day" target="_blank" class="project-link" style="background-color: transparent; border: 1px solid var(--sub-text); color: var(--sub-text);">
+          Visit GitHub Profile
+        </a>
       </div>
 
     </div>
   </div>
 
   <script>
-    // عشان يحافظ على نفس الثيم اللي اختاره المستخدم في الصفحة الرئيسية
+    // الحفاظ على ثيم المستخدم (نهاري/ليلي)
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-theme');
     }
   </script>
 </body>
 </html>
-
