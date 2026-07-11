@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html class="theme-dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SKRT7 | About Me</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #07080B;
+      --text-color: #E4E6EB;
+      --card-bg: #1F222F;
+      --sub-text: #94A3B8;
+      --accent-color: #a855f7;
+    }
+
+    .light-theme {
+      --bg-color: #F8FAFC;
+      --text-color: #0F172A;
+      --card-bg: #E2E8F0;
+      --sub-text: #64748B;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.4s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-enter {
+      opacity: 0;
+      animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      border-bottom: 2px solid var(--card-bg);
+      padding-bottom: 20px;
+    }
+
+    .back-btn {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    /* ==========================================
+       INTRO CARD
+       ========================================== */
+    .intro-card {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(168, 85, 247, 0.02));
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeSlideUp 0.8s 0.1s forwards;
+    }
+
+    .intro-greeting {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin: 0 0 10px 0;
+    }
+
+    .intro-greeting .wave {
+      display: inline-block;
+      animation: wave 2.2s ease-in-out infinite;
+      transform-origin: 70% 70%;
+    }
+
+    @keyframes wave {
+      0%, 60%, 100% { transform: rotate(0deg); }
+      10% { transform: rotate(14deg); }
+      20% { transform: rotate(-8deg); }
+      30% { transform: rotate(14deg); }
+      40% { transform: rotate(-4deg); }
+      50% { transform: rotate(10deg); }
+    }
+
+    .intro-text {
+      color: var(--sub-text);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ==========================================
+       INFO CARDS GRID
+       ========================================== */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .info-card {
+      background-color: var(--card-bg);
+      border-radius: 15px;
+      padding: 22px;
+      opacity: 0;
+      animation: fadeSlideUp 0.8s 0.2s forwards;
+    }
+
+    .info-card:nth-child(2) { animation-delay: 0.3s; }
+
+    .info-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .info-card-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background-color: rgba(168, 85, 247, 0.15);
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .info-card-title {
+      font-size: 1.05rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .info-card-body {
+      color: var(--sub-text);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .info-list li {
+      background-color: rgba(168, 85, 247, 0.15);
+      color: var(--accent-color);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+    }
+
+    /* ==========================================
+       FULL-WIDTH STORY CARDS
+       ========================================== */
+    .story-card {
+      background-color: var(--card-bg);
+      border-radius: 15px;
+      padding: 24px;
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeSlideUp 0.8s 0.4s forwards;
+    }
+
+    .story-card:nth-of-type(2) { animation-delay: 0.5s; }
+
+    .story-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .story-card-icon {
+      color: var(--accent-color);
+      font-size: 1.2rem;
+    }
+
+    .story-card-title {
+      font-size: 1.05rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .story-card-body {
+      color: var(--sub-text);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    /* ==========================================
+       DREAM QUESTION CARD
+       ========================================== */
+    .question-card {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(59, 130, 246, 0.08));
+      border: 1px dashed rgba(168, 85, 247, 0.4);
+      border-radius: 15px;
+      padding: 24px;
+      text-align: center;
+      margin: 24px 0;
+      opacity: 0;
+      animation: fadeSlideUp 0.8s 0.6s forwards;
+    }
+
+    .question-card p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-color);
+    }
+
+    .question-card .highlight {
+      color: var(--accent-color);
+      font-weight: bold;
+    }
+
+    /* ==========================================
+       CLOSING NOTE
+       ========================================== */
+    .closing-note {
+      text-align: center;
+      padding: 24px 10px 0;
+      opacity: 0;
+      animation: fadeSlideUp 0.8s 0.7s forwards;
+    }
+
+    .closing-note p {
+      color: var(--sub-text);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin: 0 0 6px 0;
+    }
+
+    .closing-note .signature {
+      color: var(--accent-color);
+      font-weight: bold;
+      font-size: 1.05rem;
+      margin-top: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container animate-enter">
+    <div class="header">
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+      <h1>About Me</h1>
+    </div>
+
+    <div class="intro-card">
+      <p class="intro-greeting"><span class="wave">👋</span> Hey there, welcome!</p>
+      <p class="intro-text">
+        I'm glad you stopped by. How are you doing? If you'd like to know a bit more about me, you're in the right place — let's dive in.
+      </p>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-header">
+          <div class="info-card-icon"><i class="fa-solid fa-id-badge"></i></div>
+          <h2 class="info-card-title">Who am I</h2>
+        </div>
+        <p class="info-card-body">
+          Online, I go by <strong style="color: var(--text-color);">SKRT7</strong>. I keep my real name private for personal reasons — hope you understand. I'm <strong style="color: var(--text-color);">19 years old</strong>, currently based in <strong style="color: var(--text-color);">Morocco</strong>.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-card-header">
+          <div class="info-card-icon"><i class="fa-solid fa-heart"></i></div>
+          <h2 class="info-card-title">Interests</h2>
+        </div>
+        <ul class="info-list">
+          <li>🏊 Swimming</li>
+          <li>🎮 Gaming</li>
+          <li>🎬 Video Editing</li>
+          <li>🎨 Design</li>
+          <li>💻 Programming</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-card-header">
+        <i class="fa-solid fa-compass story-card-icon"></i>
+        <h3 class="story-card-title">Still exploring</h3>
+      </div>
+      <p class="story-card-body">
+        I'm a hobbyist in most of the things I mentioned above, still learning and improving with time. I don't have a bunch of scattered profiles online — this website is the one place you'll always find me, so if you ever need to reach me, you know where to look.
+      </p>
+    </div>
+
+    <div class="story-card">
+      <div class="story-card-header">
+        <i class="fa-solid fa-moon story-card-icon"></i>
+        <h3 class="story-card-title">A bit introverted</h3>
+      </div>
+      <p class="story-card-body">
+        I'd describe myself as an introvert — I'm not really into big gatherings or crowds. I've been through my share of struggles; some I made it through fine, others not so much. But that's okay — it's all part of becoming better over time.
+      </p>
+    </div>
+
+    <div class="question-card">
+      <p>
+        One of my biggest dreams is to <span class="highlight">travel the world</span> — to experience different cultures, and just get some distance from life's problems and pressure, even if only for a while.
+      </p>
+      <p style="margin-top: 12px;">
+        So, what about <span class="highlight">you</span>? What are your dreams? 😊
+      </p>
+    </div>
+
+    <div class="closing-note">
+      <p>Sounds like it could be a fun conversation ^^</p>
+      <p>Wishing you all the best, and thanks for making it all the way here.</p>
+      <p class="signature">— SKRT7</p>
+    </div>
+
+  </div>
+
+  <script>
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light-theme');
+    }
+  </script>
+</body>
+</html>
+
