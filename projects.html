@@ -158,9 +158,110 @@
     .star-btn.starred { background-color: var(--accent-color); color: #fff; }
     .star-btn:disabled { opacity: 0.6; cursor: default; }
 
+    /* ==========================================
+       TOS WARNING MODAL
+       Blocks the page until the visitor acknowledges
+       that some listed projects (e.g. selfbots) violate
+       Discord's Terms of Service.
+       ========================================== */
+    .warning-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .warning-card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      max-width: 440px;
+      width: 100%;
+      padding: 28px 24px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      text-align: center;
+    }
+
+    .warning-icon {
+      font-size: 2.5rem;
+      color: #ef4444;
+      margin-bottom: 14px;
+    }
+
+    .warning-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 0 0 12px 0;
+      color: var(--text-color);
+    }
+
+    .warning-text {
+      color: var(--sub-text);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 10px;
+      text-align: right;
+      direction: rtl;
+    }
+
+    .warning-text strong {
+      color: #ef4444;
+    }
+
+    .warning-link {
+      display: inline-block;
+      color: var(--accent-color);
+      font-size: 0.85rem;
+      text-decoration: underline;
+      margin-bottom: 20px;
+    }
+
+    .warning-ok-btn {
+      background-color: var(--accent-color);
+      color: #fff;
+      border: none;
+      padding: 12px 40px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .warning-ok-btn:hover { background-color: #9333ea; }
+
+    body.warning-active {
+      overflow: hidden;
+    }
+
   </style>
 </head>
-<body>
+<body class="warning-active">
+
+  <!-- TOS Warning Modal -->
+  <div class="warning-overlay" id="warningOverlay">
+    <div class="warning-card">
+      <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+      <h2 class="warning-title">تنبيه هام قبل المتابعة</h2>
+      <p class="warning-text">
+        بعض المشاريع المعروضة في هذه الصفحة (مثل <strong>Selfbots</strong>) <strong>تخالف شروط استخدام Discord</strong>،
+        وتحديداً القسم الخاص بمنع أتمتة الحسابات الشخصية (Self-Bots).
+      </p>
+      <p class="warning-text">
+        استخدام هذه المشاريع على حسابك الشخصي قد يعرضك لحظر دائم من Discord.
+        هذه المشاريع مطروحة لأغراض تعليمية/تجريبية فقط، وأنت مسؤول بالكامل عن أي استخدام لها.
+      </p>
+      <a href="https://discord.com/terms" target="_blank" class="warning-link">
+        اقرأ شروط استخدام Discord (Terms of Service)
+      </a>
+      <br>
+      <button class="warning-ok-btn" id="warningOkBtn">فهمت، أوافق (OK)</button>
+    </div>
+  </div>
 
   <div class="container animate-enter">
     <div class="header">
@@ -433,6 +534,30 @@
     }
 
     document.addEventListener('DOMContentLoaded', init);
+
+    // ==========================================
+    // TOS Warning Modal Handling
+    // Shows once per visitor (remembered via localStorage).
+    // Blocks interaction with the page until the visitor
+    // explicitly clicks OK acknowledging the warning.
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('warningOverlay');
+      const okBtn = document.getElementById('warningOkBtn');
+
+      const alreadyAcknowledged = localStorage.getItem('tos_warning_acknowledged') === 'true';
+
+      if (alreadyAcknowledged) {
+        overlay.remove();
+        document.body.classList.remove('warning-active');
+      } else {
+        okBtn.addEventListener('click', () => {
+          localStorage.setItem('tos_warning_acknowledged', 'true');
+          overlay.remove();
+          document.body.classList.remove('warning-active');
+        });
+      }
+    });
   </script>
 </body>
 </html>
