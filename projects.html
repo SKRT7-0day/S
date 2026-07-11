@@ -6,234 +6,60 @@
   <title>SKRT7 | Projects</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root {
-      --bg-color: #07080B;
-      --text-color: #E4E6EB;
-      --card-bg: #1F222F;
-      --sub-text: #94A3B8;
-      --accent-color: #a855f7;
-    }
-
-    .light-theme {
-      --bg-color: #F8FAFC;
-      --text-color: #0F172A;
-      --card-bg: #E2E8F0;
-      --sub-text: #64748B;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      transition: background-color 0.4s ease, color 0.3s ease;
-      overflow-x: hidden;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-
-    /* أنيميشن دخول الصفحة */
-    @keyframes fadeSlideUp {
-      0% {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .animate-enter {
-      opacity: 0;
-      animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 40px;
-      border-bottom: 2px solid var(--card-bg);
-      padding-bottom: 20px;
-    }
-
-    .back-btn {
-      color: var(--text-color);
-      text-decoration: none;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: color 0.2s ease;
-    }
-
-    .back-btn:hover {
-      color: var(--accent-color);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .project-card {
-      background-color: var(--card-bg);
-      border-radius: 15px;
-      padding: 25px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid transparent;
-      opacity: 0; /* البداية مخفية للأنيميشن */
-    }
-
-    /* تأخير بسيط لكل بطاقة عشان تطلع وحدة ورا الثانية */
-    .project-card:nth-child(1) { animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
-    .project-card:nth-child(2) { animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
-    .project-card:nth-child(3) { animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards; }
-
-    .project-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-      border-color: rgba(168, 85, 247, 0.3);
-    }
-
-    .project-icon {
-      font-size: 2rem;
-      color: var(--text-color);
-      margin-bottom: 15px;
-    }
-
-    .project-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin: 0 0 10px 0;
-    }
-
-    .project-desc {
-      color: var(--sub-text);
-      font-size: 0.95rem;
-      line-height: 1.5;
-      margin-bottom: 20px;
-      flex-grow: 1;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .tag {
-      background-color: rgba(168, 85, 247, 0.15);
-      color: var(--accent-color);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      border: 1px solid rgba(168, 85, 247, 0.2);
-    }
-
-    .project-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-decoration: none;
-      color: #fff;
-      background-color: #2b3137; /* لون مقارب لـ GitHub */
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 0.9rem;
-      text-align: center;
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .project-link:hover {
-      background-color: #24292e;
-      transform: scale(1.02);
-    }
-
+    /* (نفس تنسيقات CSS السابقة، أضف هذا الجزء الخاص ببطاقات GitHub) */
+    :root { --bg-color: #07080B; --text-color: #E4E6EB; --card-bg: #1F222F; --accent-color: #a855f7; }
+    body { background-color: var(--bg-color); color: var(--text-color); font-family: sans-serif; margin: 0; padding: 40px 20px; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
+    .project-card { background-color: var(--card-bg); border-radius: 15px; padding: 25px; transition: transform 0.3s; }
+    .star-btn { display: inline-block; background: #333; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; }
+    .star-count { margin-left: 10px; color: #fde047; }
   </style>
 </head>
 <body>
 
-  <div class="container animate-enter">
-    <div class="header">
-      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
-      <h1>My Projects</h1>
+  <div class="container">
+    <div class="header" style="text-align: center; margin-bottom: 40px;">
+      <h1>My GitHub Projects</h1>
     </div>
-
-    <div class="projects-grid">
-      
-      <!-- Project 1: Fake View Script -->
-      <div class="project-card">
-        <i class="fa-brands fa-github project-icon"></i>
-        <h2 class="project-title">Fake View Script</h2>
-        <p class="project-desc">سكربت مخصص لزيادة المشاهدات الوهمية بشكل تلقائي، مصمم للعمل باستقرار على بيئات الاستضافة المختلفة.</p>
-        <div class="project-tags">
-          <span class="tag">Python</span>
-          <span class="tag">Automation</span>
-          <span class="tag">Script</span>
-        </div>
-        <!-- استبدل YOUR_REPO_NAME باسم المستودع الفعلي -->
-        <a href="https://github.com/SKRT7-0day/YOUR_REPO_NAME" target="_blank" class="project-link">
-          <i class="fa-brands fa-github"></i> View on GitHub
-        </a>
-      </div>
-
-      <!-- Project 2: Fake Stream Script -->
-      <div class="project-card">
-        <i class="fa-brands fa-github project-icon"></i>
-        <h2 class="project-title">Fake Stream Script</h2>
-        <p class="project-desc">أداة متقدمة لإدارة وإنشاء بثوث وهمية باستخدام خوادم الطرف الثالث، مع دعم للتشغيل المستمر 24/7.</p>
-        <div class="project-tags">
-          <span class="tag">Node.js</span>
-          <span class="tag">Termux</span>
-          <span class="tag">API</span>
-        </div>
-        <!-- استبدل YOUR_REPO_NAME باسم المستودع الفعلي -->
-        <a href="https://github.com/SKRT7-0day/YOUR_REPO_NAME" target="_blank" class="project-link">
-          <i class="fa-brands fa-github"></i> View on GitHub
-        </a>
-      </div>
-
-      <!-- Project 3: Empty Placeholder (تقدر تنسخه عشان تضيف مشاريع زيادة) -->
-      <div class="project-card">
-        <i class="fa-brands fa-github project-icon" style="opacity: 0.5;"></i>
-        <h2 class="project-title">Upcoming Project...</h2>
-        <p class="project-desc">مساحة مخصصة لمشروع جديد. سيتم إضافة الكود المصدري هنا قريباً.</p>
-        <div class="project-tags">
-          <span class="tag" style="background-color: transparent; border-color: var(--sub-text); color: var(--sub-text);">Coming Soon</span>
-        </div>
-        <a href="https://github.com/SKRT7-0day" target="_blank" class="project-link" style="background-color: transparent; border: 1px solid var(--sub-text); color: var(--sub-text);">
-          Visit GitHub Profile
-        </a>
-      </div>
-
+    <div class="projects-grid" id="projectsContainer">
+      <!-- البطاقات ستظهر هنا تلقائياً عن طريق الجافا سكريبت -->
     </div>
   </div>
 
   <script>
-    // الحفاظ على ثيم المستخدم (نهاري/ليلي)
-    if (localStorage.getItem('theme') === 'light') {
-      document.body.classList.add('light-theme');
+    // 1. ضع قائمة بأسماء مشاريعك في GitHub هنا
+    const repoNames = [
+      "SKRT7-0day/repo-name-1", 
+      "SKRT7-0day/repo-name-2"
+    ];
+
+    async function fetchProjects() {
+      const container = document.getElementById('projectsContainer');
+      let projects = [];
+
+      for (const repo of repoNames) {
+        const res = await fetch(`https://api.github.com/repos/${repo}`);
+        const data = await res.json();
+        projects.push(data);
+      }
+
+      // 2. ترتيب المشاريع (الأكثر نجومية أولاً)
+      projects.sort((a, b) => b.stargazers_count - a.stargazers_count);
+
+      // 3. عرض المشاريع
+      container.innerHTML = projects.map(p => `
+        <div class="project-card">
+          <h2>${p.name}</h2>
+          <p>${p.description || 'No description'}</p>
+          <a href="${p.html_url}" target="_blank" class="star-btn">
+            <i class="fa-solid fa-star"></i> Star <span class="star-count">${p.stargazers_count}</span>
+          </a>
+        </div>
+      `).join('');
     }
+
+    fetchProjects();
   </script>
 </body>
 </html>
+
