@@ -186,10 +186,10 @@
     const projects = [
       {
         id: 'proj1',
-        title: 'A simple and easy website.',
-        description: 'A simple and easy website where I keep all my social media links in one place, making it easy for people to find and connect with me.',
+        title: 'Fake View Script',
+        description: 'A custom script for automatically boosting view counts, designed to run reliably.',
         icon: 'fa-brands fa-github',
-        repoUrl: 'https://github.com/SKRT7-0day/S.git',
+        repoUrl: 'https://github.com/USERNAME/REPO_NAME',
         manualTags: ['Python', 'Automation'],
         comingSoon: false
       },
@@ -344,7 +344,7 @@
       });
     }
 
-    async function setupStarButton(project) {
+    async function setupStarButton(project, prefetchedCount) {
       if (project.comingSoon) return;
 
       const btn = document.getElementById(`star-btn-${project.id}`);
@@ -353,8 +353,8 @@
       const countSpan = btn.querySelector('.star-count');
       const icon = btn.querySelector('.star-icon');
 
-      // Load the real shared count from the counter API
-      const currentCount = await getStarCount(project.id);
+      // Use the count already fetched during sorting, avoiding a duplicate request
+      const currentCount = prefetchedCount !== undefined ? prefetchedCount : await getStarCount(project.id);
       countSpan.innerText = currentCount;
       btn.disabled = false;
 
@@ -392,21 +392,43 @@
       });
     }
 
-    function init() {
+    async function init() {
       if (localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-theme');
       }
 
       const grid = document.getElementById('projectsGrid');
-      projects.forEach((project, index) => {
+
+      // Separate coming-soon cards (always last) from real projects
+      const realProjects = projects.filter(p => !p.comingSoon);
+      const comingSoonProjects = projects.filter(p => p.comingSoon);
+
+      // Fetch star counts for all real projects first, so we can sort
+      // by popularity (most stars first) before anything is rendered.
+      const countsById = {};
+      await Promise.all(
+        realProjects.map(async project => {
+          countsById[project.id] = await getStarCount(project.id);
+        })
+      );
+
+      // Sort by star count descending. Ties keep their original order.
+      const sortedProjects = [...realProjects].sort(
+        (a, b) => countsById[b.id] - countsById[a.id]
+      );
+
+      // Coming-soon cards always render after the real, sorted projects
+      const orderedProjects = [...sortedProjects, ...comingSoonProjects];
+
+      orderedProjects.forEach((project, index) => {
         const card = createProjectCard(project, index);
         grid.appendChild(card);
       });
 
-      // After cards are in the DOM, fetch tags and wire up star buttons
-      projects.forEach(project => {
+      // Render tags, and wire up star buttons using the counts already fetched
+      orderedProjects.forEach(project => {
         renderTags(project);
-        setupStarButton(project);
+        setupStarButton(project, countsById[project.id]);
       });
     }
 
@@ -414,4 +436,4 @@
   </script>
 </body>
 </html>
-l
+
