@@ -214,12 +214,15 @@
     ];
 
     /* ==========================================
-       COUNTAPI CONFIG
-       Free, keyless counter service so star counts are
-       shared across every visitor, not just local to one browser.
-       Docs: https://countapi.xyz
+       COUNTER API CONFIG
+       countapi.xyz (the original service) shut down permanently,
+       so this uses the maintained community replacement instead:
+       https://countapi.mileshilliard.com
+       No namespaces on this API, so keys are prefixed manually
+       below to avoid clashing with other sites using the same service.
        ========================================== */
-    const COUNTAPI_NAMESPACE = 'skrt7-bio-projects';
+    const COUNTER_BASE = 'https://countapi.mileshilliard.com/api/v1';
+    const COUNTER_PREFIX = 'skrt7-bio-projects_';
 
     function extractGithubRepo(url) {
       if (!url) return null;
@@ -243,10 +246,10 @@
 
     async function getStarCount(projectId) {
       try {
-        const res = await fetch(`https://api.countapi.xyz/get/${COUNTAPI_NAMESPACE}/${projectId}`);
-        if (!res.ok) return 0;
+        const res = await fetch(`${COUNTER_BASE}/get/${COUNTER_PREFIX}${projectId}`);
+        if (!res.ok) return 0; // Key doesn't exist yet -> starts at 0
         const data = await res.json();
-        return data.value || 0;
+        return parseInt(data.value, 10) || 0;
       } catch (err) {
         console.error('Failed to get star count for', projectId, err);
         return 0;
@@ -255,10 +258,10 @@
 
     async function incrementStarCount(projectId) {
       try {
-        const res = await fetch(`https://api.countapi.xyz/hit/${COUNTAPI_NAMESPACE}/${projectId}`);
+        const res = await fetch(`${COUNTER_BASE}/hit/${COUNTER_PREFIX}${projectId}`);
         if (!res.ok) return null;
         const data = await res.json();
-        return data.value;
+        return parseInt(data.value, 10);
       } catch (err) {
         console.error('Failed to increment star count for', projectId, err);
         return null;
@@ -267,10 +270,14 @@
 
     async function decrementStarCount(projectId) {
       try {
-        const res = await fetch(`https://api.countapi.xyz/update/${COUNTAPI_NAMESPACE}/${projectId}?amount=-1`);
+        // This API has no direct "-1" endpoint, so read the current
+        // value first, then explicitly set it one lower.
+        const current = await getStarCount(projectId);
+        const newValue = Math.max(0, current - 1);
+        const res = await fetch(`${COUNTER_BASE}/set/${COUNTER_PREFIX}${projectId}?value=${newValue}`);
         if (!res.ok) return null;
         const data = await res.json();
-        return Math.max(0, data.value);
+        return parseInt(data.value, 10);
       } catch (err) {
         console.error('Failed to decrement star count for', projectId, err);
         return null;
@@ -346,7 +353,7 @@
       const countSpan = btn.querySelector('.star-count');
       const icon = btn.querySelector('.star-icon');
 
-      // Load the real shared count from CountAPI
+      // Load the real shared count from the counter API
       const currentCount = await getStarCount(project.id);
       countSpan.innerText = currentCount;
       btn.disabled = false;
@@ -407,3 +414,4 @@
   </script>
 </body>
 </html>
+l
