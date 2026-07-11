@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="theme-dark" lang="en">
 <head>
@@ -238,35 +239,96 @@
       overflow: hidden;
     }
 
+    /* ==========================================
+       LANGUAGE TOGGLE BUTTON
+       ========================================== */
+    .lang-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--card-bg);
+      border: 1.5px solid rgba(168, 85, 247, 0.35);
+      color: var(--text-color);
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+      transition: border-color 0.2s ease, transform 0.15s ease, background-color 0.2s ease;
+    }
+    .lang-toggle:hover {
+      border-color: var(--accent-color);
+      background-color: rgba(168, 85, 247, 0.12);
+      transform: translateY(-1px);
+    }
+    .lang-toggle:active { transform: translateY(0); }
+    .lang-toggle .flag { font-size: 1.1rem; line-height: 1; }
+    .lang-toggle .lang-code { color: var(--accent-color); }
+
+    /* Header layout tweak to fit the toggle button */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Small variant used inside the warning card */
+    .lang-toggle.lang-toggle-modal {
+      margin: 0 auto 18px;
+      display: flex;
+    }
+
+    /* RTL adjustments */
+    html[dir="rtl"] body {
+      font-family: 'Tahoma', 'Segoe UI', sans-serif;
+    }
+    html[dir="rtl"] .warning-text {
+      text-align: right;
+    }
+    html[dir="rtl"] .back-btn i {
+      transform: scaleX(-1);
+    }
+
   </style>
 </head>
+
 <body class="warning-active">
 
   <!-- TOS Warning Modal -->
   <div class="warning-overlay" id="warningOverlay">
     <div class="warning-card">
+      <button class="lang-toggle lang-toggle-modal" id="langToggleModal">
+        <span class="flag">🇬🇧</span> <span class="lang-code">EN</span>
+      </button>
       <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
-      <h2 class="warning-title">تنبيه هام قبل المتابعة</h2>
-      <p class="warning-text">
+      <h2 class="warning-title" data-i18n="warningTitle">تنبيه هام قبل المتابعة</h2>
+      <p class="warning-text" data-i18n="warningText1">
         بعض المشاريع المعروضة في هذه الصفحة (مثل <strong>Selfbots</strong>) <strong>تخالف شروط استخدام Discord</strong>،
         وتحديداً القسم الخاص بمنع أتمتة الحسابات الشخصية (Self-Bots).
       </p>
-      <p class="warning-text">
+      <p class="warning-text" data-i18n="warningText2">
         استخدام هذه المشاريع على حسابك الشخصي قد يعرضك لحظر دائم من Discord.
         هذه المشاريع مطروحة لأغراض تعليمية/تجريبية فقط، وأنت مسؤول بالكامل عن أي استخدام لها.
       </p>
-      <a href="https://discord.com/terms" target="_blank" class="warning-link">
+      <a href="https://discord.com/terms" target="_blank" class="warning-link" data-i18n="warningLink">
         اقرأ شروط استخدام Discord (Terms of Service)
       </a>
       <br>
-      <button class="warning-ok-btn" id="warningOkBtn">فهمت، أوافق (OK)</button>
+      <button class="warning-ok-btn" id="warningOkBtn" data-i18n="warningOkBtn">فهمت، أوافق (OK)</button>
     </div>
   </div>
 
   <div class="container animate-enter">
     <div class="header">
-      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
-      <h1>My Projects</h1>
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="backBtn">Back to Home</span></a>
+      <div class="header-actions">
+        <h1 data-i18n="pageTitle">My Projects</h1>
+        <button class="lang-toggle" id="langTogglePage">
+          <span class="flag">🇬🇧</span> <span class="lang-code">EN</span>
+        </button>
+      </div>
     </div>
 
     <div class="projects-grid" id="projectsGrid"></div>
@@ -393,6 +455,7 @@
       const iconClass = project.icon + ' project-icon' + (project.comingSoon ? ' dimmed' : '');
       const titleClass = 'project-title' + (project.comingSoon ? ' dimmed' : '');
       const descClass = 'project-desc' + (project.comingSoon ? ' dimmed' : '');
+      const dict = translations[getCurrentLang()];
 
       card.innerHTML = `
         <i class="${iconClass}"></i>
@@ -401,8 +464,8 @@
         <div class="project-tags" id="tags-${project.id}"></div>
         <div class="actions">
           ${project.comingSoon
-            ? `<a href="#" class="project-link disabled">Not Available Yet</a>`
-            : `<a href="${project.repoUrl || '#'}" target="_blank" class="project-link">View Project</a>
+            ? `<a href="#" class="project-link disabled">${dict.notAvailableBtn}</a>`
+            : `<a href="${project.repoUrl || '#'}" target="_blank" class="project-link">${dict.viewProjectBtn}</a>
                <button class="star-btn" id="star-btn-${project.id}" disabled>
                  <i class="fa-regular fa-star star-icon"></i> <span class="star-count">-</span>
                </button>`
@@ -415,9 +478,10 @@
     function renderTags(project) {
       const tagsContainer = document.getElementById(`tags-${project.id}`);
       if (!tagsContainer) return;
+      const dict = translations[getCurrentLang()];
 
       if (project.comingSoon) {
-        tagsContainer.innerHTML = `<span class="tag dimmed">Coming Soon</span>`;
+        tagsContainer.innerHTML = `<span class="tag dimmed">${dict.comingSoonTag}</span>`;
         return;
       }
 
@@ -431,14 +495,14 @@
       }
 
       // Show a loading placeholder while fetching from GitHub
-      tagsContainer.innerHTML = `<span class="tag loading">Detecting...</span>`;
+      tagsContainer.innerHTML = `<span class="tag loading">${dict.detectingTag}</span>`;
 
       fetchRepoLanguages(repo.owner, repo.repo).then(languages => {
         if (languages.length === 0) {
           // GitHub fetch failed or repo has no detectable languages, fall back
           tagsContainer.innerHTML = project.manualTags.length
             ? project.manualTags.map(tag => `<span class="tag">${tag}</span>`).join('')
-            : `<span class="tag dimmed">Unknown</span>`;
+            : `<span class="tag dimmed">${dict.unknownTag}</span>`;
           return;
         }
         tagsContainer.innerHTML = languages.map(lang => `<span class="tag">${lang}</span>`).join('');
@@ -536,6 +600,93 @@
     document.addEventListener('DOMContentLoaded', init);
 
     // ==========================================
+    // LANGUAGE TOGGLE (English / Arabic)
+    // Translates static UI text, sets page direction,
+    // and remembers the choice per visitor.
+    // ==========================================
+    const translations = {
+      en: {
+        pageTitle: 'My Projects',
+        backBtn: 'Back to Home',
+        warningTitle: 'Important Notice Before Continuing',
+        warningText1: 'Some projects listed on this page (such as <strong>Selfbots</strong>) <strong>violate Discord\'s Terms of Service</strong>, specifically the section prohibiting automation of personal accounts (Self-Bots).',
+        warningText2: 'Using these projects on your personal account may result in a permanent Discord ban. These projects are provided for educational/experimental purposes only, and you are fully responsible for any use of them.',
+        warningLink: 'Read Discord\'s Terms of Service',
+        warningOkBtn: 'I Understand, Agree (OK)',
+        viewProjectBtn: 'View Project',
+        notAvailableBtn: 'Not Available Yet',
+        comingSoonTag: 'Coming Soon',
+        detectingTag: 'Detecting...',
+        unknownTag: 'Unknown'
+      },
+      ar: {
+        pageTitle: 'مشاريعي',
+        backBtn: 'العودة للرئيسية',
+        warningTitle: 'تنبيه هام قبل المتابعة',
+        warningText1: 'بعض المشاريع المعروضة في هذه الصفحة (مثل <strong>Selfbots</strong>) <strong>تخالف شروط استخدام Discord</strong>، وتحديداً القسم الخاص بمنع أتمتة الحسابات الشخصية (Self-Bots).',
+        warningText2: 'استخدام هذه المشاريع على حسابك الشخصي قد يعرضك لحظر دائم من Discord. هذه المشاريع مطروحة لأغراض تعليمية/تجريبية فقط، وأنت مسؤول بالكامل عن أي استخدام لها.',
+        warningLink: 'اقرأ شروط استخدام Discord (Terms of Service)',
+        warningOkBtn: 'فهمت، أوافق (OK)',
+        viewProjectBtn: 'عرض المشروع',
+        notAvailableBtn: 'غير متاح بعد',
+        comingSoonTag: 'قريباً',
+        detectingTag: 'جارِ الكشف...',
+        unknownTag: 'غير معروف'
+      }
+    };
+
+    function getCurrentLang() {
+      return localStorage.getItem('site_lang') || 'en';
+    }
+
+    function applyLanguage(lang) {
+      const dict = translations[lang];
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      // Translate every element tagged with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) {
+          el.innerHTML = dict[key];
+        }
+      });
+
+      // Update the button icons/labels themselves (show the OTHER language to switch to)
+      const nextLang = lang === 'en' ? 'ar' : 'en';
+      const nextFlag = nextLang === 'ar' ? '🇸🇦' : '🇬🇧';
+      const nextCode = nextLang === 'ar' ? 'AR' : 'EN';
+
+      document.querySelectorAll('.lang-toggle').forEach(btn => {
+        btn.querySelector('.flag').textContent = nextFlag;
+        btn.querySelector('.lang-code').textContent = nextCode;
+      });
+
+      // Re-translate any already-rendered project buttons/tags dynamically
+      document.querySelectorAll('.project-link:not(.disabled)').forEach(link => {
+        link.textContent = dict.viewProjectBtn;
+      });
+      document.querySelectorAll('.project-link.disabled').forEach(link => {
+        link.textContent = dict.notAvailableBtn;
+      });
+
+      localStorage.setItem('site_lang', lang);
+    }
+
+    function toggleLanguage() {
+      const current = getCurrentLang();
+      const next = current === 'en' ? 'ar' : 'en';
+      applyLanguage(next);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(getCurrentLang());
+
+      document.getElementById('langTogglePage').addEventListener('click', toggleLanguage);
+      document.getElementById('langToggleModal').addEventListener('click', toggleLanguage);
+    });
+
+    // ==========================================
     // TOS Warning Modal Handling
     // Shows once per visitor (remembered via localStorage).
     // Blocks interaction with the page until the visitor
@@ -561,4 +712,3 @@
   </script>
 </body>
 </html>
-
