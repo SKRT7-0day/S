@@ -858,17 +858,20 @@
     // JSONBLOB_ID below is empty. On first use, this script
     // will auto-create a blob and print its ID to the browser
     // console -- copy that ID, paste it into JSONBLOB_ID below,
-    // and redeploy. Until that's done, the list works for the
-    // current session but won't persist/share properly.
+    // and redeploy. Until that's done, the list is cached in this
+    // browser's localStorage as a fallback (so at least it works
+    // and persists for you), but won't be shared with other visitors
+    // until the ID is hardcoded and everyone loads the same one.
     // ==========================================
     const JSONBLOB_ID = ''; // <-- paste your blob ID here after first run
 
-    function getBlobUrl() {
-      return `https://jsonblob.com/api/jsonBlob/${JSONBLOB_ID}`;
-    }
+    // Cache the resolved ID in memory + localStorage so every call
+    // in this session (and future visits from this browser) reuses
+    // the SAME blob instead of creating a new one each time.
+    let resolvedBlobId = JSONBLOB_ID || localStorage.getItem('jsonblob_id') || null;
 
     async function ensureBlobExists() {
-      if (JSONBLOB_ID) return JSONBLOB_ID;
+      if (resolvedBlobId) return resolvedBlobId;
       try {
         const res = await fetch('https://jsonblob.com/api/jsonBlob', {
           method: 'POST',
@@ -877,6 +880,10 @@
         });
         const location = res.headers.get('Location') || res.url;
         const newId = location.split('/').pop();
+
+        resolvedBlobId = newId;
+        localStorage.setItem('jsonblob_id', newId);
+
         console.warn(
           '%cDiscord Servers: copy this Blob ID into JSONBLOB_ID in the code and redeploy: ' + newId,
           'color:#a855f7;font-weight:bold;font-size:14px;'
@@ -889,7 +896,7 @@
     }
 
     async function loadServersList() {
-      const id = JSONBLOB_ID || await ensureBlobExists();
+      const id = await ensureBlobExists();
       if (!id) return [];
       try {
         const res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`);
@@ -903,7 +910,7 @@
     }
 
     async function saveServersList(servers) {
-      const id = JSONBLOB_ID || await ensureBlobExists();
+      const id = await ensureBlobExists();
       if (!id) return false;
       try {
         const res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, {
