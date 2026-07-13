@@ -22,15 +22,19 @@ A personal bio/link-in-bio page with live Discord presence integration (via [Lan
 
 ```
 skrt7-bio/
-├── index.html          # Main page markup
+├── index.html          # Home page (bio, Discord presence, links)
+├── projects.html       # Projects showcase + community Discord server list
+├── about.html          # About Me page
 ├── assets/
 │   ├── css/
-│   │   └── style.css   # All styling
+│   │   └── style.css   # Shared styling (used by index.html)
 │   └── js/
 │       └── main.js     # Confetti, theme toggle, Discord presence (Lanyard)
 ├── images/              # Local image assets (if any)
 └── README.md
 ```
+
+> **Note:** `projects.html` and `about.html` are self-contained (their CSS/JS live inline in each file) rather than sharing `assets/`. This keeps each page independent and easy to drop in or remove without affecting the others.
 
 ## How it works
 
