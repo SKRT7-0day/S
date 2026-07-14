@@ -1,0 +1,177 @@
+/*
+  Cloudflare Worker: /api/add-server
+
+  This is the security fix for the "anyone can spam fake servers" hole.
+  Everything that matters now happens SERVER-SIDE, where the client
+  cannot see, skip, or fake it:
+
+    1. Verifies the invite is real by calling Discord's API from here
+       (not trusting anything the browser claims about the server).
+    2. Writes to Supabase using the SECRET service_role key, which is
+       never sent to the browser. The public `anon` key on the client
+       has no insert permission anymore (see the SQL migration).
+    3. Rate-limits and temporarily bans abusive IPs using Cloudflare KV
+       -- a server-side store the client cannot read or tamper with.
+
+  ── Deploy ──
+  1. Cloudflare dashboard → Workers & Pages → Create → "Create Worker"
+  2. Paste this file as the Worker's code (replacing the default template)
+  3. Settings → Variables → add:
+       - SUPABASE_URL         = https://agorksddnpwhysojsmtu.supabase.co
+       - SUPABASE_SERVICE_KEY = (the SECRET key from Supabase, NOT the
+                                  publishable one -- Settings → API Keys →
+                                  "Secret keys" section)
+       Mark SUPABASE_SERVICE_KEY as "Encrypt" so it's hidden even to you
+       after saving.
+  4. Settings → Bindings → KV Namespace → create a namespace (e.g.
+       "server-rate-limit") → bind it to the variable name RATE_LIMIT_KV
+  5. Deploy. Copy the Worker's URL (e.g. https://your-worker.workers.dev)
+  6. Update WORKER_URL in projects.html to that address.
+  7. In "Settings → Triggers", if you want it on your own domain instead
+       of *.workers.dev, add a custom route, e.g. s.skrt7.workers.dev/api/*
+*/
+
+const ALLOWED_ORIGIN = 'https://s.skrt7.workers.dev';
+
+const RATE_LIMIT_WINDOW_SECONDS = 60;   // rolling window
+const RATE_LIMIT_MAX_REQUESTS = 5;      // max add-attempts per window
+const BAN_DURATION_SECONDS = 30 * 60;   // temporary ban length: 30 minutes
+
+function corsHeaders() {
+  return {
+    'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  };
+}
+
+function jsonResponse(body, status) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...corsHeaders() },
+  });
+}
+
+export default {
+  async fetch(request, env) {
+    if (request.method === 'OPTIONS') {
+      return new Response(null, { headers: corsHeaders() });
+    }
+
+    if (request.method !== 'POST') {
+      return jsonResponse({ error: 'Method not allowed' }, 405);
+    }
+
+    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+
+    // ── 1. Check if this IP is currently banned ──
+    const banKey = `ban:${ip}`;
+    const banned = await env.RATE_LIMIT_KV.get(banKey);
+    if (banned) {
+      return jsonResponse(
+        { error: 'You have been temporarily blocked from adding servers due to repeated abuse. Please try again later.' },
+        429
+      );
+    }
+
+    // ── 2. Rate limiting ──
+    const rateKey = `rate:${ip}`;
+    const now = Date.now();
+    let rateData = await env.RATE_LIMIT_KV.get(rateKey, 'json');
+    if (!rateData || now > rateData.resetAt) {
+      rateData = { count: 0, resetAt: now + RATE_LIMIT_WINDOW_SECONDS * 1000 };
+    }
+    rateData.count += 1;
+
+    if (rateData.count > RATE_LIMIT_MAX_REQUESTS) {
+      // Too many attempts in the window -- issue a temporary ban.
+      await env.RATE_LIMIT_KV.put(banKey, '1', { expirationTtl: BAN_DURATION_SECONDS });
+      return jsonResponse(
+        { error: 'Too many requests. You have been temporarily blocked for 30 minutes.' },
+        429
+      );
+    }
+    await env.RATE_LIMIT_KV.put(rateKey, JSON.stringify(rateData), {
+      expirationTtl: RATE_LIMIT_WINDOW_SECONDS,
+    });
+
+    // ── 3. Parse and validate the request body ──
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return jsonResponse({ error: 'Invalid request body.' }, 400);
+    }
+
+    const code = (body.code || '').trim();
+    if (!code || !/^[a-zA-Z0-9-]{2,32}$/.test(code)) {
+      return jsonResponse({ error: 'Invalid invite code format.' }, 400);
+    }
+
+    // ── 4. Verify the invite against Discord's real API (server-side) ──
+    let invite;
+    try {
+      const inviteRes = await fetch(
+        `https://discord.com/api/v10/invites/${code}?with_counts=true`
+      );
+      if (!inviteRes.ok) {
+        return jsonResponse({ error: 'Invalid or expired invite link.' }, 400);
+      }
+      invite = await inviteRes.json();
+    } catch {
+      return jsonResponse({ error: 'Could not reach Discord. Try again.' }, 502);
+    }
+
+    const guild = invite.guild;
+    if (!guild) {
+      return jsonResponse({ error: 'Invalid invite link.' }, 400);
+    }
+
+    // Discord's Server Tag (guild "clan" tag) if the server has one enabled.
+    // Not every invite payload includes this depending on the server's setup.
+    const hasTag = guild.tag && guild.badge;
+
+    const server = {
+      code,
+      name: guild.name,
+      icon: guild.icon
+        ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=128`
+        : null,
+      online: invite.approximate_presence_count ?? null,
+      total: invite.approximate_member_count ?? null,
+      tag: hasTag ? guild.tag : null,
+      tag_badge: hasTag
+        ? `https://cdn.discordapp.com/clan-badges/${guild.id}/${guild.badge}.png?size=32`
+        : null,
+    };
+
+    // ── 5. Insert into Supabase using the SECRET key (server-side only) ──
+    let insertRes;
+    try {
+      insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/discord_servers`, {
+        method: 'POST',
+        headers: {
+          apikey: env.SUPABASE_SERVICE_KEY,
+          Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation',
+        },
+        body: JSON.stringify(server),
+      });
+    } catch {
+      return jsonResponse({ error: 'Failed to reach the database.' }, 502);
+    }
+
+    if (insertRes.status === 409) {
+      return jsonResponse({ error: 'duplicate' }, 409);
+    }
+    if (!insertRes.ok) {
+      const errText = await insertRes.text();
+      console.error('Supabase insert failed:', insertRes.status, errText);
+      return jsonResponse({ error: 'Failed to save the server.' }, 500);
+    }
+
+    return jsonResponse({ success: true, server }, 200);
+  },
+};
+
