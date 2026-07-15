@@ -578,15 +578,6 @@
   <script>
     const projects = [
       {
-        id: 'proj1',
-        title: 'A simple and easy website.',
-        description: 'A simple and easy website where I keep all my social media links in one place, making it easy for people to find and connect with me.',
-        icon: 'fa-brands fa-github',
-        repoUrl: 'https://github.com/SKRT7-0day/S.git',
-        manualTags: ['Python', 'Automation'],
-        comingSoon: false
-      },
-      {
         id: 'proj2',
         title: 'Fake Stream Script 24/7 ',
         description: 'An advanced tool for managing and creating fake streams using third-party servers.',
@@ -857,7 +848,7 @@
     const SUPABASE_KEY = 'sb_publishable_6j06PssSHe4wTsv5PXp2JA_fKVS4DKa';
 
     // TODO: replace with your deployed Worker's URL (see worker.js)
-    const WORKER_URL = 'https://your-worker-name.your-subdomain.workers.dev/api/add-server';
+    const WORKER_URL = 'https://skrt7-servers-api.xdbronah.workers.dev/api/add-server';
 
     function supabaseHeaders(extra) {
       return Object.assign({
