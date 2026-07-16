@@ -300,9 +300,13 @@
       align-items: center;
       gap: 4px;
       background-color: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 5px;
-      padding: 2px 6px 2px 4px;
+      padding: 2px 6px; /* متوازن بشكل افتراضي للتاغات النصية */
       flex-shrink: 0;
+    }
+    .server-tag-chip.has-badge {
+      padding-left: 4px; /* لتقليص المساحة قليلاً جهة الأيقونة لتبدو أجمل */
     }
     .server-tag-chip img {
       width: 13px;
@@ -841,22 +845,10 @@
 
     // ==========================================
     // DISCORD SERVERS TAB
-    //
-    // SECURITY NOTE:
-    // Submissions no longer write to Supabase directly from the
-    // browser. Instead they go through a Cloudflare Worker
-    // (WORKER_URL below) that:
-    //   - re-verifies the invite against Discord's real API itself
-    //   - writes to Supabase using the SECRET service_role key
-    //     (never exposed to the client)
-    //   - rate-limits and temporarily bans abusive IPs server-side
-    // The public Supabase key below is used ONLY for reading the
-    // list (safe -- it's public info anyway), never for writing.
     // ==========================================
     const SUPABASE_URL = 'https://agorksddnpwhysojsmtu.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_6j06PssSHe4wTsv5PXp2JA_fKVS4DKa';
 
-    // TODO: replace with your deployed Worker's URL (see worker.js)
     const WORKER_URL = 'https://skrt7-servers-api.xdbronah.workers.dev/api/add-server';
 
     function supabaseHeaders(extra) {
@@ -895,8 +887,12 @@
         ? `<img class="server-icon" src="${server.icon}" alt="">`
         : `<div class="server-icon">${(server.name || '?').charAt(0).toUpperCase()}</div>`;
 
-      const tagHTML = (server.tag && server.tag_badge)
-        ? `<div class="server-tag-chip"><img src="${server.tag_badge}" alt=""><span>${server.tag}</span></div>`
+      // التعديل الذكي هنا: يعرض التاق إذا كان موجوداً، والأيقونة اختيارية تظهر بجانبه فقط إن وجدت
+      const tagHTML = server.tag
+        ? `<div class="server-tag-chip ${server.tag_badge ? 'has-badge' : ''}">
+            ${server.tag_badge ? `<img src="${server.tag_badge}" alt="">` : ''}
+            <span>${server.tag}</span>
+           </div>`
         : '';
 
       card.innerHTML = `
