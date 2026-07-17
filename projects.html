@@ -240,6 +240,54 @@
     .add-server-status.success { color: #23a55a; }
     .add-server-status.loading { color: var(--sub-text); }
 
+    /* Optional manual tag inputs (self-reported, like other tag directory sites) */
+    .add-server-tag-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .add-server-tag-input {
+      background-color: var(--card-bg);
+      border: 1.5px solid rgba(168, 85, 247, 0.15);
+      color: var(--text-color);
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .add-server-tag-input:focus { border-color: var(--accent-color); }
+    .add-server-tag-input::placeholder { color: var(--sub-text); }
+    .add-server-tag-input.tag-text { flex: 0 0 110px; }
+    .add-server-tag-input.tag-badge-url { flex: 1; }
+
+    .add-server-tag-hint {
+      font-size: 0.75rem;
+      color: var(--sub-text);
+      margin: -4px 0 16px;
+    }
+
+    /* Search bar (Discord Servers tab) */
+    .server-search-row {
+      margin-bottom: 20px;
+    }
+    .server-search-input {
+      width: 100%;
+      box-sizing: border-box;
+      background-color: var(--card-bg);
+      border: 1.5px solid rgba(168, 85, 247, 0.25);
+      color: var(--text-color);
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .server-search-input:focus { border-color: var(--accent-color); }
+    .server-search-input::placeholder { color: var(--sub-text); }
+
     .servers-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -300,13 +348,9 @@
       align-items: center;
       gap: 4px;
       background-color: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 5px;
-      padding: 2px 6px; /* متوازن بشكل افتراضي للتاغات النصية */
+      padding: 2px 6px 2px 4px;
       flex-shrink: 0;
-    }
-    .server-tag-chip.has-badge {
-      padding-left: 4px; /* لتقليص المساحة قليلاً جهة الأيقونة لتبدو أجمل */
     }
     .server-tag-chip img {
       width: 13px;
@@ -574,7 +618,17 @@
         <input type="text" class="add-server-input" id="serverInviteInput" placeholder="Paste a Discord invite link or code (e.g. discord.gg/abc123)">
         <button class="add-server-btn" id="addServerBtn">Add</button>
       </div>
+      <div class="add-server-tag-row">
+        <input type="text" class="add-server-tag-input tag-text" id="serverTagTextInput" placeholder="Tag (e.g. EUIZ)" maxlength="8">
+        <input type="text" class="add-server-tag-input tag-badge-url" id="serverTagBadgeInput" placeholder="Badge image URL (optional)">
+      </div>
+      <p class="add-server-tag-hint">Server Tag isn't available through Discord's public API, so if your server has one, enter it yourself here (optional).</p>
       <div class="add-server-status" id="addServerStatus"></div>
+
+      <div class="server-search-row">
+        <input type="text" class="server-search-input" id="serverSearchInput" placeholder="Search servers by name...">
+      </div>
+
       <div class="servers-grid" id="serversGrid"></div>
     </div>
   </div>
@@ -845,10 +899,22 @@
 
     // ==========================================
     // DISCORD SERVERS TAB
+    //
+    // SECURITY NOTE:
+    // Submissions no longer write to Supabase directly from the
+    // browser. Instead they go through a Cloudflare Worker
+    // (WORKER_URL below) that:
+    //   - re-verifies the invite against Discord's real API itself
+    //   - writes to Supabase using the SECRET service_role key
+    //     (never exposed to the client)
+    //   - rate-limits and temporarily bans abusive IPs server-side
+    // The public Supabase key below is used ONLY for reading the
+    // list (safe -- it's public info anyway), never for writing.
     // ==========================================
     const SUPABASE_URL = 'https://agorksddnpwhysojsmtu.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_6j06PssSHe4wTsv5PXp2JA_fKVS4DKa';
 
+    // TODO: replace with your deployed Worker's URL (see worker.js)
     const WORKER_URL = 'https://skrt7-servers-api.xdbronah.workers.dev/api/add-server';
 
     function supabaseHeaders(extra) {
@@ -887,12 +953,8 @@
         ? `<img class="server-icon" src="${server.icon}" alt="">`
         : `<div class="server-icon">${(server.name || '?').charAt(0).toUpperCase()}</div>`;
 
-      // التعديل الذكي هنا: يعرض التاق إذا كان موجوداً، والأيقونة اختيارية تظهر بجانبه فقط إن وجدت
-      const tagHTML = server.tag
-        ? `<div class="server-tag-chip ${server.tag_badge ? 'has-badge' : ''}">
-            ${server.tag_badge ? `<img src="${server.tag_badge}" alt="">` : ''}
-            <span>${server.tag}</span>
-           </div>`
+      const tagHTML = (server.tag && server.tag_badge)
+        ? `<div class="server-tag-chip"><img src="${server.tag_badge}" alt=""><span>${server.tag}</span></div>`
         : '';
 
       card.innerHTML = `
@@ -913,19 +975,38 @@
       return card;
     }
 
+    let allServersCache = [];
+
     async function renderServersGrid() {
       const grid = document.getElementById('serversGrid');
       grid.innerHTML = `<div class="servers-empty">Loading servers...</div>`;
 
       const servers = await loadServersList();
+      allServersCache = servers;
 
-      if (servers.length === 0) {
+      renderFilteredServers(document.getElementById('serverSearchInput').value);
+    }
+
+    function renderFilteredServers(query) {
+      const grid = document.getElementById('serversGrid');
+      const trimmed = query.trim().toLowerCase();
+
+      const filtered = trimmed
+        ? allServersCache.filter(s => (s.name || '').toLowerCase().includes(trimmed))
+        : allServersCache;
+
+      if (allServersCache.length === 0) {
         grid.innerHTML = `<div class="servers-empty">No servers added yet. Be the first!</div>`;
         return;
       }
 
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="servers-empty">No servers match "${query}".</div>`;
+        return;
+      }
+
       grid.innerHTML = '';
-      servers.forEach((server, index) => {
+      filtered.forEach((server, index) => {
         grid.appendChild(renderServerCard(server, index));
       });
     }
@@ -936,14 +1017,24 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const input = document.getElementById('serverInviteInput');
+      const tagTextInput = document.getElementById('serverTagTextInput');
+      const tagBadgeInput = document.getElementById('serverTagBadgeInput');
       const addBtn = document.getElementById('addServerBtn');
       const statusEl = document.getElementById('addServerStatus');
+      const searchInput = document.getElementById('serverSearchInput');
+
+      searchInput.addEventListener('input', () => {
+        renderFilteredServers(searchInput.value);
+      });
 
       addBtn.addEventListener('click', async () => {
         const raw = input.value;
         if (!raw.trim()) return;
 
         const code = extractInviteCode(raw);
+        const manualTag = tagTextInput.value.trim();
+        const manualTagBadge = tagBadgeInput.value.trim();
+
         addBtn.disabled = true;
         statusEl.className = 'add-server-status loading';
         statusEl.textContent = 'Looking up server...';
@@ -952,7 +1043,11 @@
           const res = await fetch(WORKER_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code })
+            body: JSON.stringify({
+              code,
+              tag: manualTag || undefined,
+              tag_badge: manualTagBadge || undefined
+            })
           });
 
           const data = await res.json().catch(() => ({}));
@@ -961,6 +1056,8 @@
             statusEl.className = 'add-server-status success';
             statusEl.textContent = `${data.server.name} added successfully!`;
             input.value = '';
+            tagTextInput.value = '';
+            tagBadgeInput.value = '';
             renderServersGrid();
           } else if (res.status === 409 || data.error === 'duplicate') {
             statusEl.className = 'add-server-status error';
