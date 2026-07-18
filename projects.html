@@ -334,11 +334,14 @@
       100% { transform: translate(-50%, -50%) scale(9); opacity: 0; }
     }
 
-    /* Newly added server card — brief premium highlight */
+    /* Newly added server card — brief premium highlight.
+       IMPORTANT: this must include fadeSlideUp alongside newCardGlow, otherwise
+       it silently overrides the entrance animation on .server-card and the card
+       is left stuck at opacity:0 forever (looks "invisible until reload"). */
     .server-card.server-card-new {
       position: relative;
       border: 1px solid rgba(168, 85, 247, 0.6);
-      animation: newCardGlow 2.2s ease-out;
+      animation: fadeSlideUp 0.6s ease-out forwards, newCardGlow 2.2s ease-out 0.1s;
     }
 
     .server-card.server-card-new::before {
@@ -1357,4 +1360,3 @@
   </script>
 </body>
 </html>
-
