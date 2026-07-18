@@ -252,8 +252,98 @@
       min-height: 1.2em;
     }
     .add-server-status.error { color: #ef4444; }
-    .add-server-status.success { color: #23a55a; }
+    .add-server-status.success {
+      color: #23a55a;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      animation: successPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
     .add-server-status.loading { color: var(--sub-text); }
+
+    .add-server-status.success .success-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #23a55a, #178a48);
+      color: #fff;
+      font-size: 0.65rem;
+      animation: successRing 1.1s ease-out;
+    }
+
+    @keyframes successPop {
+      0% { opacity: 0; transform: translateY(-4px) scale(0.9); }
+      60% { opacity: 1; transform: translateY(0) scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes successRing {
+      0% { box-shadow: 0 0 0 0 rgba(35, 165, 90, 0.55); }
+      70% { box-shadow: 0 0 0 10px rgba(35, 165, 90, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(35, 165, 90, 0); }
+    }
+
+    /* Confetti burst */
+    .confetti-piece {
+      position: fixed;
+      top: -12px;
+      width: 8px;
+      height: 8px;
+      pointer-events: none;
+      z-index: 10000;
+      opacity: 0.95;
+      animation-name: confettiFall;
+      animation-timing-function: cubic-bezier(0.35, 0, 0.65, 1);
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--drift), 100vh) rotate(var(--spin));
+        opacity: 0;
+      }
+    }
+
+    /* Newly added server card — brief premium highlight */
+    .server-card.server-card-new {
+      position: relative;
+      border: 1px solid rgba(168, 85, 247, 0.6);
+      animation: newCardGlow 2.2s ease-out;
+    }
+
+    .server-card.server-card-new::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 15px;
+      padding: 1px;
+      background: linear-gradient(120deg, var(--accent-color), #23a55a, var(--accent-color));
+      background-size: 200% 200%;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: newCardShimmer 1.8s ease-in-out 2;
+      pointer-events: none;
+    }
+
+    @keyframes newCardGlow {
+      0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.65), 0 0 24px 4px rgba(168, 85, 247, 0.35); }
+      70% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0), 0 0 24px 4px rgba(168, 85, 247, 0.15); }
+      100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0), 0 0 0 0 rgba(168, 85, 247, 0); }
+    }
+
+    @keyframes newCardShimmer {
+      0% { background-position: 0% 50%; opacity: 1; }
+      100% { background-position: 200% 50%; opacity: 0; }
+    }
 
     /* Search bar (Discord Servers tab) */
     .server-search-row {
@@ -905,9 +995,14 @@
       return match ? match[1] : trimmed;
     }
 
+    let justAddedCode = null;
+
     function renderServerCard(server, index) {
       const card = document.createElement('div');
       card.className = 'server-card';
+      if (justAddedCode && server.code === justAddedCode) {
+        card.classList.add('server-card-new');
+      }
       card.style.animationDelay = `${0.05 * index}s`;
 
       const iconHTML = server.icon
@@ -934,6 +1029,35 @@
         <a href="https://discord.gg/${server.code}" target="_blank" class="server-join-btn">Join</a>
       `;
       return card;
+    }
+
+    // Premium confetti burst — fired on a successful add
+    function fireConfetti(originEl) {
+      const colors = ['#a855f7', '#c084fc', '#23a55a', '#f4d35e', '#fff'];
+      const rect = originEl.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const count = 26;
+
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        const size = 5 + Math.random() * 5;
+        const isCircle = Math.random() > 0.5;
+        piece.style.width = `${size}px`;
+        piece.style.height = `${size}px`;
+        piece.style.left = `${originX + (Math.random() * 160 - 80)}px`;
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.borderRadius = isCircle ? '50%' : '2px';
+        const duration = 1.4 + Math.random() * 1.1;
+        const drift = (Math.random() * 160 - 80) + 'px';
+        const spin = (Math.random() * 560 - 280) + 'deg';
+        piece.style.setProperty('--drift', drift);
+        piece.style.setProperty('--spin', spin);
+        piece.style.animationDuration = `${duration}s`;
+        piece.style.animationDelay = `${Math.random() * 0.15}s`;
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), (duration + 0.2) * 1000);
+      }
     }
 
     let allServersCache = [];
@@ -1007,9 +1131,12 @@
 
           if (res.ok && data.success) {
             statusEl.className = 'add-server-status success';
-            statusEl.textContent = `${data.server.name} added successfully!`;
+            statusEl.innerHTML = `<span class="success-check"><i class="fa-solid fa-check"></i></span> ${data.server.name} added successfully!`;
+            justAddedCode = code;
+            fireConfetti(addBtn);
             input.value = '';
             renderServersGrid();
+            setTimeout(() => { justAddedCode = null; }, 3000);
           } else if (res.status === 409 || data.error === 'duplicate') {
             statusEl.className = 'add-server-status error';
             statusEl.textContent = 'This server is already in the list.';
