@@ -287,29 +287,51 @@
       100% { box-shadow: 0 0 0 0 rgba(35, 165, 90, 0); }
     }
 
-    /* Confetti burst */
+    /* Confetti burst — center-screen explosion */
     .confetti-piece {
       position: fixed;
-      top: -12px;
-      width: 8px;
-      height: 8px;
+      left: 50%;
+      top: 42%;
       pointer-events: none;
       z-index: 10000;
-      opacity: 0.95;
-      animation-name: confettiFall;
-      animation-timing-function: cubic-bezier(0.35, 0, 0.65, 1);
+      opacity: 1;
+      animation-name: confettiBurst;
+      animation-timing-function: cubic-bezier(0.15, 0.6, 0.35, 1);
       animation-fill-mode: forwards;
+      will-change: transform, opacity;
     }
 
-    @keyframes confettiFall {
+    @keyframes confettiBurst {
       0% {
-        transform: translate(0, 0) rotate(0deg);
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+      70% {
         opacity: 1;
       }
       100% {
-        transform: translate(var(--drift), 100vh) rotate(var(--spin));
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--spin)) scale(0.7);
         opacity: 0;
       }
+    }
+
+    .confetti-flash {
+      position: fixed;
+      left: 50%;
+      top: 42%;
+      width: 40px;
+      height: 40px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.9), rgba(168, 85, 247, 0));
+      z-index: 9999;
+      pointer-events: none;
+      animation: confettiFlash 0.7s ease-out forwards;
+    }
+
+    @keyframes confettiFlash {
+      0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0.9; }
+      100% { transform: translate(-50%, -50%) scale(9); opacity: 0; }
     }
 
     /* Newly added server card — brief premium highlight */
@@ -1031,32 +1053,41 @@
       return card;
     }
 
-    // Premium confetti burst — fired on a successful add
-    function fireConfetti(originEl) {
-      const colors = ['#a855f7', '#c084fc', '#23a55a', '#f4d35e', '#fff'];
-      const rect = originEl.getBoundingClientRect();
-      const originX = rect.left + rect.width / 2;
-      const count = 26;
+    // Premium confetti burst — big, centered explosion
+    function fireConfetti() {
+      const colors = ['#a855f7', '#c084fc', '#e9d5ff', '#23a55a', '#f4d35e', '#ffffff'];
+      const count = 90;
+
+      const flash = document.createElement('div');
+      flash.className = 'confetti-flash';
+      document.body.appendChild(flash);
+      setTimeout(() => flash.remove(), 750);
 
       for (let i = 0; i < count; i++) {
         const piece = document.createElement('div');
         piece.className = 'confetti-piece';
-        const size = 5 + Math.random() * 5;
-        const isCircle = Math.random() > 0.5;
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 140 + Math.random() * 340;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance * 0.75 + 120; // slight downward gravity bias
+        const size = 7 + Math.random() * 9;
+        const shape = Math.random();
+
         piece.style.width = `${size}px`;
-        piece.style.height = `${size}px`;
-        piece.style.left = `${originX + (Math.random() * 160 - 80)}px`;
+        piece.style.height = shape > 0.66 ? `${size * 1.8}px` : `${size}px`;
         piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.borderRadius = isCircle ? '50%' : '2px';
-        const duration = 1.4 + Math.random() * 1.1;
-        const drift = (Math.random() * 160 - 80) + 'px';
-        const spin = (Math.random() * 560 - 280) + 'deg';
-        piece.style.setProperty('--drift', drift);
-        piece.style.setProperty('--spin', spin);
+        piece.style.borderRadius = shape < 0.33 ? '50%' : '2px';
+        piece.style.setProperty('--dx', `${dx}px`);
+        piece.style.setProperty('--dy', `${dy}px`);
+        piece.style.setProperty('--spin', `${Math.random() * 720 - 360}deg`);
+
+        const duration = 1.5 + Math.random() * 0.9;
         piece.style.animationDuration = `${duration}s`;
-        piece.style.animationDelay = `${Math.random() * 0.15}s`;
+        piece.style.animationDelay = `${Math.random() * 0.12}s`;
+
         document.body.appendChild(piece);
-        setTimeout(() => piece.remove(), (duration + 0.2) * 1000);
+        setTimeout(() => piece.remove(), (duration + 0.3) * 1000);
       }
     }
 
@@ -1133,9 +1164,16 @@
             statusEl.className = 'add-server-status success';
             statusEl.innerHTML = `<span class="success-check"><i class="fa-solid fa-check"></i></span> ${data.server.name} added successfully!`;
             justAddedCode = code;
-            fireConfetti(addBtn);
+            fireConfetti();
             input.value = '';
-            renderServersGrid();
+
+            // Optimistically show the new server right away instead of re-querying
+            // Supabase immediately (which can race the write and return stale data,
+            // making the card seem to "disappear" until a manual reload).
+            allServersCache = allServersCache.filter(s => s.code !== data.server.code);
+            allServersCache.unshift(data.server);
+            renderFilteredServers(searchInput.value);
+
             setTimeout(() => { justAddedCode = null; }, 3000);
           } else if (res.status === 409 || data.error === 'duplicate') {
             statusEl.className = 'add-server-status error';
