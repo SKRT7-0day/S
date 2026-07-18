@@ -193,6 +193,19 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
+    /* شارة Beta التي تمت إضافتها */
+    .beta-badge {
+      background-color: #ef4444;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-left: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     /* ==========================================
        DISCORD SERVERS TAB
        ========================================== */
@@ -606,7 +619,8 @@
 
     <div class="tabs">
       <button class="tab-btn active" id="tabBtnProjects"><i class="fa-solid fa-folder-open"></i> Projects</button>
-      <button class="tab-btn" id="tabBtnServers"><i class="fa-brands fa-discord"></i> Discord Servers</button>
+      <!-- تم إضافة شارة Beta هنا -->
+      <button class="tab-btn" id="tabBtnServers"><i class="fa-brands fa-discord"></i> Discord Servers <span class="beta-badge">Beta</span></button>
     </div>
 
     <div class="tab-panel active" id="panelProjects">
@@ -619,7 +633,7 @@
         <button class="add-server-btn" id="addServerBtn">Add</button>
       </div>
       <div class="add-server-tag-row">
-        <input type="text" class="add-server-tag-input tag-text" id="serverTagTextInput" placeholder="Tag (e.g. NFN)" maxlength="8">
+        <input type="text" class="add-server-tag-input tag-text" id="serverTagTextInput" placeholder="Tag (e.g. EUIZ)" maxlength="8">
         <input type="text" class="add-server-tag-input tag-badge-url" id="serverTagBadgeInput" placeholder="Badge image URL (optional)">
       </div>
       <p class="add-server-tag-hint">Server Tag isn't available through Discord's public API, so if your server has one, enter it yourself here (optional).</p>
@@ -899,22 +913,10 @@
 
     // ==========================================
     // DISCORD SERVERS TAB
-    //
-    // SECURITY NOTE:
-    // Submissions no longer write to Supabase directly from the
-    // browser. Instead they go through a Cloudflare Worker
-    // (WORKER_URL below) that:
-    //   - re-verifies the invite against Discord's real API itself
-    //   - writes to Supabase using the SECRET service_role key
-    //     (never exposed to the client)
-    //   - rate-limits and temporarily bans abusive IPs server-side
-    // The public Supabase key below is used ONLY for reading the
-    // list (safe -- it's public info anyway), never for writing.
     // ==========================================
     const SUPABASE_URL = 'https://agorksddnpwhysojsmtu.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_6j06PssSHe4wTsv5PXp2JA_fKVS4DKa';
 
-    // TODO: replace with your deployed Worker's URL (see worker.js)
     const WORKER_URL = 'https://skrt7-servers-api.xdbronah.workers.dev/api/add-server';
 
     function supabaseHeaders(extra) {
