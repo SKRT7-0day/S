@@ -335,13 +335,22 @@
     }
 
     /* Newly added server card — brief premium highlight.
-       IMPORTANT: this must include fadeSlideUp alongside newCardGlow, otherwise
-       it silently overrides the entrance animation on .server-card and the card
-       is left stuck at opacity:0 forever (looks "invisible until reload"). */
+       The glow lives on a ::after pseudo-element, completely separate from the
+       .server-card's own "animation" property (fadeSlideUp). This way nothing
+       added here can ever again silently cancel the entrance fade and leave
+       the card stuck invisible. */
     .server-card.server-card-new {
       position: relative;
       border: 1px solid rgba(168, 85, 247, 0.6);
-      animation: fadeSlideUp 0.6s ease-out forwards, newCardGlow 2.2s ease-out 0.1s;
+    }
+
+    .server-card.server-card-new::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 15px;
+      pointer-events: none;
+      animation: newCardGlow 2.2s ease-out;
     }
 
     .server-card.server-card-new::before {
@@ -1142,6 +1151,16 @@
       filtered.forEach((server, index) => {
         grid.appendChild(renderServerCard(server, index));
       });
+
+      // Safety net: whatever happens with entrance/highlight animations above,
+      // make sure every card is guaranteed visible shortly after render. This
+      // is what actually prevents the "invisible until reload" symptom for good.
+      setTimeout(() => {
+        grid.querySelectorAll('.server-card').forEach(card => {
+          card.style.opacity = '1';
+          card.style.transform = 'none';
+        });
+      }, 900);
     }
 
     async function loadServers() {
