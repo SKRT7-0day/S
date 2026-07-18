@@ -334,50 +334,7 @@
       100% { transform: translate(-50%, -50%) scale(9); opacity: 0; }
     }
 
-    /* Newly added server card — brief premium highlight.
-       The glow lives on a ::after pseudo-element, completely separate from the
-       .server-card's own "animation" property (fadeSlideUp). This way nothing
-       added here can ever again silently cancel the entrance fade and leave
-       the card stuck invisible. */
-    .server-card.server-card-new {
-      position: relative;
-      border: 1px solid rgba(168, 85, 247, 0.6);
-    }
 
-    .server-card.server-card-new::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 15px;
-      pointer-events: none;
-      animation: newCardGlow 2.2s ease-out;
-    }
-
-    .server-card.server-card-new::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: 15px;
-      padding: 1px;
-      background: linear-gradient(120deg, var(--accent-color), #23a55a, var(--accent-color));
-      background-size: 200% 200%;
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      animation: newCardShimmer 1.8s ease-in-out 2;
-      pointer-events: none;
-    }
-
-    @keyframes newCardGlow {
-      0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.65), 0 0 24px 4px rgba(168, 85, 247, 0.35); }
-      70% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0), 0 0 24px 4px rgba(168, 85, 247, 0.15); }
-      100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0), 0 0 0 0 rgba(168, 85, 247, 0); }
-    }
-
-    @keyframes newCardShimmer {
-      0% { background-position: 0% 50%; opacity: 1; }
-      100% { background-position: 200% 50%; opacity: 0; }
-    }
 
     /* Search bar (Discord Servers tab) */
     .server-search-row {
@@ -506,6 +463,51 @@
       transition: background-color 0.2s ease;
     }
     .server-join-btn:hover { background-color: #9333ea; }
+
+    /* Newly added server card — brief premium highlight.
+       The glow lives on ::after and the shimmer border on ::before, completely
+       separate from the .server-card's own "animation" property (fadeSlideUp).
+       This way nothing here can ever silently cancel the entrance fade and
+       leave the card stuck invisible. */
+    .server-card.server-card-new {
+      position: relative;
+      border: 1px solid rgba(168, 85, 247, 0.6);
+    }
+
+    .server-card.server-card-new::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 15px;
+      pointer-events: none;
+      animation: newCardGlow 2.2s ease-out;
+    }
+
+    .server-card.server-card-new::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 15px;
+      padding: 1px;
+      background: linear-gradient(120deg, var(--accent-color), #23a55a, var(--accent-color));
+      background-size: 200% 200%;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: newCardShimmer 1.8s ease-in-out 2;
+      pointer-events: none;
+    }
+
+    @keyframes newCardGlow {
+      0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.65), 0 0 24px 4px rgba(168, 85, 247, 0.35); }
+      70% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0), 0 0 24px 4px rgba(168, 85, 247, 0.15); }
+      100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0), 0 0 0 0 rgba(168, 85, 247, 0); }
+    }
+
+    @keyframes newCardShimmer {
+      0% { background-position: 0% 50%; opacity: 1; }
+      100% { background-position: 200% 50%; opacity: 0; }
+    }
 
     .servers-empty {
       text-align: center;
@@ -1379,3 +1381,4 @@
   </script>
 </body>
 </html>
+
