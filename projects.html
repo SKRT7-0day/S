@@ -997,6 +997,19 @@
       }, extra || {});
     }
 
+    function normalizeServer(s) {
+      if (!s) return s;
+      return {
+        name: s.name || s.server_name || s.title || 'Unknown Server',
+        icon: s.icon || s.icon_url || s.avatar || s.avatar_url || null,
+        code: s.code || s.invite_code || s.invite || '',
+        online: s.online ?? s.online_count ?? s.presence_count ?? s.approximate_presence_count ?? '?',
+        total: s.total ?? s.member_count ?? s.total_members ?? s.approximate_member_count ?? '?',
+        tag: s.tag || null,
+        tag_badge: s.tag_badge || s.tagBadge || s.tag_badge_url || null
+      };
+    }
+
     async function loadServersList() {
       try {
         const res = await fetch(
@@ -1004,7 +1017,8 @@
           { headers: supabaseHeaders() }
         );
         if (!res.ok) return [];
-        return await res.json();
+        const rows = await res.json();
+        return rows.map(normalizeServer);
       } catch (err) {
         console.error('Failed to load servers list:', err);
         return [];
@@ -1163,18 +1177,29 @@
           if (res.ok && data.success) {
             statusEl.className = 'add-server-status success';
             statusEl.innerHTML = `<span class="success-check"><i class="fa-solid fa-check"></i></span> ${data.server.name} added successfully!`;
-            justAddedCode = code;
+            const newServer = normalizeServer(data.server);
+            justAddedCode = newServer.code;
             fireConfetti();
             input.value = '';
 
             // Optimistically show the new server right away instead of re-querying
-            // Supabase immediately (which can race the write and return stale data,
-            // making the card seem to "disappear" until a manual reload).
-            allServersCache = allServersCache.filter(s => s.code !== data.server.code);
-            allServersCache.unshift(data.server);
+            // Supabase immediately (which can race the write and return stale/incomplete
+            // data, making the card seem to "disappear" until a manual reload).
+            allServersCache = allServersCache.filter(s => s.code !== newServer.code);
+            allServersCache.unshift(newServer);
             renderFilteredServers(searchInput.value);
 
-            setTimeout(() => { justAddedCode = null; }, 3000);
+            // Quietly reconcile with Supabase a moment later so the card ends up with
+            // fully accurate data (icon, live counts, tag) even if the optimistic
+            // version above was based on incomplete info — no reload needed.
+            setTimeout(async () => {
+              const freshList = await loadServersList();
+              if (freshList.length) {
+                allServersCache = freshList;
+                renderFilteredServers(searchInput.value);
+              }
+              justAddedCode = null;
+            }, 1500);
           } else if (res.status === 409 || data.error === 'duplicate') {
             statusEl.className = 'add-server-status error';
             statusEl.textContent = 'This server is already in the list.';
