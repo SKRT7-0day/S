@@ -476,42 +476,158 @@
     }
     .server-info-badge:active { transform: scale(0.95); }
 
-    .server-desc-popover {
-      position: absolute;
-      left: 14px;
-      right: 14px;
-      top: 100%;
-      margin-top: 10px;
-      background-color: var(--bg-color);
-      border: 1px solid rgba(168, 85, 247, 0.35);
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 0.8rem;
-      line-height: 1.55;
-      color: var(--text-color);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.4);
-      z-index: 20;
+    /* ==========================================
+       SERVER DETAILS MODAL
+       ========================================== */
+    .server-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 9998;
       display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
       opacity: 0;
-      transform: translateY(-6px);
-      transition: opacity 0.18s ease, transform 0.18s ease;
+      transition: opacity 0.2s ease;
     }
-    .server-desc-popover.open {
+    .server-modal-overlay.open {
+      display: flex;
+    }
+    .server-modal-overlay.show {
+      opacity: 1;
+    }
+
+    .server-modal-card {
+      background-color: var(--card-bg);
+      border-radius: 18px;
+      max-width: 420px;
+      width: 100%;
+      max-height: 85vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      transform: translateY(16px) scale(0.97);
+      opacity: 0;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+    }
+    .server-modal-overlay.show .server-modal-card {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .server-modal-banner-wrap {
+      position: relative;
+      width: 100%;
+      height: 130px;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(35, 165, 90, 0.15));
+      flex-shrink: 0;
+    }
+    .server-modal-banner-wrap img.server-modal-banner {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
     }
-    .server-desc-popover.show {
-      opacity: 1;
-      transform: translateY(0);
+
+    .server-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      border: none;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+      transition: background-color 0.2s ease;
     }
-    .server-desc-popover .server-desc-label {
+    .server-modal-close:hover { background-color: rgba(0, 0, 0, 0.7); }
+
+    .server-modal-icon {
+      width: 76px;
+      height: 76px;
+      border-radius: 20px;
+      object-fit: cover;
+      border: 4px solid var(--card-bg);
+      background-color: rgba(168, 85, 247, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-color);
+      font-size: 2rem;
+      font-weight: bold;
+      margin-top: -46px;
+      margin-left: 20px;
+      flex-shrink: 0;
+    }
+
+    .server-modal-body {
+      padding: 12px 22px 22px;
+      overflow-y: auto;
+    }
+
+    .server-modal-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .server-modal-name {
+      font-size: 1.15rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .server-modal-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      color: var(--sub-text);
+      margin-bottom: 16px;
+    }
+
+    .server-modal-desc-label {
       color: var(--accent-color);
       font-weight: 700;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
-      margin-bottom: 5px;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
       display: block;
     }
+
+    .server-modal-desc {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      margin-bottom: 20px;
+      white-space: pre-line;
+    }
+
+    .server-modal-join-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      background-color: var(--accent-color);
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
+    }
+    .server-modal-join-btn:hover { background-color: #9333ea; }
 
     .server-join-btn {
       background-color: var(--accent-color);
@@ -803,6 +919,28 @@
     </div>
   </div>
 
+  <!-- Server details modal: banner + avatar + description -->
+  <div class="server-modal-overlay" id="serverModalOverlay">
+    <div class="server-modal-card">
+      <div class="server-modal-banner-wrap" id="serverModalBannerWrap">
+        <button class="server-modal-close" id="serverModalClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="server-modal-icon" id="serverModalIcon"></div>
+      <div class="server-modal-body">
+        <div class="server-modal-name-row">
+          <p class="server-modal-name" id="serverModalName"></p>
+          <span id="serverModalTag"></span>
+        </div>
+        <div class="server-modal-meta" id="serverModalMeta"></div>
+        <div id="serverModalDescWrap">
+          <span class="server-modal-desc-label">About this server</span>
+          <p class="server-modal-desc" id="serverModalDesc"></p>
+        </div>
+        <a href="#" target="_blank" class="server-modal-join-btn" id="serverModalJoin">Join Server</a>
+      </div>
+    </div>
+  </div>
+
   <script>
     const projects = [
       {
@@ -1078,6 +1216,7 @@
       return {
         name: s.name || s.server_name || s.title || 'Unknown Server',
         icon: s.icon || s.icon_url || s.avatar || s.avatar_url || null,
+        banner: s.banner || s.banner_url || null,
         code: s.code || s.invite_code || s.invite || '',
         online: s.online ?? s.online_count ?? s.presence_count ?? s.approximate_presence_count ?? '?',
         total: s.total ?? s.member_count ?? s.total_members ?? s.approximate_member_count ?? '?',
@@ -1116,6 +1255,76 @@
 
     let justAddedCode = null;
 
+    function openServerModal(server) {
+      const overlay = document.getElementById('serverModalOverlay');
+      const bannerWrap = document.getElementById('serverModalBannerWrap');
+      const iconEl = document.getElementById('serverModalIcon');
+      const nameEl = document.getElementById('serverModalName');
+      const tagEl = document.getElementById('serverModalTag');
+      const metaEl = document.getElementById('serverModalMeta');
+      const descWrap = document.getElementById('serverModalDescWrap');
+      const descEl = document.getElementById('serverModalDesc');
+      const joinEl = document.getElementById('serverModalJoin');
+
+      // Banner (falls back to the gradient background already set in CSS)
+      bannerWrap.querySelector('img.server-modal-banner')?.remove();
+      if (server.banner) {
+        const img = document.createElement('img');
+        img.className = 'server-modal-banner';
+        img.src = server.banner;
+        img.alt = '';
+        bannerWrap.insertBefore(img, bannerWrap.firstChild);
+      }
+
+      // Icon
+      if (server.icon) {
+        iconEl.innerHTML = `<img src="${server.icon}" alt="" style="width:100%;height:100%;border-radius:16px;object-fit:cover;">`;
+      } else {
+        iconEl.textContent = (server.name || '?').charAt(0).toUpperCase();
+      }
+
+      nameEl.textContent = server.name;
+
+      tagEl.innerHTML = (server.tag && server.tag_badge)
+        ? `<span class="server-tag-chip"><img src="${server.tag_badge}" alt=""><span>${escapeHtml(server.tag)}</span></span>`
+        : '';
+
+      metaEl.innerHTML = `
+        <span><span class="online-dot"></span>${server.online ?? '?'} online</span>
+        <span>·</span>
+        <span>${server.total ?? '?'} members</span>
+      `;
+
+      if (server.description) {
+        descWrap.style.display = '';
+        descEl.textContent = server.description;
+      } else {
+        descWrap.style.display = 'none';
+      }
+
+      joinEl.href = `https://discord.gg/${server.code}`;
+
+      overlay.classList.add('open');
+      requestAnimationFrame(() => overlay.classList.add('show'));
+    }
+
+    function closeServerModal() {
+      const overlay = document.getElementById('serverModalOverlay');
+      overlay.classList.remove('show');
+      setTimeout(() => overlay.classList.remove('open'), 200);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('serverModalOverlay');
+      document.getElementById('serverModalClose').addEventListener('click', closeServerModal);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeServerModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('open')) closeServerModal();
+      });
+    });
+
     function renderServerCard(server, index) {
       const card = document.createElement('div');
       card.className = 'server-card';
@@ -1133,11 +1342,7 @@
         : '';
 
       const infoBadgeHTML = server.description
-        ? `<span class="server-info-badge" role="button" aria-label="Server description">!</span>`
-        : '';
-
-      const descPopoverHTML = server.description
-        ? `<div class="server-desc-popover"><span class="server-desc-label">About this server</span>${escapeHtml(server.description)}</div>`
+        ? `<span class="server-info-badge" role="button" data-code="${server.code}" aria-label="Server description">!</span>`
         : '';
 
       card.innerHTML = `
@@ -1153,7 +1358,6 @@
             <span>·</span>
             <span>${server.total ?? '?'} members</span>
           </div>
-          ${descPopoverHTML}
         </div>
         <a href="https://discord.gg/${server.code}" target="_blank" class="server-join-btn">Join</a>
       `;
@@ -1258,42 +1462,13 @@
         renderFilteredServers(searchInput.value);
       });
 
-      // Toggle the "!" description popover. Event delegation because server
+      // Open the server details modal. Event delegation because server
       // cards are re-rendered/replaced dynamically.
       document.getElementById('serversGrid').addEventListener('click', (e) => {
         const badge = e.target.closest('.server-info-badge');
-        const openPopover = document.querySelector('.server-desc-popover.open');
-
-        if (badge) {
-          const card = badge.closest('.server-card');
-          const popover = card.querySelector('.server-desc-popover');
-          const alreadyOpen = popover.classList.contains('open');
-
-          document.querySelectorAll('.server-desc-popover.open').forEach(p => {
-            p.classList.remove('show');
-            p.classList.remove('open');
-          });
-
-          if (!alreadyOpen) {
-            popover.classList.add('open');
-            requestAnimationFrame(() => popover.classList.add('show'));
-          }
-          e.stopPropagation();
-          return;
-        }
-
-        if (openPopover && !e.target.closest('.server-desc-popover')) {
-          openPopover.classList.remove('show');
-          openPopover.classList.remove('open');
-        }
-      });
-
-      document.addEventListener('click', (e) => {
-        if (e.target.closest('.server-info-badge') || e.target.closest('.server-desc-popover')) return;
-        document.querySelectorAll('.server-desc-popover.open').forEach(p => {
-          p.classList.remove('show');
-          p.classList.remove('open');
-        });
+        if (!badge) return;
+        const server = allServersCache.find(s => s.code === badge.dataset.code);
+        if (server) openServerModal(server);
       });
 
       addBtn.addEventListener('click', async () => {
