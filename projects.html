@@ -370,6 +370,7 @@
       align-items: center;
       gap: 14px;
       opacity: 0;
+      position: relative;
       animation: fadeSlideUp 0.6s ease-out forwards;
     }
 
@@ -449,6 +450,67 @@
       background-color: #23a55a;
       display: inline-block;
       margin-right: 4px;
+    }
+
+    /* Server description info badge — small circle with "!" */
+    .server-info-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      color: var(--accent-color);
+      font-size: 0.68rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+    .server-info-badge:hover {
+      background-color: rgba(168, 85, 247, 0.3);
+      transform: scale(1.08);
+    }
+    .server-info-badge:active { transform: scale(0.95); }
+
+    .server-desc-popover {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      top: 100%;
+      margin-top: 10px;
+      background-color: var(--bg-color);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      color: var(--text-color);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.4);
+      z-index: 20;
+      display: none;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .server-desc-popover.open {
+      display: block;
+    }
+    .server-desc-popover.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .server-desc-popover .server-desc-label {
+      color: var(--accent-color);
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 5px;
+      display: block;
     }
 
     .server-join-btn {
@@ -1020,7 +1082,8 @@
         online: s.online ?? s.online_count ?? s.presence_count ?? s.approximate_presence_count ?? '?',
         total: s.total ?? s.member_count ?? s.total_members ?? s.approximate_member_count ?? '?',
         tag: s.tag || null,
-        tag_badge: s.tag_badge || s.tagBadge || s.tag_badge_url || null
+        tag_badge: s.tag_badge || s.tagBadge || s.tag_badge_url || null,
+        description: s.description || s.server_description || null
       };
     }
 
@@ -1045,6 +1108,12 @@
       return match ? match[1] : trimmed;
     }
 
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
     let justAddedCode = null;
 
     function renderServerCard(server, index) {
@@ -1063,18 +1132,28 @@
         ? `<div class="server-tag-chip"><img src="${server.tag_badge}" alt=""><span>${server.tag}</span></div>`
         : '';
 
+      const infoBadgeHTML = server.description
+        ? `<span class="server-info-badge" role="button" aria-label="Server description">!</span>`
+        : '';
+
+      const descPopoverHTML = server.description
+        ? `<div class="server-desc-popover"><span class="server-desc-label">About this server</span>${escapeHtml(server.description)}</div>`
+        : '';
+
       card.innerHTML = `
         ${iconHTML}
         <div class="server-info">
           <div class="server-name-row">
             <p class="server-name">${server.name}</p>
             ${tagHTML}
+            ${infoBadgeHTML}
           </div>
           <div class="server-meta">
             <span><span class="online-dot"></span>${server.online ?? '?'} online</span>
             <span>·</span>
             <span>${server.total ?? '?'} members</span>
           </div>
+          ${descPopoverHTML}
         </div>
         <a href="https://discord.gg/${server.code}" target="_blank" class="server-join-btn">Join</a>
       `;
@@ -1177,6 +1256,44 @@
 
       searchInput.addEventListener('input', () => {
         renderFilteredServers(searchInput.value);
+      });
+
+      // Toggle the "!" description popover. Event delegation because server
+      // cards are re-rendered/replaced dynamically.
+      document.getElementById('serversGrid').addEventListener('click', (e) => {
+        const badge = e.target.closest('.server-info-badge');
+        const openPopover = document.querySelector('.server-desc-popover.open');
+
+        if (badge) {
+          const card = badge.closest('.server-card');
+          const popover = card.querySelector('.server-desc-popover');
+          const alreadyOpen = popover.classList.contains('open');
+
+          document.querySelectorAll('.server-desc-popover.open').forEach(p => {
+            p.classList.remove('show');
+            p.classList.remove('open');
+          });
+
+          if (!alreadyOpen) {
+            popover.classList.add('open');
+            requestAnimationFrame(() => popover.classList.add('show'));
+          }
+          e.stopPropagation();
+          return;
+        }
+
+        if (openPopover && !e.target.closest('.server-desc-popover')) {
+          openPopover.classList.remove('show');
+          openPopover.classList.remove('open');
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.server-info-badge') || e.target.closest('.server-desc-popover')) return;
+        document.querySelectorAll('.server-desc-popover.open').forEach(p => {
+          p.classList.remove('show');
+          p.classList.remove('open');
+        });
       });
 
       addBtn.addEventListener('click', async () => {
