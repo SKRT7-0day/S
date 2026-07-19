@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="theme-dark" lang="en">
 <head>
@@ -181,6 +182,130 @@ Thanks for stopping by!">
       width: 16px;
       height: 16px;
       vertical-align: middle;
+    }
+
+    /* ==========================================
+       LIVE ACTIVITY CARD (Spotify / Playing a game)
+       ========================================== */
+    .activity-card {
+      display: none;
+      width: 90%;
+      max-width: 400px;
+      margin: 0 auto 22px;
+      background-color: var(--card-bg);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      text-align: left;
+      animation: slideInCustomStatus 0.4s ease-out;
+    }
+
+    .activity-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .activity-icon-wrap {
+      position: relative;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+    }
+
+    .activity-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      object-fit: cover;
+      display: block;
+      background-color: rgba(255,255,255,0.06);
+    }
+
+    .activity-icon-badge {
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background-color: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      border: 2px solid var(--card-bg);
+    }
+    .activity-icon-badge.spotify { color: #1DB954; }
+    .activity-icon-badge.game { color: #a855f7; }
+
+    .activity-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .activity-label {
+      margin: 0 0 2px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--sub-text);
+    }
+
+    .activity-title {
+      margin: 0;
+      font-size: 0.92rem;
+      font-weight: bold;
+      color: var(--text-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .activity-subtitle {
+      margin: 2px 0 0;
+      font-size: 0.78rem;
+      color: var(--sub-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .activity-progress {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .activity-progress-bar {
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background-color: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    .activity-progress-fill {
+      height: 100%;
+      width: 0%;
+      background-color: #1DB954;
+      border-radius: 2px;
+      transition: width 0.9s linear;
+    }
+
+    .activity-progress-times {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--sub-text);
+      margin-top: 4px;
+    }
+
+    .activity-elapsed-only {
+      display: none;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      color: var(--sub-text);
     }
 
     .celebration-container { position: relative; display: inline-block; margin: 10px auto; padding: 10px 30px; cursor: crosshair; }
@@ -419,6 +544,29 @@ Thanks for stopping by!">
       <div class="discord-activity" id="discordCustomStatus"></div>
     </div>
 
+    <!-- Live "Listening to Spotify" / "Playing a game" card -->
+    <div class="activity-card" id="activityCard">
+      <div class="activity-card-header">
+        <div class="activity-icon-wrap">
+          <img class="activity-icon" id="activityIcon" src="" alt="">
+          <span class="activity-icon-badge" id="activityIconBadge"></span>
+        </div>
+        <div class="activity-info">
+          <p class="activity-label" id="activityLabel"></p>
+          <p class="activity-title" id="activityTitle"></p>
+          <p class="activity-subtitle" id="activitySubtitle"></p>
+        </div>
+      </div>
+      <div class="activity-progress" id="activityProgressWrap">
+        <div class="activity-progress-bar"><div class="activity-progress-fill" id="activityProgressFill"></div></div>
+        <div class="activity-progress-times">
+          <span id="activityElapsed">0:00</span>
+          <span id="activityDuration">0:00</span>
+        </div>
+      </div>
+      <div class="activity-elapsed-only" id="activityElapsedOnly"></div>
+    </div>
+
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
         <input type="checkbox" class="theme-switch__checkbox" id="themeCheckbox">
@@ -527,6 +675,154 @@ Thanks for stopping by!">
 
     const DISCORD_ID = "1217944125555474565";
 
+    // ==========================================
+    // LIVE ACTIVITY CARD (Spotify / Playing a game)
+    // ==========================================
+    let activityTicker = null;
+    let activityTickerMode = null; // 'spotify' | 'game' | null
+    let activityTickerData = null;
+
+    function formatClock(ms) {
+      if (!isFinite(ms) || ms < 0) ms = 0;
+      const totalSec = Math.floor(ms / 1000);
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      if (h > 0) {
+        return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      }
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function stopActivityTicker() {
+      if (activityTicker) {
+        clearInterval(activityTicker);
+        activityTicker = null;
+      }
+      activityTickerMode = null;
+      activityTickerData = null;
+    }
+
+    function tickSpotifyProgress() {
+      if (!activityTickerData) return;
+      const { start, end } = activityTickerData;
+      const now = Date.now();
+      const elapsed = Math.min(Math.max(now - start, 0), end - start);
+      const total = end - start;
+      const pct = total > 0 ? (elapsed / total) * 100 : 0;
+
+      document.getElementById('activityProgressFill').style.width = pct + '%';
+      document.getElementById('activityElapsed').textContent = formatClock(elapsed);
+      document.getElementById('activityDuration').textContent = formatClock(total);
+    }
+
+    function tickGameElapsed() {
+      if (!activityTickerData) return;
+      const elapsed = Date.now() - activityTickerData.start;
+      document.getElementById('activityElapsedOnly').textContent = formatClock(elapsed) + ' elapsed';
+    }
+
+    function getGameImageUrl(activity) {
+      const large = activity.assets && activity.assets.large_image;
+      if (!large) return null;
+      if (large.startsWith('mp:')) {
+        return `https://media.discordapp.net/${large.slice(3)}`;
+      }
+      if (activity.application_id) {
+        return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${large}.png`;
+      }
+      return null;
+    }
+
+    function showSpotifyCard(spotify) {
+      const card = document.getElementById('activityCard');
+      const icon = document.getElementById('activityIcon');
+      const badge = document.getElementById('activityIconBadge');
+      const label = document.getElementById('activityLabel');
+      const title = document.getElementById('activityTitle');
+      const subtitle = document.getElementById('activitySubtitle');
+      const progressWrap = document.getElementById('activityProgressWrap');
+      const elapsedOnly = document.getElementById('activityElapsedOnly');
+
+      icon.src = spotify.album_art_url || '';
+      badge.innerHTML = '<i class="fa-brands fa-spotify"></i>';
+      badge.className = 'activity-icon-badge spotify';
+      label.textContent = '🎧 Listening to Spotify';
+      title.textContent = spotify.song || '';
+      subtitle.textContent = spotify.artist ? `by ${spotify.artist}${spotify.album ? ' • ' + spotify.album : ''}` : '';
+
+      progressWrap.style.display = 'block';
+      elapsedOnly.style.display = 'none';
+      card.style.display = 'block';
+
+      const start = spotify.timestamps?.start;
+      const end = spotify.timestamps?.end;
+      if (start && end) {
+        activityTickerData = { start, end };
+        tickSpotifyProgress();
+        if (activityTickerMode !== 'spotify') {
+          stopActivityTicker();
+          activityTickerMode = 'spotify';
+          activityTicker = setInterval(tickSpotifyProgress, 1000);
+        }
+      }
+    }
+
+    function showGameCard(activity) {
+      const card = document.getElementById('activityCard');
+      const icon = document.getElementById('activityIcon');
+      const badge = document.getElementById('activityIconBadge');
+      const label = document.getElementById('activityLabel');
+      const title = document.getElementById('activityTitle');
+      const subtitle = document.getElementById('activitySubtitle');
+      const progressWrap = document.getElementById('activityProgressWrap');
+      const elapsedOnly = document.getElementById('activityElapsedOnly');
+
+      const imgUrl = getGameImageUrl(activity);
+      icon.src = imgUrl || '';
+      icon.style.visibility = imgUrl ? 'visible' : 'hidden';
+      badge.innerHTML = '<i class="fa-solid fa-gamepad"></i>';
+      badge.className = 'activity-icon-badge game';
+      label.textContent = '🎮 Playing';
+      title.textContent = activity.name || '';
+      subtitle.textContent = activity.details || activity.state || '';
+
+      progressWrap.style.display = 'none';
+      card.style.display = 'block';
+
+      if (activity.timestamps && activity.timestamps.start) {
+        elapsedOnly.style.display = 'block';
+        activityTickerData = { start: activity.timestamps.start };
+        tickGameElapsed();
+        if (activityTickerMode !== 'game') {
+          stopActivityTicker();
+          activityTickerMode = 'game';
+          activityTicker = setInterval(tickGameElapsed, 1000);
+        }
+      } else {
+        elapsedOnly.style.display = 'none';
+        stopActivityTicker();
+      }
+    }
+
+    function hideActivityCard() {
+      document.getElementById('activityCard').style.display = 'none';
+      stopActivityTicker();
+    }
+
+    function updateActivityCard(data) {
+      if (data.listening_to_spotify && data.spotify) {
+        showSpotifyCard(data.spotify);
+        return;
+      }
+      const gameActivity = (data.activities || []).find(a => a.type === 0);
+      if (gameActivity) {
+        showGameCard(gameActivity);
+        return;
+      }
+      hideActivityCard();
+    }
+
     async function updateDiscordPresence() {
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
@@ -621,6 +917,8 @@ Thanks for stopping by!">
           container.style.visibility = 'visible';
         }
 
+        updateActivityCard(data);
+
       } catch (err) {
         console.error('Lanyard fetch failed:', err);
       }
@@ -631,4 +929,3 @@ Thanks for stopping by!">
   </script>
 </body>
 </html>
-
