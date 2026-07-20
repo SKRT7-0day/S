@@ -52,19 +52,36 @@ Thanks for stopping by!">
       position: relative;
     }
 
-    /* Dynamic background: softly tinted with the current Spotify album art's
-       dominant color while playing, fades back to the normal background
-       otherwise. Sits behind everything. */
-    .dynamic-bg {
+    /* Dynamic background: the current Spotify album art (or game art) itself,
+       blurred and darkened, fills the whole page behind everything. Two
+       stacked layers crossfade smoothly whenever the track/game changes. */
+    .dynamic-bg-layer {
+      position: fixed;
+      inset: -60px;
+      z-index: 0;
+      pointer-events: none;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.15);
+      filter: blur(50px) brightness(0.5) saturate(1.35);
+      opacity: 0;
+      transition: opacity 1.3s ease;
+    }
+    .dynamic-bg-layer.active {
+      opacity: 1;
+    }
+
+    /* A subtle color-matched glow on top of the blurred photo for extra richness */
+    .dynamic-bg-tint {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      background: radial-gradient(circle at 50% 0%, var(--dynamic-tint, transparent) 0%, transparent 60%);
+      background: radial-gradient(circle at 50% 0%, var(--dynamic-tint, transparent) 0%, transparent 65%);
       opacity: 0;
-      transition: opacity 1.1s ease, background 1.1s ease;
+      transition: opacity 1.3s ease, background 1.3s ease;
     }
-    .dynamic-bg.active {
+    .dynamic-bg-tint.active {
       opacity: 1;
     }
 
@@ -538,7 +555,9 @@ Thanks for stopping by!">
 
 <body>
 
-  <div class="dynamic-bg" id="dynamicBg"></div>
+  <div class="dynamic-bg-layer" id="dynamicBgA"></div>
+  <div class="dynamic-bg-layer" id="dynamicBgB"></div>
+  <div class="dynamic-bg-tint" id="dynamicBgTint"></div>
 
   <svg style="display: none;">
     <defs>
@@ -805,12 +824,23 @@ Thanks for stopping by!">
       });
     }
 
+    let activeBgLayer = 'A'; // which of dynamicBgA/dynamicBgB is currently showing
+
     async function applyDynamicBackground(imgUrl) {
       if (!imgUrl || imgUrl === lastDynamicBgUrl) return;
       lastDynamicBgUrl = imgUrl;
 
       const card = document.getElementById('activityCard');
       card.style.setProperty('--art-bg-echo', `url("${imgUrl}")`);
+
+      // Crossfade: paint the image onto the currently-hidden layer, then swap.
+      const showing = document.getElementById(activeBgLayer === 'A' ? 'dynamicBgA' : 'dynamicBgB');
+      const hidden = document.getElementById(activeBgLayer === 'A' ? 'dynamicBgB' : 'dynamicBgA');
+
+      hidden.style.backgroundImage = `url("${imgUrl}")`;
+      hidden.classList.add('active');
+      showing.classList.remove('active');
+      activeBgLayer = activeBgLayer === 'A' ? 'B' : 'A';
 
       try {
         let rgb = dynamicColorCache.get(imgUrl);
@@ -821,22 +851,25 @@ Thanks for stopping by!">
         if (lastDynamicBgUrl !== imgUrl) return; // a newer track/game took over meanwhile
 
         const [r, g, b] = rgb;
-        const bg = document.getElementById('dynamicBg');
-        bg.style.setProperty('--dynamic-tint', `rgba(${r}, ${g}, ${b}, 0.32)`);
-        bg.classList.add('active');
+        const tint = document.getElementById('dynamicBgTint');
+        tint.style.setProperty('--dynamic-tint', `rgba(${r}, ${g}, ${b}, 0.28)`);
+        tint.classList.add('active');
 
         card.style.setProperty('--art-glow', `rgba(${r}, ${g}, ${b}, 0.55)`);
         card.style.setProperty('--card-tint', `rgba(${r}, ${g}, ${b}, 0.22)`);
         card.style.setProperty('--card-ring', `rgba(${r}, ${g}, ${b}, 0.35)`);
       } catch (err) {
-        // CORS-blocked or failed to load — keep the art echo but skip the color tint.
+        // CORS-blocked or failed to load — the blurred photo background still
+        // works either way; this only skips the extra color-matched glow.
         console.warn('Dynamic background color extraction failed:', err);
       }
     }
 
     function clearDynamicBackground() {
       lastDynamicBgUrl = null;
-      document.getElementById('dynamicBg').classList.remove('active');
+      document.getElementById('dynamicBgA').classList.remove('active');
+      document.getElementById('dynamicBgB').classList.remove('active');
+      document.getElementById('dynamicBgTint').classList.remove('active');
       const card = document.getElementById('activityCard');
       card.style.removeProperty('--art-glow');
       card.style.removeProperty('--art-bg-echo');
