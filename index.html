@@ -208,32 +208,60 @@ Thanks for stopping by!">
       width: 90%;
       max-width: 400px;
       margin: 0 auto 22px;
-      background-color: rgba(31, 34, 47, 0.72);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+      background:
+        linear-gradient(160deg, var(--card-tint, rgba(255,255,255,0.03)) 0%, rgba(31, 34, 47, 0.78) 55%);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--card-ring, rgba(255,255,255,0.08));
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 10px 34px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.02) inset;
       text-align: left;
       animation: slideInCustomStatus 0.4s ease-out;
-      transition: background-color 0.4s ease;
+      transition: background 0.7s ease, border-color 0.7s ease, box-shadow 0.7s ease;
     }
 
     .activity-card-header {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
+    }
+
+    .activity-icon-wrap {
+      position: relative;
+      flex-shrink: 0;
+      width: 108px;
+      height: 108px;
     }
 
     .activity-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 10px;
+      width: 108px;
+      height: 108px;
+      border-radius: 16px;
       object-fit: cover;
       display: block;
       background-color: rgba(255,255,255,0.06);
-      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-      flex-shrink: 0;
+      box-shadow:
+        0 12px 30px rgba(0,0,0,0.45),
+        0 0 0 1px rgba(255,255,255,0.08),
+        0 0 32px 2px var(--art-glow, transparent);
+      transition: box-shadow 0.7s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Soft blurred echo of the art behind it for a premium "glow" feel */
+    .activity-icon-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border-radius: 16px;
+      background-image: var(--art-bg-echo, none);
+      background-size: cover;
+      background-position: center;
+      filter: blur(18px) saturate(1.4);
+      opacity: 0.65;
+      z-index: 0;
+      transition: opacity 0.5s ease;
     }
 
     .activity-info {
@@ -255,7 +283,7 @@ Thanks for stopping by!">
 
     .activity-title {
       margin: 0;
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: bold;
       color: var(--text-color);
       white-space: nowrap;
@@ -264,12 +292,13 @@ Thanks for stopping by!">
     }
 
     .activity-subtitle {
-      margin: 2px 0 0;
-      font-size: 0.79rem;
+      margin: 3px 0 0;
+      font-size: 0.82rem;
       color: var(--sub-text);
-      white-space: nowrap;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .activity-progress {
@@ -549,7 +578,9 @@ Thanks for stopping by!">
     <!-- Live "Listening to Spotify" / "Playing a game" card -->
     <div class="activity-card" id="activityCard">
       <div class="activity-card-header">
-        <img class="activity-icon" id="activityIcon" src="" alt="">
+        <div class="activity-icon-wrap">
+          <img class="activity-icon" id="activityIcon" src="" alt="">
+        </div>
         <div class="activity-info">
           <p class="activity-label" id="activityLabel"></p>
           <p class="activity-title" id="activityTitle"></p>
@@ -778,6 +809,9 @@ Thanks for stopping by!">
       if (!imgUrl || imgUrl === lastDynamicBgUrl) return;
       lastDynamicBgUrl = imgUrl;
 
+      const card = document.getElementById('activityCard');
+      card.style.setProperty('--art-bg-echo', `url("${imgUrl}")`);
+
       try {
         let rgb = dynamicColorCache.get(imgUrl);
         if (!rgb) {
@@ -790,8 +824,12 @@ Thanks for stopping by!">
         const bg = document.getElementById('dynamicBg');
         bg.style.setProperty('--dynamic-tint', `rgba(${r}, ${g}, ${b}, 0.32)`);
         bg.classList.add('active');
+
+        card.style.setProperty('--art-glow', `rgba(${r}, ${g}, ${b}, 0.55)`);
+        card.style.setProperty('--card-tint', `rgba(${r}, ${g}, ${b}, 0.22)`);
+        card.style.setProperty('--card-ring', `rgba(${r}, ${g}, ${b}, 0.35)`);
       } catch (err) {
-        // CORS-blocked or failed to load — just skip the tint gracefully.
+        // CORS-blocked or failed to load — keep the art echo but skip the color tint.
         console.warn('Dynamic background color extraction failed:', err);
       }
     }
@@ -799,6 +837,11 @@ Thanks for stopping by!">
     function clearDynamicBackground() {
       lastDynamicBgUrl = null;
       document.getElementById('dynamicBg').classList.remove('active');
+      const card = document.getElementById('activityCard');
+      card.style.removeProperty('--art-glow');
+      card.style.removeProperty('--art-bg-echo');
+      card.style.removeProperty('--card-tint');
+      card.style.removeProperty('--card-ring');
     }
 
     function showSpotifyCard(spotify) {
@@ -1000,3 +1043,4 @@ Thanks for stopping by!">
   </script>
 </body>
 </html>
+
