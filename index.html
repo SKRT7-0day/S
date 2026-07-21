@@ -479,22 +479,44 @@ Thanks for stopping by!">
     .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__comets { opacity: 1; }
     @keyframes auroraWave { 0% { transform: translateY(-100%) translateX(-50%); } 100% { transform: translateY(-100%) translateX(50%); } }
 
-    .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
-    
+    .button-stack { width: 90%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+
     .ship-btn {
       text-decoration: none; display: flex; align-items: center; justify-content: center;
-      height: 55px; border-radius: 15px; border: none; font-weight: bold; font-size: 1rem; color: #fff;
-      transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      height: 54px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.07);
+      font-weight: 600; font-size: 0.98rem; color: var(--text-color);
+      background-color: rgba(255,255,255,0.04);
+      backdrop-filter: blur(6px);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
-    .ship-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
-    .ship-btn i { margin-right: 10px; font-size: 1.2rem; }
+    .ship-btn:hover {
+      transform: translateY(-2px);
+      background-color: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.14);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.25);
+    }
+    .ship-btn i { margin-right: 10px; font-size: 1.15rem; }
 
-    .discord { background: #5865F2; } 
-    .instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-    .github { background: #171515; } 
-    .youtube { background: #FF0000; } 
-    .spotify { background: #1DB954; } 
-    .facebook { background: #1877F2; }
+    /* Primary CTA keeps a solid fill so it stands out from the rest */
+    .ship-btn.primary {
+      background: linear-gradient(135deg, #a855f7, #9333ea);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.35);
+    }
+    .ship-btn.primary:hover {
+      background: linear-gradient(135deg, #b768ff, #a244f0);
+      box-shadow: 0 10px 26px rgba(168, 85, 247, 0.45);
+    }
+
+    /* Brand color lives on the icon only, not the whole button */
+    .ship-btn.discord i { color: #5865F2; }
+    .ship-btn.instagram i { color: #e1306c; }
+    .ship-btn.github i { color: #ffffff; }
+    .ship-btn.youtube i { color: #FF0000; }
+    .ship-btn.spotify i { color: #1DB954; }
+    .ship-btn.facebook i { color: #1877F2; }
 
     .loading-screen {
       position: fixed;
@@ -645,7 +667,7 @@ Thanks for stopping by!">
     </div>
 
     <div class="button-stack">
-      <a href="projects.html" class="ship-btn" style="background-color: #a855f7;"><i class="fa-solid fa-folder-open"></i> My Projects</a>
+      <a href="projects.html" class="ship-btn primary"><i class="fa-solid fa-folder-open"></i> My Projects</a>
       <a href="https://discord.gg/Vk8WJhpQW4" target="_blank" class="ship-btn discord"><i class="fa-brands fa-discord"></i> Discord</a>
       <a href="https://www.instagram.com/skrt7_66" target="_blank" class="ship-btn instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
       <a href="https://github.com/SKRT7-0day" target="_blank" class="ship-btn github"><i class="fa-brands fa-github"></i> GitHub</a>
