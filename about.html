@@ -182,6 +182,23 @@
     }
 
     /* ==========================================
+       LIVE AGE COUNTER
+       ========================================== */
+    .age-counter {
+      color: var(--accent-color);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.2px;
+      display: inline-block;
+      animation: ageGlow 2.6s ease-in-out infinite;
+    }
+
+    @keyframes ageGlow {
+      0%, 100% { text-shadow: 0 0 0px rgba(168, 85, 247, 0); }
+      50% { text-shadow: 0 0 10px rgba(168, 85, 247, 0.6), 0 0 22px rgba(168, 85, 247, 0.25); }
+    }
+
+    /* ==========================================
        FULL-WIDTH STORY CARDS
        ========================================== */
     .story-card {
@@ -294,7 +311,7 @@
           <h2 class="info-card-title">Who am I</h2>
         </div>
         <p class="info-card-body">
-          Online, I go by <strong style="color: var(--text-color);">SKRT7</strong>. I keep my real name private for personal reasons — hope you understand. I'm <strong style="color: var(--text-color);">19 years old</strong>, currently based in <strong style="color: var(--text-color);">Morocco</strong>.
+          Online, I go by <strong style="color: var(--text-color);">SKRT7</strong>. I keep my real name private for personal reasons — hope you understand. I'm <span class="age-counter" id="ageCounter">19</span> years old, currently based in <strong style="color: var(--text-color);">Morocco</strong>.
         </p>
       </div>
 
@@ -354,6 +371,25 @@
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-theme');
     }
+
+    // ==========================================
+    // LIVE AGE COUNTER
+    // ==========================================
+    // ⚠️ REPLACE THIS with your exact birth date and time (local time is fine).
+    // Format: 'YYYY-MM-DDTHH:MM:SS'
+    const BIRTH_DATE = new Date('2006-12-21T08:00:00');
+
+    const MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365.2425; // accounts for leap years
+
+    function updateAgeCounter() {
+      const el = document.getElementById('ageCounter');
+      if (el) {
+        const ageYears = (Date.now() - BIRTH_DATE.getTime()) / MS_PER_YEAR;
+        el.textContent = ageYears.toFixed(9);
+      }
+      requestAnimationFrame(updateAgeCounter);
+    }
+    requestAnimationFrame(updateAgeCounter);
   </script>
 </body>
 </html>
