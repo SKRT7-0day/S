@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="theme-dark" lang="en">
 <head>
@@ -230,6 +229,13 @@
       transition: border-color 0.2s ease;
     }
     .add-server-input:focus { border-color: var(--accent-color); }
+    .add-server-input.input-attention {
+      animation: inputAttentionPulse 0.7s ease-in-out 2;
+    }
+    @keyframes inputAttentionPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.55); }
+      50% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0); }
+    }
     .add-server-input::placeholder { color: var(--sub-text); }
 
     .add-server-btn {
@@ -1222,6 +1228,21 @@
         panelProjects.classList.remove('active');
         loadServers();
       });
+
+      // Arrived from the "Add your server" bubble on the home page —
+      // jump straight to the Discord Servers tab and focus the input.
+      if (new URLSearchParams(window.location.search).get('openServers') === '1') {
+        tabBtnServers.click();
+        const input = document.getElementById('serverInviteInput');
+        if (input) {
+          setTimeout(() => {
+            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            input.focus();
+            input.classList.add('input-attention');
+            setTimeout(() => input.classList.remove('input-attention'), 2200);
+          }, 300);
+        }
+      }
     });
 
     // ==========================================
@@ -1713,3 +1734,4 @@
   </script>
 </body>
 </html>
+
