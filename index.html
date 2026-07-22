@@ -86,6 +86,71 @@ Thanks for stopping by!">
     }
 
     .container { margin-top: 10vh; position: relative; z-index: 1; }
+
+    /* ==========================================
+       "ADD YOUR SERVER" FLOATING BUBBLE
+       ========================================== */
+    .add-server-bubble {
+      position: fixed;
+      top: 12%;
+      left: 8%;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      color: #fff;
+      padding: 12px 18px 12px 16px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 10px 26px rgba(168, 85, 247, 0.45);
+      cursor: pointer;
+      opacity: 0;
+      transform: scale(0.7);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+    }
+    .add-server-bubble.visible {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+      animation: bubbleFloat 22s ease-in-out infinite, bubblePulse 2.4s ease-in-out infinite;
+    }
+    .add-server-bubble:hover {
+      box-shadow: 0 14px 34px rgba(168, 85, 247, 0.6);
+    }
+
+    .add-server-bubble .bubble-close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.2);
+      font-size: 0.62rem;
+      margin-left: 2px;
+      flex-shrink: 0;
+    }
+    .add-server-bubble .bubble-close:hover {
+      background-color: rgba(255,255,255,0.35);
+    }
+
+    @keyframes bubbleFloat {
+      0%   { top: 12%; left: 8%; }
+      20%  { top: 62%; left: 74%; }
+      40%  { top: 18%; left: 68%; }
+      60%  { top: 72%; left: 12%; }
+      80%  { top: 38%; left: 45%; }
+      100% { top: 12%; left: 8%; }
+    }
+
+    @keyframes bubblePulse {
+      0%, 100% { box-shadow: 0 10px 26px rgba(168, 85, 247, 0.45); }
+      50% { box-shadow: 0 10px 34px rgba(168, 85, 247, 0.75); }
+    }
     
     .avatar-wrapper {
       position: relative;
@@ -597,6 +662,12 @@ Thanks for stopping by!">
     </div>
   </div>
 
+  <div class="add-server-bubble" id="addServerBubble">
+    <i class="fa-brands fa-discord"></i>
+    <span>Add your server</span>
+    <span class="bubble-close" id="addServerBubbleClose"><i class="fa-solid fa-xmark"></i></span>
+  </div>
+
   <div class="container">
 
     <div class="avatar-wrapper">
@@ -741,8 +812,34 @@ Thanks for stopping by!">
         if (loader) {
           loader.classList.add('fade-out');
         }
+        initAddServerBubble();
       }, 2500);
     });
+
+    // ==========================================
+    // "ADD YOUR SERVER" FLOATING BUBBLE — first visit only
+    // ==========================================
+    function initAddServerBubble() {
+      const SEEN_KEY = 'skrt7_add_server_bubble_seen';
+      if (localStorage.getItem(SEEN_KEY)) return;
+
+      const bubble = document.getElementById('addServerBubble');
+      const closeBtn = document.getElementById('addServerBubbleClose');
+      if (!bubble) return;
+
+      bubble.classList.add('visible');
+
+      bubble.addEventListener('click', () => {
+        localStorage.setItem(SEEN_KEY, 'true');
+        window.location.href = 'projects.html?openServers=1';
+      });
+
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        localStorage.setItem(SEEN_KEY, 'true');
+        bubble.classList.remove('visible');
+      });
+    }
 
     const DISCORD_ID = "1217944125555474565";
 
