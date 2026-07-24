@@ -22,6 +22,7 @@
   let idleAnimationFrame = 0;
 
   const nekoSpeed = 10;
+  const nekoScale = 2.2; // bump this up/down to resize the cat (1 = original 32px size)
   const spriteSets = {
     idle: [[-3, -3]],
     alert: [[-7, -3]],
@@ -124,6 +125,8 @@
     nekoEl.style.left = `${nekoPosX - 16}px`;
     nekoEl.style.top = `${nekoPosY - 16}px`;
     nekoEl.style.zIndex = 2147483647;
+    nekoEl.style.transform = `scale(${nekoScale})`;
+    nekoEl.style.transformOrigin = "center center";
 
     nekoEl.style.backgroundImage = `url(${nekoFile})`;
     
@@ -277,3 +280,4 @@
 
   init();
 })();
+
