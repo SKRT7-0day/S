@@ -23,6 +23,8 @@
 
   const nekoSpeed = 10;
   const nekoScale = 2.2; // bump this up/down to resize the cat (1 = original 32px size)
+  let menuOpen = false;
+  let currentSkinFile = "./oneko.gif";
   const spriteSets = {
     idle: [[-3, -3]],
     alert: [[-7, -3]],
@@ -99,6 +101,12 @@
         persistPosition = JSON.parse(curScript.dataset.persistPosition.toLowerCase());
       }
     }
+
+    currentSkinFile = nekoFile;
+    try {
+      const savedSkin = window.localStorage.getItem("onekoSkin");
+      if (savedSkin) currentSkinFile = savedSkin;
+    } catch (e) { /* ignore */ }
   
     if (persistPosition) {
       let storedNeko = JSON.parse(window.localStorage.getItem("oneko"));
@@ -120,7 +128,8 @@
     nekoEl.style.width = "32px";
     nekoEl.style.height = "32px";
     nekoEl.style.position = "fixed";
-    nekoEl.style.pointerEvents = "none";
+    nekoEl.style.pointerEvents = "auto";
+    nekoEl.style.cursor = "pointer";
     nekoEl.style.imageRendering = "pixelated";
     nekoEl.style.left = `${nekoPosX - 16}px`;
     nekoEl.style.top = `${nekoPosY - 16}px`;
@@ -128,9 +137,14 @@
     nekoEl.style.transform = `scale(${nekoScale})`;
     nekoEl.style.transformOrigin = "center center";
 
-    nekoEl.style.backgroundImage = `url(${nekoFile})`;
+    nekoEl.style.backgroundImage = `url(${currentSkinFile})`;
     
     document.body.appendChild(nekoEl);
+
+    nekoEl.addEventListener("click", function (event) {
+      event.stopPropagation();
+      toggleSkinMenu();
+    });
 
     document.addEventListener("mousemove", function (event) {
       mousePosX = event.clientX;
@@ -176,6 +190,116 @@
   function setSprite(name, frame) {
     const sprite = spriteSets[name][frame % spriteSets[name].length];
     nekoEl.style.backgroundPosition = `${sprite[0] * 32}px ${sprite[1] * 32}px`;
+  }
+
+  // ==========================================
+  // SKIN PICKER — click the cat to pop out a
+  // circle of character choices around it.
+  // ==========================================
+  const SKIN_OPTIONS = [
+    { file: "oneko.gif", label: "Classic" },
+    { file: "oneko-alt1.webp", label: "Neko 1" },
+    { file: "oneko-alt2.webp", label: "Neko 2" },
+    { file: "oneko-alt3.webp", label: "Bear" },
+  ];
+
+  let skinMenuEl = null;
+
+  function closeSkinMenu() {
+    if (!skinMenuEl) return;
+    const el = skinMenuEl;
+    skinMenuEl = null;
+    menuOpen = false;
+    el.style.opacity = "0";
+    setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 180);
+  }
+
+  function chooseSkin(file) {
+    currentSkinFile = file;
+    nekoEl.style.backgroundImage = `url(${file})`;
+    try { window.localStorage.setItem("onekoSkin", file); } catch (e) { /* ignore */ }
+    closeSkinMenu();
+  }
+
+  function toggleSkinMenu() {
+    if (skinMenuEl) {
+      closeSkinMenu();
+      return;
+    }
+    menuOpen = true;
+
+    const wrap = document.createElement("div");
+    wrap.style.position = "fixed";
+    wrap.style.left = "0";
+    wrap.style.top = "0";
+    wrap.style.width = "0";
+    wrap.style.height = "0";
+    wrap.style.zIndex = 2147483647;
+    wrap.style.opacity = "1";
+    wrap.style.transition = "opacity 0.18s ease";
+
+    const centerX = nekoPosX;
+    const centerY = nekoPosY;
+    const radius = 78;
+    const count = SKIN_OPTIONS.length;
+
+    SKIN_OPTIONS.forEach(function (skin, i) {
+      const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
+      const bx = centerX + Math.cos(angle) * radius;
+      const by = centerY + Math.sin(angle) * radius;
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.title = skin.label;
+      btn.style.position = "fixed";
+      btn.style.left = `${bx - 20}px`;
+      btn.style.top = `${by - 20}px`;
+      btn.style.width = "40px";
+      btn.style.height = "40px";
+      btn.style.borderRadius = "50%";
+      btn.style.border = skin.file === currentSkinFile ? "2px solid #ff6fae" : "2px solid rgba(255,255,255,0.25)";
+      btn.style.background = "#1b1420";
+      btn.style.backgroundImage = `url(${skin.file})`;
+      btn.style.backgroundPosition = "-96px -96px"; // idle frame crop
+      btn.style.backgroundSize = "256px 128px";
+      btn.style.imageRendering = "pixelated";
+      btn.style.cursor = "pointer";
+      btn.style.boxShadow = "0 6px 16px rgba(0,0,0,0.4)";
+      btn.style.transform = "scale(0)";
+      btn.style.opacity = "0";
+      btn.style.transition = "transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease";
+      btn.style.transitionDelay = `${i * 0.05}s`;
+
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        chooseSkin(skin.file);
+      });
+
+      wrap.appendChild(btn);
+
+      // Trigger the pop-in on the next frame so the transition applies.
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          btn.style.transform = "scale(1)";
+          btn.style.opacity = "1";
+        });
+      });
+    });
+
+    document.body.appendChild(wrap);
+    skinMenuEl = wrap;
+
+    // Close if the user clicks anywhere outside the menu/cat.
+    setTimeout(function () {
+      document.addEventListener("click", onOutsideClick);
+    }, 0);
+  }
+
+  function onOutsideClick() {
+    document.removeEventListener("click", onOutsideClick);
+    closeSkinMenu();
   }
 
   function resetIdleAnimation() {
@@ -240,6 +364,7 @@
   }
 
   function frame() {
+    if (menuOpen) return;
     frameCount += 1;
     const diffX = nekoPosX - mousePosX;
     const diffY = nekoPosY - mousePosY;
