@@ -1104,7 +1104,9 @@ Thanks for stopping by!">
 
         const avatarImg = document.getElementById('discordAvatar');
         if (user && user.avatar) {
-          avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+          const isAnimatedAvatar = user.avatar.startsWith('a_');
+          const avatarExt = isAnimatedAvatar ? 'gif' : 'png';
+          avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${avatarExt}?size=256`;
           avatarImg.style.display = 'block';
         } else {
           avatarImg.style.display = 'block'; 
