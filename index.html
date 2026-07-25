@@ -85,7 +85,34 @@ Thanks for stopping by!">
       opacity: 1;
     }
 
-    .container { margin-top: 10vh; position: relative; z-index: 1; }
+    .container { margin-top: 0; position: relative; z-index: 1; }
+
+    /* ==========================================
+       PROFILE BANNER — sits behind the avatar,
+       Discord-card style. Full-width, soft rounded
+       bottom corners, no floating shadow.
+       ========================================== */
+    .banner-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 34vh;
+      max-height: 260px;
+      min-height: 160px;
+      margin: 0;
+      border-radius: 0 0 32px 32px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #a855f7, #3b82f6);
+      background-size: cover;
+      background-position: center;
+      transition: background 0.6s ease;
+    }
+    .banner-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
     /* ==========================================
        "ADD YOUR SERVER" FLOATING BUBBLE
@@ -158,32 +185,6 @@ Thanks for stopping by!">
       height: 128px;
       margin: -48px auto 15px;
       z-index: 2;
-    }
-
-    /* ==========================================
-       PROFILE BANNER — sits behind the avatar,
-       Discord-card style.
-       ========================================== */
-    .banner-wrapper {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 480px;
-      height: 140px;
-      margin: 0 auto;
-      border-radius: 0 0 24px 24px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #a855f7, #3b82f6);
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-      transition: background 0.6s ease;
-    }
-    .banner-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
     }
 
     .avatar {
@@ -695,9 +696,9 @@ Thanks for stopping by!">
     <span class="bubble-close" id="addServerBubbleClose"><i class="fa-solid fa-xmark"></i></span>
   </div>
 
-  <div class="container">
+  <div class="banner-wrapper" id="bannerWrapper"></div>
 
-    <div class="banner-wrapper" id="bannerWrapper"></div>
+  <div class="container">
 
     <div class="avatar-wrapper">
       <img class="avatar" id="discordAvatar" src="images/avatar.png" alt="SKRT7">
