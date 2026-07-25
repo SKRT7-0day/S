@@ -156,7 +156,34 @@ Thanks for stopping by!">
       position: relative;
       width: 128px;
       height: 128px;
-      margin: 0 auto 15px;
+      margin: -48px auto 15px;
+      z-index: 2;
+    }
+
+    /* ==========================================
+       PROFILE BANNER — sits behind the avatar,
+       Discord-card style.
+       ========================================== */
+    .banner-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+      height: 140px;
+      margin: 0 auto;
+      border-radius: 0 0 24px 24px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #a855f7, #3b82f6);
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      transition: background 0.6s ease;
+    }
+    .banner-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .avatar {
@@ -670,6 +697,8 @@ Thanks for stopping by!">
 
   <div class="container">
 
+    <div class="banner-wrapper" id="bannerWrapper"></div>
+
     <div class="avatar-wrapper">
       <img class="avatar" id="discordAvatar" src="images/avatar.png" alt="SKRT7">
       <img class="avatar-decoration" id="avatarDecoration" alt="">
@@ -1125,6 +1154,18 @@ Thanks for stopping by!">
           const gradient = `linear-gradient(45deg, ${accentColor}, ${lighterColor}, ${accentColor}, ${darkerColor}, ${accentColor})`;
           
           document.documentElement.style.setProperty('--gradient-color', gradient);
+        }
+
+        const bannerWrapper = document.getElementById('bannerWrapper');
+        if (user && user.banner) {
+          const isAnimatedBanner = user.banner.startsWith('a_');
+          const bannerExt = isAnimatedBanner ? 'gif' : 'png';
+          bannerWrapper.style.backgroundImage = `url(https://cdn.discordapp.com/banners/${user.id}/${user.banner}.${bannerExt}?size=600)`;
+        } else if (user && user.accent_color) {
+          const accentColor = '#' + user.accent_color.toString(16).padStart(6, '0').toUpperCase();
+          bannerWrapper.style.backgroundImage = `linear-gradient(135deg, ${accentColor}, #3b82f6)`;
+        } else if (user && user.banner_color) {
+          bannerWrapper.style.backgroundImage = `linear-gradient(135deg, ${user.banner_color}, #a855f7)`;
         }
 
         const decoEl = document.getElementById('avatarDecoration');
