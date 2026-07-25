@@ -431,6 +431,39 @@ Thanks for stopping by!">
     @keyframes partyPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); } 100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); } }
     p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
 
+    /* ==========================================
+       VISITOR COUNTER — prominent glowing badge
+       right under the avatar/status.
+       ========================================== */
+    .visitor-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 10px auto 18px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(168,85,247,0.18), rgba(59,130,246,0.18));
+      border: 1px solid rgba(168,85,247,0.4);
+      color: var(--text-color);
+      font-weight: 700;
+      font-size: 0.92rem;
+      box-shadow: 0 0 0 0 rgba(168,85,247,0.5);
+      animation: visitorPulse 2.6s ease-in-out infinite;
+    }
+    .visitor-badge i {
+      color: #a855f7;
+      font-size: 0.9rem;
+    }
+    .visitor-badge .visitor-label {
+      color: var(--sub-text);
+      font-weight: 500;
+      font-size: 0.82rem;
+    }
+    @keyframes visitorPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(168,85,247,0.35); }
+      50% { box-shadow: 0 0 0 6px rgba(168,85,247,0); }
+    }
+
     .theme-switch-wrapper { margin: 25px auto 40px; display: flex; justify-content: center; }
 
     .theme-switch {
@@ -675,6 +708,12 @@ Thanks for stopping by!">
       <img class="avatar-decoration" id="avatarDecoration" alt="">
       <span class="status-dot status-offline" id="statusDot" title="Offline"></span>
     </div>
+
+    <div id="visitorCounter" class="visitor-badge">
+      <i class="fa-solid fa-eye"></i>
+      <span id="visitorCount">···</span>
+      <span class="visitor-label">visits</span>
+    </div>
     
     <div>
       <div class="celebration-container" id="interactiveName">
@@ -752,12 +791,9 @@ Thanks for stopping by!">
       <a href="about.html" class="bottom-link">about</a>
     </div>
 
-    <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 8px;">
+    <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 20px;">
       © 2026 SKRT7. ALL RIGHTS RESERVED.
     </footer>
-    <div id="visitorCounter" style="color: var(--sub-text); font-size: 0.75rem; padding-bottom: 20px; opacity: 0.85;">
-      <i class="fa-solid fa-eye" style="margin-right: 5px;"></i><span id="visitorCount">···</span> visits
-    </div>
   </div>
   <script>
     const nameContainer = document.getElementById('interactiveName');
@@ -1241,3 +1277,4 @@ Thanks for stopping by!">
   <script src="oneko.js"></script>
 </body>
 </html>
+
