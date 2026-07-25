@@ -752,9 +752,12 @@ Thanks for stopping by!">
       <a href="about.html" class="bottom-link">about</a>
     </div>
 
-    <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 20px;">
+    <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 8px;">
       © 2026 SKRT7. ALL RIGHTS RESERVED.
     </footer>
+    <div id="visitorCounter" style="color: var(--sub-text); font-size: 0.75rem; padding-bottom: 20px; opacity: 0.85;">
+      <i class="fa-solid fa-eye" style="margin-right: 5px;"></i><span id="visitorCount">···</span> visits
+    </div>
   </div>
   <script>
     const nameContainer = document.getElementById('interactiveName');
@@ -1194,10 +1197,47 @@ Thanks for stopping by!">
 
     updateDiscordPresence();
     setInterval(updateDiscordPresence, 5000);
+
+    // ==========================================
+    // VISITOR COUNTER — free, no signup, no API key.
+    // Increments by 1 every time this script runs,
+    // then animates counting up from 0 to the total.
+    // ==========================================
+    function animateCountUp(el, target, duration) {
+      const start = 0;
+      const startTime = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        const current = Math.floor(start + (target - start) * eased);
+        el.textContent = current.toLocaleString();
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          el.textContent = target.toLocaleString();
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    fetch('https://countapi.mileshilliard.com/api/v1/hit/skrt7-workers-dev-visits')
+      .then(res => res.json())
+      .then(data => {
+        const el = document.getElementById('visitorCount');
+        if (el && data && typeof data.value !== 'undefined') {
+          const target = data.value;
+          const duration = Math.min(400 + target * 15, 1800); // scales a bit with size, capped
+          animateCountUp(el, target, duration);
+        }
+      })
+      .catch(err => {
+        console.warn('Visitor counter unavailable:', err);
+        const el = document.getElementById('visitorCount');
+        if (el) el.textContent = '—';
+      });
   </script>
 
   <!-- oneko cat widget -->
   <script src="oneko.js"></script>
 </body>
 </html>
-
