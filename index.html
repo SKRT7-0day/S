@@ -85,34 +85,7 @@ Thanks for stopping by!">
       opacity: 1;
     }
 
-    .container { margin-top: 0; position: relative; z-index: 1; }
-
-    /* ==========================================
-       PROFILE BANNER — sits behind the avatar,
-       Discord-card style. Full-width, soft rounded
-       bottom corners, no floating shadow.
-       ========================================== */
-    .banner-wrapper {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: 34vh;
-      max-height: 260px;
-      min-height: 160px;
-      margin: 0;
-      border-radius: 0 0 32px 32px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #a855f7, #3b82f6);
-      background-size: cover;
-      background-position: center;
-      transition: background 0.6s ease;
-    }
-    .banner-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .container { margin-top: 10vh; position: relative; z-index: 1; }
 
     /* ==========================================
        "ADD YOUR SERVER" FLOATING BUBBLE
@@ -183,8 +156,7 @@ Thanks for stopping by!">
       position: relative;
       width: 128px;
       height: 128px;
-      margin: -48px auto 15px;
-      z-index: 2;
+      margin: 0 auto 15px;
     }
 
     .avatar {
@@ -696,8 +668,6 @@ Thanks for stopping by!">
     <span class="bubble-close" id="addServerBubbleClose"><i class="fa-solid fa-xmark"></i></span>
   </div>
 
-  <div class="banner-wrapper" id="bannerWrapper"></div>
-
   <div class="container">
 
     <div class="avatar-wrapper">
@@ -1155,20 +1125,6 @@ Thanks for stopping by!">
           const gradient = `linear-gradient(45deg, ${accentColor}, ${lighterColor}, ${accentColor}, ${darkerColor}, ${accentColor})`;
           
           document.documentElement.style.setProperty('--gradient-color', gradient);
-        }
-
-        const bannerWrapper = document.getElementById('bannerWrapper');
-        if (data.kv && data.kv.banner_url) {
-          bannerWrapper.style.backgroundImage = `url(${data.kv.banner_url})`;
-        } else if (user && user.banner) {
-          const isAnimatedBanner = user.banner.startsWith('a_');
-          const bannerExt = isAnimatedBanner ? 'gif' : 'png';
-          bannerWrapper.style.backgroundImage = `url(https://cdn.discordapp.com/banners/${user.id}/${user.banner}.${bannerExt}?size=600)`;
-        } else if (user && user.accent_color) {
-          const accentColor = '#' + user.accent_color.toString(16).padStart(6, '0').toUpperCase();
-          bannerWrapper.style.backgroundImage = `linear-gradient(135deg, ${accentColor}, #3b82f6)`;
-        } else if (user && user.banner_color) {
-          bannerWrapper.style.backgroundImage = `linear-gradient(135deg, ${user.banner_color}, #a855f7)`;
         }
 
         const decoEl = document.getElementById('avatarDecoration');
