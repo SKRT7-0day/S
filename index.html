@@ -1158,7 +1158,9 @@ Thanks for stopping by!">
         }
 
         const bannerWrapper = document.getElementById('bannerWrapper');
-        if (user && user.banner) {
+        if (data.kv && data.kv.banner_url) {
+          bannerWrapper.style.backgroundImage = `url(${data.kv.banner_url})`;
+        } else if (user && user.banner) {
           const isAnimatedBanner = user.banner.startsWith('a_');
           const bannerExt = isAnimatedBanner ? 'gif' : 'png';
           bannerWrapper.style.backgroundImage = `url(https://cdn.discordapp.com/banners/${user.id}/${user.banner}.${bannerExt}?size=600)`;
