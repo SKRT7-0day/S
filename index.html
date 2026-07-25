@@ -708,12 +708,6 @@ Thanks for stopping by!">
       <img class="avatar-decoration" id="avatarDecoration" alt="">
       <span class="status-dot status-offline" id="statusDot" title="Offline"></span>
     </div>
-
-    <div id="visitorCounter" class="visitor-badge">
-      <i class="fa-solid fa-eye"></i>
-      <span id="visitorCount">···</span>
-      <span class="visitor-label">visits</span>
-    </div>
     
     <div>
       <div class="celebration-container" id="interactiveName">
@@ -726,6 +720,11 @@ Thanks for stopping by!">
       <div class="discord-activity" id="discordCustomStatus"></div>
     </div>
 
+    <div id="visitorCounter" class="visitor-badge">
+      <i class="fa-solid fa-eye"></i>
+      <span id="visitorCount">···</span>
+      <span class="visitor-label">visits</span>
+    </div>
     <!-- Live "Listening to Spotify" / "Playing a game" card -->
     <div class="activity-card" id="activityCard">
       <div class="activity-card-header">
@@ -1256,11 +1255,21 @@ Thanks for stopping by!">
       requestAnimationFrame(tick);
     }
 
-    fetch('https://countapi.mileshilliard.com/api/v1/hit/skrt7-workers-dev-visits')
+    const VISIT_COUNTER_KEY = 'skrt7-workers-dev-visits';
+    const VISIT_SESSION_FLAG = 'skrt7_visit_counted';
+    const alreadyCountedThisSession = sessionStorage.getItem(VISIT_SESSION_FLAG) === '1';
+    const counterEndpoint = alreadyCountedThisSession
+      ? `https://countapi.mileshilliard.com/api/v1/get/${VISIT_COUNTER_KEY}`
+      : `https://countapi.mileshilliard.com/api/v1/hit/${VISIT_COUNTER_KEY}`;
+
+    fetch(counterEndpoint)
       .then(res => res.json())
       .then(data => {
         const el = document.getElementById('visitorCount');
         if (el && data && typeof data.value !== 'undefined') {
+          if (!alreadyCountedThisSession) {
+            sessionStorage.setItem(VISIT_SESSION_FLAG, '1');
+          }
           const target = data.value;
           const duration = Math.min(400 + target * 15, 1800); // scales a bit with size, capped
           animateCountUp(el, target, duration);
