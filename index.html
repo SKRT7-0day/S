@@ -432,36 +432,22 @@ Thanks for stopping by!">
     p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
 
     /* ==========================================
-       VISITOR COUNTER — prominent glowing badge
-       right under the avatar/status.
+       VISITOR COUNTER — plain text, no box/button look.
        ========================================== */
     .visitor-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      margin: 10px auto 18px;
-      padding: 7px 16px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(168,85,247,0.18), rgba(59,130,246,0.18));
-      border: 1px solid rgba(168,85,247,0.4);
-      color: var(--text-color);
-      font-weight: 700;
-      font-size: 0.92rem;
-      box-shadow: 0 0 0 0 rgba(168,85,247,0.5);
-      animation: visitorPulse 2.6s ease-in-out infinite;
+      display: block;
+      margin: 6px auto 18px;
+      color: var(--sub-text);
+      font-weight: 500;
+      font-size: 0.85rem;
     }
     .visitor-badge i {
-      color: #a855f7;
-      font-size: 0.9rem;
+      color: var(--sub-text);
+      font-size: 0.82rem;
+      margin-right: 3px;
     }
     .visitor-badge .visitor-label {
       color: var(--sub-text);
-      font-weight: 500;
-      font-size: 0.82rem;
-    }
-    @keyframes visitorPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(168,85,247,0.35); }
-      50% { box-shadow: 0 0 0 6px rgba(168,85,247,0); }
     }
 
     .theme-switch-wrapper { margin: 25px auto 40px; display: flex; justify-content: center; }
@@ -1256,9 +1242,9 @@ Thanks for stopping by!">
     }
 
     const VISIT_COUNTER_KEY = 'skrt7-workers-dev-visits';
-    const VISIT_SESSION_FLAG = 'skrt7_visit_counted';
-    const alreadyCountedThisSession = sessionStorage.getItem(VISIT_SESSION_FLAG) === '1';
-    const counterEndpoint = alreadyCountedThisSession
+    const VISIT_LOCAL_FLAG = 'skrt7_visit_counted';
+    const alreadyCounted = localStorage.getItem(VISIT_LOCAL_FLAG) === '1';
+    const counterEndpoint = alreadyCounted
       ? `https://countapi.mileshilliard.com/api/v1/get/${VISIT_COUNTER_KEY}`
       : `https://countapi.mileshilliard.com/api/v1/hit/${VISIT_COUNTER_KEY}`;
 
@@ -1267,8 +1253,8 @@ Thanks for stopping by!">
       .then(data => {
         const el = document.getElementById('visitorCount');
         if (el && data && typeof data.value !== 'undefined') {
-          if (!alreadyCountedThisSession) {
-            sessionStorage.setItem(VISIT_SESSION_FLAG, '1');
+          if (!alreadyCounted) {
+            localStorage.setItem(VISIT_LOCAL_FLAG, '1');
           }
           const target = data.value;
           const duration = Math.min(400 + target * 15, 1800); // scales a bit with size, capped
