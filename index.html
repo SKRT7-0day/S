@@ -656,6 +656,66 @@ Thanks for stopping by!">
       color: var(--text-color);
     }
 
+    /* ==========================================
+       RATING WIDGET
+       ========================================== */
+    .rating-widget {
+      margin: 30px auto 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .rating-stars {
+      display: flex;
+      gap: 6px;
+      font-size: 1.4rem;
+    }
+    .rating-star {
+      color: rgba(255,255,255,0.18);
+      cursor: pointer;
+      transition: color 0.15s ease, transform 0.15s ease;
+    }
+    .rating-star:hover {
+      transform: scale(1.15);
+    }
+    .rating-star.filled {
+      color: #ffb703;
+    }
+    .rating-star.hovered {
+      color: #ffd166;
+    }
+    .rating-widget.rated .rating-star {
+      cursor: default;
+    }
+    .rating-widget.rated .rating-star:hover {
+      transform: none;
+    }
+    .rating-summary {
+      color: var(--sub-text);
+      font-size: 0.85rem;
+    }
+    .rating-summary #ratingAverage {
+      color: var(--text-color);
+      font-weight: 700;
+    }
+
+    /* ==========================================
+       COMMENTS SECTION
+       ========================================== */
+    .comments-section {
+      width: 90%;
+      max-width: 480px;
+      margin: 30px auto 0;
+      text-align: left;
+    }
+    .comments-heading {
+      color: var(--text-color);
+      font-size: 1rem;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
   </style>
 </head> 
 
@@ -774,6 +834,46 @@ Thanks for stopping by!">
     <!-- الزر الجديد "about" المربوط بملف about.html -->
     <div class="bottom-links">
       <a href="about.html" class="bottom-link">about</a>
+    </div>
+
+    <!-- ==========================================
+         RATING — shared star rating (CountAPI-backed)
+         ========================================== -->
+    <div class="rating-widget" id="ratingWidget">
+      <div class="rating-stars" id="ratingStars">
+        <i class="fa-solid fa-star rating-star" data-value="1"></i>
+        <i class="fa-solid fa-star rating-star" data-value="2"></i>
+        <i class="fa-solid fa-star rating-star" data-value="3"></i>
+        <i class="fa-solid fa-star rating-star" data-value="4"></i>
+        <i class="fa-solid fa-star rating-star" data-value="5"></i>
+      </div>
+      <div class="rating-summary">
+        <span id="ratingAverage">···</span>
+        <span class="rating-count">(<span id="ratingCount">0</span>)</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         COMMENTS — powered by GitHub Discussions (giscus)
+         ========================================== -->
+    <div class="comments-section">
+      <h3 class="comments-heading">Comments</h3>
+      <div class="giscus"></div>
+      <script src="https://giscus.app/client.js"
+        data-repo="SKRT7-0day/S"
+        data-repo-id="R_kgDOSfVCeA"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOSfVCeM4DCQiB"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="purple_dark"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+      </script>
     </div>
 
     <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 20px;">
@@ -1266,6 +1366,82 @@ Thanks for stopping by!">
         const el = document.getElementById('visitorCount');
         if (el) el.textContent = '—';
       });
+
+    // ==========================================
+    // STAR RATING — shared average via CountAPI
+    // (two counters: sum of all ratings + how many
+    // people rated). One vote per browser.
+    // ==========================================
+    const RATING_SUM_KEY = 'skrt7-workers-dev-rating-sum';
+    const RATING_COUNT_KEY = 'skrt7-workers-dev-rating-count';
+    const RATING_LOCAL_FLAG = 'skrt7_rating_value';
+    const RATING_BASE = 'https://countapi.mileshilliard.com/api/v1';
+
+    const ratingWidget = document.getElementById('ratingWidget');
+    const ratingStars = document.querySelectorAll('.rating-star');
+    const ratingAverageEl = document.getElementById('ratingAverage');
+    const ratingCountEl = document.getElementById('ratingCount');
+
+    function paintStars(filledCount) {
+      ratingStars.forEach(star => {
+        const val = parseInt(star.dataset.value, 10);
+        star.classList.toggle('filled', val <= filledCount);
+      });
+    }
+
+    function refreshRatingDisplay() {
+      Promise.all([
+        fetch(`${RATING_BASE}/get/${RATING_SUM_KEY}`).then(r => r.json()).catch(() => null),
+        fetch(`${RATING_BASE}/get/${RATING_COUNT_KEY}`).then(r => r.json()).catch(() => null),
+      ]).then(([sumData, countData]) => {
+        const sum = sumData && sumData.value ? Number(sumData.value) : 0;
+        const count = countData && countData.value ? Number(countData.value) : 0;
+        const avg = count > 0 ? sum / count : 0;
+        ratingAverageEl.textContent = count > 0 ? avg.toFixed(2) : '—';
+        ratingCountEl.textContent = count;
+        if (!localStorage.getItem(RATING_LOCAL_FLAG)) {
+          paintStars(Math.round(avg));
+        }
+      });
+    }
+
+    const myRating = localStorage.getItem(RATING_LOCAL_FLAG);
+    if (myRating) {
+      ratingWidget.classList.add('rated');
+    }
+
+    ratingStars.forEach(star => {
+      star.addEventListener('mouseenter', () => {
+        if (localStorage.getItem(RATING_LOCAL_FLAG)) return;
+        const val = parseInt(star.dataset.value, 10);
+        ratingStars.forEach(s => s.classList.toggle('hovered', parseInt(s.dataset.value, 10) <= val));
+      });
+      star.addEventListener('mouseleave', () => {
+        ratingStars.forEach(s => s.classList.remove('hovered'));
+      });
+      star.addEventListener('click', () => {
+        if (localStorage.getItem(RATING_LOCAL_FLAG)) return; // already voted from this browser
+        const val = parseInt(star.dataset.value, 10);
+        localStorage.setItem(RATING_LOCAL_FLAG, String(val));
+        ratingWidget.classList.add('rated');
+        paintStars(val);
+
+        // sum += val, count += 1  (get-then-set, fine for this scale of traffic)
+        Promise.all([
+          fetch(`${RATING_BASE}/get/${RATING_SUM_KEY}`).then(r => r.json()).catch(() => ({ value: 0 })),
+          fetch(`${RATING_BASE}/get/${RATING_COUNT_KEY}`).then(r => r.json()).catch(() => ({ value: 0 })),
+        ]).then(([sumData, countData]) => {
+          const newSum = (sumData && sumData.value ? Number(sumData.value) : 0) + val;
+          const newCount = (countData && countData.value ? Number(countData.value) : 0) + 1;
+          return Promise.all([
+            fetch(`${RATING_BASE}/set/${RATING_SUM_KEY}?value=${newSum}`),
+            fetch(`${RATING_BASE}/set/${RATING_COUNT_KEY}?value=${newCount}`),
+          ]);
+        }).then(() => refreshRatingDisplay());
+      });
+    });
+
+    refreshRatingDisplay();
   </script>
 
   <!-- oneko cat widget -->
