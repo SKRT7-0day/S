@@ -1,0 +1,14 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://s.skrt7.workers.dev/</loc>
+<priority>1.0</priority>
+</url>
+<url>
+<loc>https://s.skrt7.workers.dev/about.html</loc>
+<priority>0.7</priority>
+</url>
+<url>
+<loc>https://s.skrt7.workers.dev/projects.html</loc>
+<priority>0.7</priority>
+</url>
+</urlset>
