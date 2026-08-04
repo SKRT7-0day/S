@@ -13,14 +13,12 @@
       --sub-text: #94A3B8;
       --accent-color: #a855f7;
     }
-
     .light-theme {
       --bg-color: #F8FAFC;
       --text-color: #0F172A;
       --card-bg: #E2E8F0;
       --sub-text: #64748B;
     }
-
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
@@ -30,873 +28,149 @@
       transition: background-color 0.4s ease, color 0.3s ease;
       overflow-x: hidden;
     }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-
+    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
     @keyframes fadeSlideUp {
       0% { opacity: 0; transform: translateY(40px); }
       100% { opacity: 1; transform: translateY(0); }
     }
-
-    .animate-enter {
-      opacity: 0;
-      animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 40px;
-      border-bottom: 2px solid var(--card-bg);
-      padding-bottom: 20px;
-    }
-
-    .back-btn {
-      color: var(--text-color);
-      text-decoration: none;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .project-card {
-      background-color: var(--card-bg);
-      border-radius: 15px;
-      padding: 25px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      border: 1px solid transparent;
-      opacity: 0;
-    }
-
-    .project-card.coming-soon {
-      border: 2px dashed var(--sub-text);
-      background-color: transparent;
-    }
-
-    .project-icon {
-      font-size: 2rem;
-      color: var(--accent-color);
-      margin-bottom: 15px;
-    }
-
+    .animate-enter { opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; border-bottom: 2px solid var(--card-bg); padding-bottom: 20px; }
+    .back-btn { color: var(--text-color); text-decoration: none; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+    h1 { margin: 0; font-size: 2rem; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .project-card { background-color: var(--card-bg); border-radius: 15px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; border: 1px solid transparent; opacity: 0; }
+    .project-card.coming-soon { border: 2px dashed var(--sub-text); background-color: transparent; }
+    .project-icon { font-size: 2rem; color: var(--accent-color); margin-bottom: 15px; }
     .project-icon.dimmed { color: var(--sub-text); }
-
     .project-title { font-size: 1.25rem; font-weight: bold; margin: 0 0 10px 0; }
     .project-title.dimmed { color: var(--sub-text); }
-
     .project-desc { color: var(--sub-text); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; }
     .project-desc.dimmed { opacity: 0.7; }
-
     .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; min-height: 26px; }
     .tag { background-color: rgba(168, 85, 247, 0.15); color: var(--accent-color); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; }
     .tag.dimmed { background-color: transparent; border: 1px solid var(--sub-text); color: var(--sub-text); }
     .tag.loading { opacity: 0.5; }
 
-    .actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
+    /* LANGUAGE LOGO BADGES — colored square icon matching each language's real brand color */
+    .lang-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background-color: rgba(255, 255, 255, 0.05); border-radius: 8px;
+      padding: 3px 10px 3px 3px; font-size: 0.8rem; font-weight: 600; color: var(--text-color);
+    }
+    .lang-badge .lang-swatch {
+      width: 20px; height: 20px; border-radius: 5px; display: flex; align-items: center; justify-content: center;
+      font-size: 0.62rem; font-weight: 800; flex-shrink: 0; letter-spacing: -0.3px;
     }
 
-    .project-link {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: #fff;
-      background-color: var(--accent-color);
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 0.95rem;
-      transition: background-color 0.2s ease;
-    }
+    .actions { display: flex; gap: 10px; align-items: center; }
+    .project-link { flex: 1; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #fff; background-color: var(--accent-color); padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; transition: background-color 0.2s ease; }
     .project-link:hover { background-color: #9333ea; }
-    .project-link.disabled {
-      background-color: transparent;
-      border: 1px solid var(--sub-text);
-      color: var(--sub-text);
-      pointer-events: none;
-    }
-
-    .star-btn {
-      background-color: transparent;
-      border: 2px solid var(--accent-color);
-      color: var(--accent-color);
-      padding: 8px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.3s ease;
-    }
-
+    .project-link.disabled { background-color: transparent; border: 1px solid var(--sub-text); color: var(--sub-text); pointer-events: none; }
+    .star-btn { background-color: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: all 0.3s ease; }
     .star-btn:hover { background-color: rgba(168, 85, 247, 0.1); }
     .star-btn.starred { background-color: var(--accent-color); color: #fff; }
     .star-btn:disabled { opacity: 0.6; cursor: default; }
-
-    /* ==========================================
-       TAB NAVIGATION
-       ========================================== */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 28px;
-      background-color: var(--card-bg);
-      padding: 5px;
-      border-radius: 12px;
-    }
-    .tab-btn {
-      flex: 1;
-      background: transparent;
-      border: none;
-      color: var(--sub-text);
-      font-size: 0.9rem;
-      font-weight: 600;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background-color 0.2s ease, color 0.2s ease;
-      font-family: inherit;
-    }
-    .tab-btn.active {
-      background-color: var(--accent-color);
-      color: #fff;
-    }
+    .tabs { display: flex; gap: 8px; margin-bottom: 28px; background-color: var(--card-bg); padding: 5px; border-radius: 12px; }
+    .tab-btn { flex: 1; background: transparent; border: none; color: var(--sub-text); font-size: 0.9rem; font-weight: 600; padding: 10px 14px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.2s ease, color 0.2s ease; font-family: inherit; }
+    .tab-btn.active { background-color: var(--accent-color); color: #fff; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
-
-    /* Beta badge — refined, understated style */
-    .beta-badge {
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(168, 85, 247, 0.08));
-      color: var(--accent-color);
-      border: 1px solid rgba(168, 85, 247, 0.45);
-      font-size: 0.62rem;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 999px;
-      margin-left: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      line-height: 1.4;
-    }
-
-    /* ==========================================
-       DISCORD SERVERS TAB
-       ========================================== */
-    .add-server-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-    .add-server-input {
-      flex: 1;
-      background-color: var(--card-bg);
-      border: 1.5px solid rgba(168, 85, 247, 0.25);
-      color: var(--text-color);
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
+    .beta-badge { background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(168, 85, 247, 0.08)); color: var(--accent-color); border: 1px solid rgba(168, 85, 247, 0.45); font-size: 0.62rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; margin-left: 6px; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.4; }
+    .add-server-row { display: flex; gap: 10px; margin-bottom: 24px; }
+    .add-server-input { flex: 1; background-color: var(--card-bg); border: 1.5px solid rgba(168, 85, 247, 0.25); color: var(--text-color); padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; font-family: inherit; outline: none; transition: border-color 0.2s ease; }
     .add-server-input:focus { border-color: var(--accent-color); }
-    .add-server-input.input-attention {
-      animation: inputAttentionPulse 0.7s ease-in-out 2;
-    }
-    @keyframes inputAttentionPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.55); }
-      50% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0); }
-    }
+    .add-server-input.input-attention { animation: inputAttentionPulse 0.7s ease-in-out 2; }
+    @keyframes inputAttentionPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.55); } 50% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0); } }
     .add-server-input::placeholder { color: var(--sub-text); }
-
-    .add-server-btn {
-      background-color: var(--accent-color);
-      color: #fff;
-      border: none;
-      padding: 0 22px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 0.9rem;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background-color 0.2s ease;
-    }
+    .add-server-btn { background-color: var(--accent-color); color: #fff; border: none; padding: 0 22px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; cursor: pointer; white-space: nowrap; transition: background-color 0.2s ease; }
     .add-server-btn:hover { background-color: #9333ea; }
     .add-server-btn:disabled { opacity: 0.6; cursor: default; }
-
-    .add-server-status {
-      font-size: 0.82rem;
-      margin-bottom: 16px;
-      min-height: 1.2em;
-    }
+    .add-server-status { font-size: 0.82rem; margin-bottom: 16px; min-height: 1.2em; }
     .add-server-status.error { color: #ef4444; }
-    .add-server-status.success {
-      color: #23a55a;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      animation: successPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
+    .add-server-status.success { color: #23a55a; font-weight: 700; display: flex; align-items: center; gap: 7px; animation: successPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
     .add-server-status.loading { color: var(--sub-text); }
-
-    .add-server-status.success .success-check {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #23a55a, #178a48);
-      color: #fff;
-      font-size: 0.65rem;
-      animation: successRing 1.1s ease-out;
-    }
-
-    @keyframes successPop {
-      0% { opacity: 0; transform: translateY(-4px) scale(0.9); }
-      60% { opacity: 1; transform: translateY(0) scale(1.03); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes successRing {
-      0% { box-shadow: 0 0 0 0 rgba(35, 165, 90, 0.55); }
-      70% { box-shadow: 0 0 0 10px rgba(35, 165, 90, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(35, 165, 90, 0); }
-    }
-
-    /* Confetti burst — center-screen explosion */
-    .confetti-piece {
-      position: fixed;
-      left: 50%;
-      top: 42%;
-      pointer-events: none;
-      z-index: 10000;
-      opacity: 1;
-      animation-name: confettiBurst;
-      animation-timing-function: cubic-bezier(0.15, 0.6, 0.35, 1);
-      animation-fill-mode: forwards;
-      will-change: transform, opacity;
-    }
-
-    @keyframes confettiBurst {
-      0% {
-        transform: translate(-50%, -50%) rotate(0deg) scale(1);
-        opacity: 1;
-      }
-      70% {
-        opacity: 1;
-      }
-      100% {
-        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--spin)) scale(0.7);
-        opacity: 0;
-      }
-    }
-
-    .confetti-flash {
-      position: fixed;
-      left: 50%;
-      top: 42%;
-      width: 40px;
-      height: 40px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.9), rgba(168, 85, 247, 0));
-      z-index: 9999;
-      pointer-events: none;
-      animation: confettiFlash 0.7s ease-out forwards;
-    }
-
-    @keyframes confettiFlash {
-      0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0.9; }
-      100% { transform: translate(-50%, -50%) scale(9); opacity: 0; }
-    }
-
-
-
-    /* Search bar (Discord Servers tab) */
-    .server-search-row {
-      margin-bottom: 20px;
-    }
-    .server-search-input {
-      width: 100%;
-      box-sizing: border-box;
-      background-color: var(--card-bg);
-      border: 1.5px solid rgba(168, 85, 247, 0.25);
-      color: var(--text-color);
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s ease;
-    }
+    .add-server-status.success .success-check { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle, #23a55a, #178a48); color: #fff; font-size: 0.65rem; animation: successRing 1.1s ease-out; }
+    @keyframes successPop { 0% { opacity: 0; transform: translateY(-4px) scale(0.9); } 60% { opacity: 1; transform: translateY(0) scale(1.03); } 100% { transform: scale(1); } }
+    @keyframes successRing { 0% { box-shadow: 0 0 0 0 rgba(35, 165, 90, 0.55); } 70% { box-shadow: 0 0 0 10px rgba(35, 165, 90, 0); } 100% { box-shadow: 0 0 0 0 rgba(35, 165, 90, 0); } }
+    .confetti-piece { position: fixed; left: 50%; top: 42%; pointer-events: none; z-index: 10000; opacity: 1; animation-name: confettiBurst; animation-timing-function: cubic-bezier(0.15, 0.6, 0.35, 1); animation-fill-mode: forwards; will-change: transform, opacity; }
+    @keyframes confettiBurst { 0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); opacity: 1; } 70% { opacity: 1; } 100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--spin)) scale(0.7); opacity: 0; } }
+    .confetti-flash { position: fixed; left: 50%; top: 42%; width: 40px; height: 40px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(168, 85, 247, 0.9), rgba(168, 85, 247, 0)); z-index: 9999; pointer-events: none; animation: confettiFlash 0.7s ease-out forwards; }
+    @keyframes confettiFlash { 0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(9); opacity: 0; } }
+    .server-search-row { margin-bottom: 20px; }
+    .server-search-input { width: 100%; box-sizing: border-box; background-color: var(--card-bg); border: 1.5px solid rgba(168, 85, 247, 0.25); color: var(--text-color); padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; font-family: inherit; outline: none; transition: border-color 0.2s ease; }
     .server-search-input:focus { border-color: var(--accent-color); }
     .server-search-input::placeholder { color: var(--sub-text); }
-
-    .servers-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-    }
-
-    .server-card {
-      background-color: var(--card-bg);
-      border-radius: 15px;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      opacity: 0;
-      position: relative;
-      animation: fadeSlideUp 0.6s ease-out forwards;
-    }
-
-    .server-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      object-fit: cover;
-      flex-shrink: 0;
-      background-color: rgba(168, 85, 247, 0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-color);
-      font-size: 1.4rem;
-      font-weight: bold;
-    }
-
-    .server-info {
-      flex: 1;
-      min-width: 0;
-      text-align: left;
-    }
-
-    .server-name-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-
-    .server-name {
-      font-size: 1rem;
-      font-weight: bold;
-      margin: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* Discord Server Tag chip, e.g. the small badge + "EUIZ" text */
-    .server-tag-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background-color: rgba(255, 255, 255, 0.06);
-      border-radius: 5px;
-      padding: 2px 6px 2px 4px;
-      flex-shrink: 0;
-    }
-    .server-tag-chip img {
-      width: 13px;
-      height: 13px;
-      border-radius: 3px;
-      display: block;
-    }
-    .server-tag-chip span {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      color: var(--sub-text);
-    }
-
-    .server-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.78rem;
-      color: var(--sub-text);
-      flex-wrap: wrap;
-    }
-
-    .server-meta .online-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: #23a55a;
-      display: inline-block;
-      margin-right: 4px;
-    }
-
-    /* Server description info badge — small circle with "!" */
-    .server-info-badge {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background-color: rgba(168, 85, 247, 0.15);
-      border: 1px solid rgba(168, 85, 247, 0.5);
-      color: var(--accent-color);
-      font-size: 0.68rem;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.2s ease, transform 0.15s ease;
-    }
-    .server-info-badge:hover {
-      background-color: rgba(168, 85, 247, 0.3);
-      transform: scale(1.08);
-    }
+    .servers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .server-card { background-color: var(--card-bg); border-radius: 15px; padding: 20px; display: flex; align-items: center; gap: 14px; opacity: 0; position: relative; animation: fadeSlideUp 0.6s ease-out forwards; }
+    .server-icon { width: 56px; height: 56px; border-radius: 16px; object-fit: cover; flex-shrink: 0; background-color: rgba(168, 85, 247, 0.15); display: flex; align-items: center; justify-content: center; color: var(--accent-color); font-size: 1.4rem; font-weight: bold; }
+    .server-info { flex: 1; min-width: 0; text-align: left; }
+    .server-name-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+    .server-name { font-size: 1rem; font-weight: bold; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .server-tag-chip { display: inline-flex; align-items: center; gap: 4px; background-color: rgba(255, 255, 255, 0.06); border-radius: 5px; padding: 2px 6px 2px 4px; flex-shrink: 0; }
+    .server-tag-chip img { width: 13px; height: 13px; border-radius: 3px; display: block; }
+    .server-tag-chip span { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.3px; color: var(--sub-text); }
+    .server-meta { display: flex; align-items: center; gap: 10px; font-size: 0.78rem; color: var(--sub-text); flex-wrap: wrap; }
+    .server-meta .online-dot { width: 8px; height: 8px; border-radius: 50%; background-color: #23a55a; display: inline-block; margin-right: 4px; }
+    .server-info-badge { width: 18px; height: 18px; border-radius: 50%; background-color: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.5); color: var(--accent-color); font-size: 0.68rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; user-select: none; transition: background-color 0.2s ease, transform 0.15s ease; }
+    .server-info-badge:hover { background-color: rgba(168, 85, 247, 0.3); transform: scale(1.08); }
     .server-info-badge:active { transform: scale(0.95); }
-
-    /* ==========================================
-       SERVER DETAILS MODAL
-       ========================================== */
-    .server-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-      z-index: 9998;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-    .server-modal-overlay.open {
-      display: flex;
-    }
-    .server-modal-overlay.show {
-      opacity: 1;
-    }
-
-    .server-modal-card {
-      background-color: var(--card-bg);
-      border-radius: 18px;
-      max-width: 420px;
-      width: 100%;
-      max-height: 85vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      transform: translateY(16px) scale(0.97);
-      opacity: 0;
-      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
-    }
-    .server-modal-overlay.show .server-modal-card {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
-
-    .server-modal-top {
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .server-modal-banner-wrap {
-      width: 100%;
-      height: 120px;
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(35, 165, 90, 0.15));
-      overflow: hidden;
-      border-radius: 18px 18px 0 0;
-    }
-    .server-modal-banner-wrap img.server-modal-banner {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .server-modal-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background-color: rgba(0, 0, 0, 0.45);
-      color: #fff;
-      border: none;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(2px);
-      transition: background-color 0.2s ease;
-      z-index: 6;
-    }
+    .server-modal-overlay { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); z-index: 9998; display: none; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.2s ease; }
+    .server-modal-overlay.open { display: flex; }
+    .server-modal-overlay.show { opacity: 1; }
+    .server-modal-card { background-color: var(--card-bg); border-radius: 18px; max-width: 420px; width: 100%; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.5); transform: translateY(16px) scale(0.97); opacity: 0; transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease; }
+    .server-modal-overlay.show .server-modal-card { transform: translateY(0) scale(1); opacity: 1; }
+    .server-modal-top { position: relative; flex-shrink: 0; }
+    .server-modal-banner-wrap { width: 100%; height: 120px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(35, 165, 90, 0.15)); overflow: hidden; border-radius: 18px 18px 0 0; }
+    .server-modal-banner-wrap img.server-modal-banner { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .server-modal-close { position: absolute; top: 12px; right: 12px; width: 30px; height: 30px; border-radius: 50%; background-color: rgba(0, 0, 0, 0.45); color: #fff; border: none; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); transition: background-color 0.2s ease; z-index: 6; }
     .server-modal-close:hover { background-color: rgba(0, 0, 0, 0.7); }
-
-    /* Avatar is absolutely positioned over the banner (not relying on
-       negative margins inside the flex flow), so it is always guaranteed
-       to paint above the banner image no matter what — this is what fixes
-       the avatar rendering "under" the banner when a real banner exists. */
-    .server-modal-icon {
-      position: absolute;
-      left: 20px;
-      bottom: -34px;
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      border: 4px solid var(--card-bg);
-      background-color: rgba(168, 85, 247, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-color);
-      font-size: 1.7rem;
-      font-weight: bold;
-      overflow: hidden;
-      z-index: 5;
-    }
-    .server-modal-icon img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .server-modal-header-text {
-      padding: 44px 20px 0 20px;
-    }
-
-    .server-modal-name-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-
-    .server-modal-name {
-      font-size: 1.05rem;
-      font-weight: bold;
-      margin: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .server-modal-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.78rem;
-      color: var(--sub-text);
-      flex-wrap: wrap;
-    }
-
-    .server-modal-body {
-      padding: 18px 20px 22px;
-      overflow-y: auto;
-    }
-
-    .server-modal-desc-label {
-      color: var(--accent-color);
-      font-weight: 700;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
-      display: block;
-    }
-
-    .server-modal-desc {
-      font-size: 0.88rem;
-      line-height: 1.6;
-      color: var(--text-color);
-      margin-bottom: 20px;
-      white-space: pre-line;
-    }
-
-    .server-modal-join-btn {
-      display: block;
-      width: 100%;
-      text-align: center;
-      text-decoration: none;
-      color: #fff;
-      background-color: var(--accent-color);
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: bold;
-      transition: background-color 0.2s ease;
-    }
+    .server-modal-icon { position: absolute; left: 20px; bottom: -34px; width: 72px; height: 72px; border-radius: 50%; border: 4px solid var(--card-bg); background-color: rgba(168, 85, 247, 0.25); display: flex; align-items: center; justify-content: center; color: var(--accent-color); font-size: 1.7rem; font-weight: bold; overflow: hidden; z-index: 5; }
+    .server-modal-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .server-modal-header-text { padding: 44px 20px 0 20px; }
+    .server-modal-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .server-modal-name { font-size: 1.05rem; font-weight: bold; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .server-modal-meta { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--sub-text); flex-wrap: wrap; }
+    .server-modal-body { padding: 18px 20px 22px; overflow-y: auto; }
+    .server-modal-desc-label { color: var(--accent-color); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
+    .server-modal-desc { font-size: 0.88rem; line-height: 1.6; color: var(--text-color); margin-bottom: 20px; white-space: pre-line; }
+    .server-modal-join-btn { display: block; width: 100%; text-align: center; text-decoration: none; color: #fff; background-color: var(--accent-color); padding: 12px; border-radius: 10px; font-weight: bold; transition: background-color 0.2s ease; }
     .server-modal-join-btn:hover { background-color: #9333ea; }
-
-    .server-join-btn {
-      background-color: var(--accent-color);
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: bold;
-      padding: 8px 14px;
-      border-radius: 8px;
-      flex-shrink: 0;
-      transition: background-color 0.2s ease;
-    }
+    .server-join-btn { background-color: var(--accent-color); color: #fff; text-decoration: none; font-size: 0.8rem; font-weight: bold; padding: 8px 14px; border-radius: 8px; flex-shrink: 0; transition: background-color 0.2s ease; }
     .server-join-btn:hover { background-color: #9333ea; }
-
-    /* Newly added server card — brief premium highlight.
-       The glow lives on ::after and the shimmer border on ::before, completely
-       separate from the .server-card's own "animation" property (fadeSlideUp).
-       This way nothing here can ever silently cancel the entrance fade and
-       leave the card stuck invisible. */
-    .server-card.server-card-new {
-      position: relative;
-      border: 1px solid rgba(168, 85, 247, 0.6);
-    }
-
-    .server-card.server-card-new::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 15px;
-      pointer-events: none;
-      animation: newCardGlow 2.2s ease-out;
-    }
-
-    .server-card.server-card-new::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: 15px;
-      padding: 1px;
-      background: linear-gradient(120deg, var(--accent-color), #23a55a, var(--accent-color));
-      background-size: 200% 200%;
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      animation: newCardShimmer 1.8s ease-in-out 2;
-      pointer-events: none;
-    }
-
-    @keyframes newCardGlow {
-      0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.65), 0 0 24px 4px rgba(168, 85, 247, 0.35); }
-      70% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0), 0 0 24px 4px rgba(168, 85, 247, 0.15); }
-      100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0), 0 0 0 0 rgba(168, 85, 247, 0); }
-    }
-
-    @keyframes newCardShimmer {
-      0% { background-position: 0% 50%; opacity: 1; }
-      100% { background-position: 200% 50%; opacity: 0; }
-    }
-
-    .servers-empty {
-      text-align: center;
-      color: var(--sub-text);
-      font-size: 0.9rem;
-      padding: 30px 10px;
-      grid-column: 1 / -1;
-    }
-
-    /* ==========================================
-       TOS WARNING MODAL
-       ========================================== */
-    .warning-overlay {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .warning-card {
-      background-color: var(--card-bg);
-      border-radius: 16px;
-      max-width: 440px;
-      width: 100%;
-      padding: 28px 24px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      text-align: center;
-    }
-
-    .warning-icon {
-      font-size: 2.5rem;
-      color: #ef4444;
-      margin-bottom: 14px;
-    }
-
-    .warning-title {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin: 0 0 12px 0;
-      color: var(--text-color);
-    }
-
-    .warning-text {
-      color: var(--sub-text);
-      font-size: 0.9rem;
-      line-height: 1.7;
-      margin-bottom: 10px;
-      text-align: left;
-      direction: ltr;
-    }
-
-    .warning-text strong {
-      color: #ef4444;
-    }
-
-    .warning-link {
-      display: inline-block;
-      color: var(--accent-color);
-      font-size: 0.85rem;
-      text-decoration: underline;
-      margin-bottom: 20px;
-    }
-
-    .warning-ok-btn {
-      background-color: var(--accent-color);
-      color: #fff;
-      border: none;
-      padding: 12px 40px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
+    .server-card.server-card-new { position: relative; border: 1px solid rgba(168, 85, 247, 0.6); }
+    .server-card.server-card-new::after { content: ""; position: absolute; inset: 0; border-radius: 15px; pointer-events: none; animation: newCardGlow 2.2s ease-out; }
+    .server-card.server-card-new::before { content: ""; position: absolute; inset: -1px; border-radius: 15px; padding: 1px; background: linear-gradient(120deg, var(--accent-color), #23a55a, var(--accent-color)); background-size: 200% 200%; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: newCardShimmer 1.8s ease-in-out 2; pointer-events: none; }
+    @keyframes newCardGlow { 0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.65), 0 0 24px 4px rgba(168, 85, 247, 0.35); } 70% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0), 0 0 24px 4px rgba(168, 85, 247, 0.15); } 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0), 0 0 0 0 rgba(168, 85, 247, 0); } }
+    @keyframes newCardShimmer { 0% { background-position: 0% 50%; opacity: 1; } 100% { background-position: 200% 50%; opacity: 0; } }
+    .servers-empty { text-align: center; color: var(--sub-text); font-size: 0.9rem; padding: 30px 10px; grid-column: 1 / -1; }
+    .warning-overlay { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.75); backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .warning-card { background-color: var(--card-bg); border-radius: 16px; max-width: 440px; width: 100%; padding: 28px 24px; box-shadow: 0 12px 40px rgba(0,0,0,0.4); border: 1px solid rgba(239, 68, 68, 0.4); text-align: center; }
+    .warning-icon { font-size: 2.5rem; color: #ef4444; margin-bottom: 14px; }
+    .warning-title { font-size: 1.2rem; font-weight: bold; margin: 0 0 12px 0; color: var(--text-color); }
+    .warning-text { color: var(--sub-text); font-size: 0.9rem; line-height: 1.7; margin-bottom: 10px; text-align: left; direction: ltr; }
+    .warning-text strong { color: #ef4444; }
+    .warning-link { display: inline-block; color: var(--accent-color); font-size: 0.85rem; text-decoration: underline; margin-bottom: 20px; }
+    .warning-ok-btn { background-color: var(--accent-color); color: #fff; border: none; padding: 12px 40px; border-radius: 10px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: background-color 0.2s ease; }
     .warning-ok-btn:hover { background-color: #9333ea; }
-
-    body.warning-active {
-      overflow: hidden;
-    }
-
-    /* ==========================================
-       LANGUAGE TOGGLE BUTTON
-       ========================================== */
-    .lang-toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      background-color: var(--card-bg);
-      border: 1.5px solid rgba(168, 85, 247, 0.35);
-      color: var(--text-color);
-      padding: 7px 16px 7px 8px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      font-family: inherit;
-      letter-spacing: 0.3px;
-      overflow: hidden;
-      transition: border-color 0.2s ease, transform 0.15s ease,
-                  background-color 0.2s ease, width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .lang-toggle:hover {
-      border-color: var(--accent-color);
-      background-color: rgba(168, 85, 247, 0.12);
-      transform: translateY(-1px);
-    }
+    body.warning-active { overflow: hidden; }
+    .lang-toggle { display: inline-flex; align-items: center; gap: 9px; background-color: var(--card-bg); border: 1.5px solid rgba(168, 85, 247, 0.35); color: var(--text-color); padding: 7px 16px 7px 8px; border-radius: 999px; cursor: pointer; font-size: 0.85rem; font-weight: 600; font-family: inherit; letter-spacing: 0.3px; overflow: hidden; transition: border-color 0.2s ease, transform 0.15s ease, background-color 0.2s ease, width 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+    .lang-toggle:hover { border-color: var(--accent-color); background-color: rgba(168, 85, 247, 0.12); transform: translateY(-1px); }
     .lang-toggle:active { transform: translateY(0); }
-
-    .lang-toggle .flag {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      overflow: hidden;
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background-color: rgba(255, 255, 255, 0.06);
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .lang-toggle .flag img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .lang-toggle.spin .flag {
-      transform: rotateY(180deg);
-    }
-
-    .lang-toggle .lang-code {
-      color: var(--accent-color);
-      display: inline-block;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-    }
-    .lang-toggle.fading .lang-code {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .lang-toggle.lang-toggle-modal {
-      margin: 0 auto 18px;
-      display: flex;
-    }
-
-    .lang-transition-target {
-      transition: opacity 0.22s ease, transform 0.22s ease;
-    }
-    .lang-transition-target.lang-fading {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-
-    .warning-card[dir="rtl"] {
-      font-family: 'Tahoma', 'Segoe UI', sans-serif;
-    }
-    .warning-card[dir="rtl"] .warning-text {
-      text-align: right;
-      direction: rtl;
-    }
-
+    .lang-toggle .flag { width: 22px; height: 22px; border-radius: 50%; overflow: hidden; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.15); background-color: rgba(255, 255, 255, 0.06); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .lang-toggle .flag img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .lang-toggle.spin .flag { transform: rotateY(180deg); }
+    .lang-toggle .lang-code { color: var(--accent-color); display: inline-block; transition: opacity 0.2s ease, transform 0.2s ease; }
+    .lang-toggle.fading .lang-code { opacity: 0; transform: translateY(4px); }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .lang-toggle.lang-toggle-modal { margin: 0 auto 18px; display: flex; }
+    .lang-transition-target { transition: opacity 0.22s ease, transform 0.22s ease; }
+    .lang-transition-target.lang-fading { opacity: 0; transform: translateY(6px); }
+    .warning-card[dir="rtl"] { font-family: 'Tahoma', 'Segoe UI', sans-serif; }
+    .warning-card[dir="rtl"] .warning-text { text-align: right; direction: rtl; }
   </style>
 </head>
-
 <body class="warning-active">
 
-  <!-- TOS Warning Modal -->
   <div class="warning-overlay" id="warningOverlay">
     <div class="warning-card">
       <button class="lang-toggle lang-toggle-modal" id="langToggleModal">
@@ -950,7 +224,6 @@
     </div>
   </div>
 
-  <!-- Server details modal: banner + avatar + description -->
   <div class="server-modal-overlay" id="serverModalOverlay">
     <div class="server-modal-card">
       <div class="server-modal-top">
@@ -1008,6 +281,34 @@
 
     const COUNTER_BASE = 'https://countapi.mileshilliard.com/api/v1';
     const COUNTER_PREFIX = 'skrt7-bio-projects_';
+
+    // Real brand colors for each language's little logo square
+    const LANG_STYLES = {
+      'JavaScript':   { bg: '#f7df1e', color: '#000000', label: 'JS' },
+      'TypeScript':   { bg: '#3178c6', color: '#ffffff', label: 'TS' },
+      'HTML':         { bg: '#e34c26', color: '#ffffff', label: '</>' },
+      'CSS':          { bg: '#264de4', color: '#ffffff', label: '{}' },
+      'Python':       { bg: '#3776ab', color: '#ffd43b', label: 'PY' },
+      'Node.js':      { bg: '#3c873a', color: '#ffffff', label: 'JS' },
+      'Java':         { bg: '#5382a1', color: '#ffffff', label: 'JV' },
+      'C++':          { bg: '#00599c', color: '#ffffff', label: 'C++' },
+      'C':            { bg: '#555555', color: '#ffffff', label: 'C' },
+      'C#':           { bg: '#68217a', color: '#ffffff', label: 'C#' },
+      'PHP':          { bg: '#777bb4', color: '#ffffff', label: 'PHP' },
+      'Ruby':         { bg: '#cc342d', color: '#ffffff', label: 'RB' },
+      'Go':           { bg: '#00add8', color: '#ffffff', label: 'GO' },
+      'Rust':         { bg: '#000000', color: '#f74c00', label: 'RS' },
+      'Shell':        { bg: '#89e051', color: '#000000', label: 'SH' },
+      'Dockerfile':   { bg: '#0db7ed', color: '#ffffff', label: '🐳' },
+      'Vue':          { bg: '#41b883', color: '#ffffff', label: 'V' },
+      'Swift':        { bg: '#f05138', color: '#ffffff', label: 'SW' },
+      'Kotlin':       { bg: '#7f52ff', color: '#ffffff', label: 'KT' },
+      'Lua':          { bg: '#000080', color: '#ffffff', label: 'LU' },
+
+      // Non-language manual tags — real brand icon + color instead of plain text
+      'Discord':      { bg: '#5865F2', color: '#ffffff', icon: 'fa-brands fa-discord' },
+      'Termux':       { bg: '#000000', color: '#00e676', icon: 'fa-solid fa-terminal' }
+    };
 
     function extractGithubRepo(url) {
       if (!url) return null;
@@ -1093,6 +394,18 @@
       return card;
     }
 
+    // Renders a tag as a colored language logo badge when the name is a
+    // recognized language, otherwise falls back to the plain pill style
+    // (used for non-language tags like "Termux", "Discord").
+    function tagMarkup(name) {
+      const style = LANG_STYLES[name];
+      if (!style) {
+        return `<span class="tag">${name}</span>`;
+      }
+      const swatchInner = style.icon ? `<i class="${style.icon}" style="font-size:0.85rem;"></i>` : style.label;
+      return `<span class="lang-badge"><span class="lang-swatch" style="background:${style.bg};color:${style.color};">${swatchInner}</span>${name}</span>`;
+    }
+
     function renderTags(project) {
       const tagsContainer = document.getElementById(`tags-${project.id}`);
       if (!tagsContainer) return;
@@ -1104,9 +417,7 @@
 
       const repo = extractGithubRepo(project.repoUrl);
       if (!repo) {
-        tagsContainer.innerHTML = project.manualTags
-          .map(tag => `<span class="tag">${tag}</span>`)
-          .join('');
+        tagsContainer.innerHTML = project.manualTags.map(tagMarkup).join('');
         return;
       }
 
@@ -1115,11 +426,11 @@
       fetchRepoLanguages(repo.owner, repo.repo).then(languages => {
         if (languages.length === 0) {
           tagsContainer.innerHTML = project.manualTags.length
-            ? project.manualTags.map(tag => `<span class="tag">${tag}</span>`).join('')
+            ? project.manualTags.map(tagMarkup).join('')
             : `<span class="tag dimmed">Unknown</span>`;
           return;
         }
-        tagsContainer.innerHTML = languages.map(lang => `<span class="tag">${lang}</span>`).join('');
+        tagsContainer.innerHTML = languages.map(tagMarkup).join('');
       });
     }
 
@@ -1205,9 +516,6 @@
 
     document.addEventListener('DOMContentLoaded', init);
 
-    // ==========================================
-    // TAB NAVIGATION (Projects / Discord Servers)
-    // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
       const tabBtnProjects = document.getElementById('tabBtnProjects');
       const tabBtnServers = document.getElementById('tabBtnServers');
@@ -1229,8 +537,6 @@
         loadServers();
       });
 
-      // Arrived from the "Add your server" bubble on the home page —
-      // jump straight to the Discord Servers tab and focus the input.
       if (new URLSearchParams(window.location.search).get('openServers') === '1') {
         tabBtnServers.click();
         const input = document.getElementById('serverInviteInput');
@@ -1245,12 +551,8 @@
       }
     });
 
-    // ==========================================
-    // DISCORD SERVERS TAB
-    // ==========================================
     const SUPABASE_URL = 'https://agorksddnpwhysojsmtu.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_6j06PssSHe4wTsv5PXp2JA_fKVS4DKa';
-
     const WORKER_URL = 'https://skrt7-servers-api.xdbronah.workers.dev/api/add-server';
 
     function supabaseHeaders(extra) {
@@ -1315,19 +617,16 @@
       const descEl = document.getElementById('serverModalDesc');
       const joinEl = document.getElementById('serverModalJoin');
 
-      // Banner (falls back to the gradient background already set in CSS)
       bannerWrap.querySelector('img.server-modal-banner')?.remove();
       if (server.banner) {
         const bannerImg = document.createElement('img');
         bannerImg.className = 'server-modal-banner';
         bannerImg.alt = '';
-        bannerImg.onerror = () => bannerImg.remove(); // falls back to the CSS gradient
+        bannerImg.onerror = () => bannerImg.remove();
         bannerImg.src = server.banner;
         bannerWrap.insertBefore(bannerImg, bannerWrap.firstChild);
       }
 
-      // Icon — if the URL 404s or fails to load, fall back to the letter avatar
-      // instead of leaving a tiny broken-image glyph.
       const iconFallback = () => {
         iconEl.innerHTML = '';
         iconEl.textContent = (server.name || '?').charAt(0).toUpperCase();
@@ -1425,7 +724,6 @@
       return card;
     }
 
-    // Premium confetti burst — big, centered explosion
     function fireConfetti() {
       const colors = ['#a855f7', '#c084fc', '#e9d5ff', '#23a55a', '#f4d35e', '#ffffff'];
       const count = 90;
@@ -1442,7 +740,7 @@
         const angle = Math.random() * Math.PI * 2;
         const distance = 140 + Math.random() * 340;
         const dx = Math.cos(angle) * distance;
-        const dy = Math.sin(angle) * distance * 0.75 + 120; // slight downward gravity bias
+        const dy = Math.sin(angle) * distance * 0.75 + 120;
         const size = 7 + Math.random() * 9;
         const shape = Math.random();
 
@@ -1498,9 +796,6 @@
         grid.appendChild(renderServerCard(server, index));
       });
 
-      // Safety net: whatever happens with entrance/highlight animations above,
-      // make sure every card is guaranteed visible shortly after render. This
-      // is what actually prevents the "invisible until reload" symptom for good.
       setTimeout(() => {
         grid.querySelectorAll('.server-card').forEach(card => {
           card.style.opacity = '1';
@@ -1523,8 +818,6 @@
         renderFilteredServers(searchInput.value);
       });
 
-      // Open the server details modal. Event delegation because server
-      // cards are re-rendered/replaced dynamically.
       document.getElementById('serversGrid').addEventListener('click', (e) => {
         const badge = e.target.closest('.server-info-badge');
         if (!badge) return;
@@ -1559,16 +852,10 @@
             fireConfetti();
             input.value = '';
 
-            // Optimistically show the new server right away instead of re-querying
-            // Supabase immediately (which can race the write and return stale/incomplete
-            // data, making the card seem to "disappear" until a manual reload).
             allServersCache = allServersCache.filter(s => s.code !== newServer.code);
             allServersCache.unshift(newServer);
             renderFilteredServers(searchInput.value);
 
-            // Quietly reconcile with Supabase a moment later so the card ends up with
-            // fully accurate data (icon, live counts, tag) even if the optimistic
-            // version above was based on incomplete info — no reload needed.
             setTimeout(async () => {
               const freshList = await loadServersList();
               if (freshList.length) {
@@ -1600,9 +887,6 @@
       });
     });
 
-    // ==========================================
-    // LANGUAGE TOGGLE (English / Arabic)
-    // ==========================================
     const translations = {
       en: {
         pageTitle: 'My Projects',
@@ -1711,9 +995,6 @@
       document.getElementById('langToggleModal').addEventListener('click', toggleLanguage);
     });
 
-    // ==========================================
-    // TOS Warning Modal Handling
-    // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
       const overlay = document.getElementById('warningOverlay');
       const okBtn = document.getElementById('warningOkBtn');
