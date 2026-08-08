@@ -34,6 +34,9 @@ Thanks for stopping by!">
       --text-color: #E4E6EB;
       --card-bg: #1F222F;
       --sub-text: #94A3B8;
+      --track-bg: rgba(255,255,255,0.08);
+      --track-border: rgba(255,255,255,0.12);
+      --star-empty: rgba(255,255,255,0.22);
     }
 
     .light-theme {
@@ -41,6 +44,9 @@ Thanks for stopping by!">
       --text-color: #0F172A;
       --card-bg: #E2E8F0;
       --sub-text: #64748B;
+      --track-bg: rgba(15,23,42,0.08);
+      --track-border: rgba(15,23,42,0.18);
+      --star-empty: rgba(15,23,42,0.22);
     }
 
     body {
@@ -730,8 +736,8 @@ Thanks for stopping by!">
       width: 100%;
       height: 46px;
       border-radius: 999px;
-      background-color: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
+      background-color: var(--track-bg);
+      border: 1px solid var(--track-border);
       overflow: hidden;
       padding: 4px;
       box-sizing: border-box;
@@ -761,7 +767,7 @@ Thanks for stopping by!">
       font-size: 1.4rem;
     }
     .rating-star {
-      color: rgba(255,255,255,0.18);
+      color: var(--star-empty);
       cursor: pointer;
       transition: color 0.15s ease, transform 0.15s ease;
     }
