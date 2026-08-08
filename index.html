@@ -435,6 +435,36 @@ Thanks for stopping by!">
     p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
 
     /* ==========================================
+       NOW LINE — live "latest project" pulled from GitHub
+       ========================================== */
+    .now-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 auto 20px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background-color: rgba(168,85,247,0.08);
+      border: 1px solid rgba(168,85,247,0.2);
+      color: var(--sub-text);
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      max-width: 90%;
+    }
+    .now-line i {
+      color: #a855f7;
+      font-size: 0.78rem;
+    }
+    .now-line a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .now-line a:hover {
+      text-decoration: underline;
+    }
+
+    /* ==========================================
        VISITOR COUNTER — plain text, no box/button look.
        ========================================== */
     .visitor-badge {
@@ -621,6 +651,19 @@ Thanks for stopping by!">
       visibility: hidden;
     }
 
+    /* Keep the cat (and any other decorative character) hidden while the
+       colorful loading screen is still showing, so it can't pop in and
+       clash with the loading animation. Revealed by JS once loading ends. */
+    #oneko {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity 0.5s ease !important;
+    }
+    body.page-loaded #oneko {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+
     .container-loader {
       --size: 300px;
       width: var(--size);
@@ -657,6 +700,49 @@ Thanks for stopping by!">
     
     .bottom-link:hover {
       color: var(--text-color);
+    }
+
+    /* ==========================================
+       TIME PROGRESS WIDGET — matches the big
+       "X% of YEAR has passed" reference style
+       ========================================== */
+    .time-progress-widget {
+      width: 92%;
+      max-width: 420px;
+      margin: 30px auto 0;
+      text-align: left;
+    }
+    .tp-heading {
+      font-family: 'Courier New', monospace;
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--text-color);
+      margin: 0 0 6px;
+      letter-spacing: -0.5px;
+    }
+    .tp-subtext {
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      color: var(--sub-text);
+      margin: 0 0 16px;
+    }
+    .tp-bar-track {
+      width: 100%;
+      height: 46px;
+      border-radius: 999px;
+      background-color: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow: hidden;
+      padding: 4px;
+      box-sizing: border-box;
+    }
+    .tp-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0fce5c, #34e07a, #0fce5c);
+      box-shadow: 0 0 16px rgba(35, 232, 120, 0.55);
+      transition: width 1.3s cubic-bezier(0.25, 0.8, 0.35, 1);
     }
 
     /* ==========================================
@@ -701,22 +787,6 @@ Thanks for stopping by!">
     .rating-summary #ratingAverage {
       color: var(--text-color);
       font-weight: 700;
-    }
-
-    /* ==========================================
-       COMMENTS SECTION
-       ========================================== */
-    .comments-section {
-      width: 90%;
-      max-width: 480px;
-      margin: 30px auto 0;
-      text-align: left;
-    }
-    .comments-heading {
-      color: var(--text-color);
-      font-size: 1rem;
-      margin-bottom: 12px;
-      text-align: center;
     }
 
   </style>
@@ -764,6 +834,11 @@ Thanks for stopping by!">
       </div>
     </div>
     <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
+
+    <div class="now-line" id="nowLine">
+      <i class="fa-solid fa-code-branch"></i>
+      <span id="nowLineText">checking latest project…</span>
+    </div>
 
     <div class="custom-status-container" id="customStatusContainer">
       <div class="discord-activity" id="discordCustomStatus"></div>
@@ -834,6 +909,17 @@ Thanks for stopping by!">
       <a href="https://www.facebook.com/share/18giPaZseb/" target="_blank" class="ship-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
     </div>
 
+    <!-- ==========================================
+         TIME PROGRESS — live year progress bar
+         ========================================== -->
+    <div class="time-progress-widget" id="timeProgressWidget">
+      <p class="tp-heading" id="tpHeading">— % of — has passed</p>
+      <p class="tp-subtext" id="tpSubtext">—</p>
+      <div class="tp-bar-track">
+        <div class="tp-bar-fill" id="tpFill"></div>
+      </div>
+    </div>
+
     <!-- الزر الجديد "about" المربوط بملف about.html -->
     <div class="bottom-links">
       <a href="about.html" class="bottom-link">about</a>
@@ -854,29 +940,6 @@ Thanks for stopping by!">
         <span id="ratingAverage">···</span>
         <span class="rating-count">(<span id="ratingCount">0</span>)</span>
       </div>
-    </div>
-
-    <!-- ==========================================
-         COMMENTS — powered by GitHub Discussions (giscus)
-         ========================================== -->
-    <div class="comments-section">
-      <h3 class="comments-heading">Comments</h3>
-      <div class="giscus"></div>
-      <script src="https://giscus.app/client.js"
-        data-repo="SKRT7-0day/S"
-        data-repo-id="R_kgDOSfVCeA"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOSfVCeM4DCQiB"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="purple_dark"
-        data-lang="en"
-        crossorigin="anonymous"
-        async>
-      </script>
     </div>
 
     <footer style="margin-top: 40px; color: var(--sub-text); font-size: 0.8rem; padding-bottom: 20px;">
@@ -939,6 +1002,10 @@ Thanks for stopping by!">
         if (loader) {
           loader.classList.add('fade-out');
         }
+        // Only now let the cat (and similar decorative characters) appear —
+        // matches the loading screen's own fade transition so nothing pops
+        // in early or clashes with the loading animation.
+        document.body.classList.add('page-loaded');
         initAddServerBubble();
       }, 2500);
     });
@@ -1323,6 +1390,29 @@ Thanks for stopping by!">
     setInterval(updateDiscordPresence, 5000);
 
     // ==========================================
+    // NOW LINE — live "latest project" from GitHub
+    // ==========================================
+    const GITHUB_USERNAME = 'SKRT7-0day';
+
+    fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=1`)
+      .then(res => res.json())
+      .then(repos => {
+        const el = document.getElementById('nowLineText');
+        if (!el) return;
+        if (Array.isArray(repos) && repos.length > 0) {
+          const repo = repos[0];
+          el.innerHTML = `latest project: <a href="${repo.html_url}" target="_blank">${repo.name}</a>`;
+        } else {
+          el.textContent = 'no public projects yet';
+        }
+      })
+      .catch(err => {
+        console.warn('GitHub now-line fetch failed:', err);
+        const el = document.getElementById('nowLineText');
+        if (el) el.textContent = 'latest project: unavailable';
+      });
+
+    // ==========================================
     // VISITOR COUNTER — free, no signup, no API key.
     // Increments by 1 every time this script runs,
     // then animates counting up from 0 to the total.
@@ -1445,6 +1535,60 @@ Thanks for stopping by!">
     });
 
     refreshRatingDisplay();
+
+    // ==========================================
+    // TIME PROGRESS — big "X% of YEAR has passed"
+    // heading + date/time + thick bar, live.
+    // When the bar fills 100%, the year is over.
+    // ==========================================
+    const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    function updateTimeProgress() {
+      const now = new Date();
+      const year = now.getFullYear();
+
+      const yearStart = new Date(year, 0, 1);
+      const yearEnd = new Date(year + 1, 0, 1);
+      const yearPct = ((now - yearStart) / (yearEnd - yearStart)) * 100;
+
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const dateStr = `${MONTH_NAMES[now.getMonth()]} ${now.getDate()}, ${hh}:${mm}`;
+
+      document.getElementById('tpHeading').textContent = `${yearPct.toFixed(0)}% of ${year} has passed`;
+      document.getElementById('tpSubtext').textContent = dateStr;
+      document.getElementById('tpFill').style.width = yearPct.toFixed(2) + '%';
+    }
+
+    // On first load, force the fill to visibly animate in from 0% to the
+    // real percentage — without this, the CSS transition can get skipped
+    // since the width would be set before the browser's first paint.
+    function initTimeProgress() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const yearStart = new Date(year, 0, 1);
+      const yearEnd = new Date(year + 1, 0, 1);
+      const yearPct = ((now - yearStart) / (yearEnd - yearStart)) * 100;
+
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const dateStr = `${MONTH_NAMES[now.getMonth()]} ${now.getDate()}, ${hh}:${mm}`;
+
+      const fillEl = document.getElementById('tpFill');
+      document.getElementById('tpHeading').textContent = `${yearPct.toFixed(0)}% of ${year} has passed`;
+      document.getElementById('tpSubtext').textContent = dateStr;
+
+      fillEl.style.width = '0%';
+      // Force a reflow so the browser registers the 0% width before we
+      // change it, guaranteeing the transition actually plays.
+      void fillEl.offsetWidth;
+      requestAnimationFrame(() => {
+        fillEl.style.width = yearPct.toFixed(2) + '%';
+      });
+    }
+
+    initTimeProgress();
+    setInterval(updateTimeProgress, 60000);
   </script>
 
   <!-- oneko cat widget -->
