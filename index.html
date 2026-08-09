@@ -1562,14 +1562,35 @@ Thanks for stopping by!">
       const mm = String(now.getMinutes()).padStart(2, '0');
       const dateStr = `${MONTH_NAMES[now.getMonth()]} ${now.getDate()}, ${hh}:${mm}`;
 
-      document.getElementById('tpHeading').textContent = `${yearPct.toFixed(0)}% of ${year} has passed`;
       document.getElementById('tpSubtext').textContent = dateStr;
       document.getElementById('tpFill').style.width = yearPct.toFixed(2) + '%';
+      animateYearHeading(yearPct, year, 1300); // same duration as the bar's CSS transition
     }
 
     // On first load, force the fill to visibly animate in from 0% to the
     // real percentage — without this, the CSS transition can get skipped
     // since the width would be set before the browser's first paint.
+    let lastDisplayedYearPct = 0;
+
+    function animateYearHeading(target, year, duration) {
+      const headingEl = document.getElementById('tpHeading');
+      const from = lastDisplayedYearPct;
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3); // cubic ease-out, matches the bar's transition curve
+        const current = from + (target - from) * eased;
+        headingEl.textContent = `${current.toFixed(0)}% of ${year} has passed`;
+        if (t < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          headingEl.textContent = `${target.toFixed(0)}% of ${year} has passed`;
+          lastDisplayedYearPct = target;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
     function initTimeProgress() {
       const now = new Date();
       const year = now.getFullYear();
@@ -1582,8 +1603,9 @@ Thanks for stopping by!">
       const dateStr = `${MONTH_NAMES[now.getMonth()]} ${now.getDate()}, ${hh}:${mm}`;
 
       const fillEl = document.getElementById('tpFill');
-      document.getElementById('tpHeading').textContent = `${yearPct.toFixed(0)}% of ${year} has passed`;
       document.getElementById('tpSubtext').textContent = dateStr;
+
+      const ANIM_DURATION = 1300; // must match the .tp-bar-fill CSS transition duration
 
       fillEl.style.width = '0%';
       // Force a reflow so the browser registers the 0% width before we
@@ -1592,6 +1614,8 @@ Thanks for stopping by!">
       requestAnimationFrame(() => {
         fillEl.style.width = yearPct.toFixed(2) + '%';
       });
+
+      animateYearHeading(yearPct, year, ANIM_DURATION);
     }
 
     setInterval(updateTimeProgress, 60000);
