@@ -1013,6 +1013,7 @@ Thanks for stopping by!">
         // in early or clashes with the loading animation.
         document.body.classList.add('page-loaded');
         initAddServerBubble();
+        initTimeProgress();
       }, 2500);
     });
 
@@ -1593,7 +1594,6 @@ Thanks for stopping by!">
       });
     }
 
-    initTimeProgress();
     setInterval(updateTimeProgress, 60000);
   </script>
 
