@@ -476,6 +476,13 @@ Thanks for stopping by!">
       font-style: italic;
     }
 
+    .spotify-embed-wrap {
+      display: none;
+      width: 90%;
+      max-width: 400px;
+      margin: 14px auto 0;
+    }
+
     .celebration-container { position: relative; display: inline-block; margin: 10px auto; padding: 10px 30px; cursor: crosshair; }
     .celebration-name {
       font-size: 3rem; font-weight: 900; letter-spacing: -0.03em;
@@ -926,6 +933,23 @@ Thanks for stopping by!">
       <div class="lyrics-panel" id="lyricsPanel"></div>
     </div>
 
+    <!-- ==========================================
+         SPOTIFY EMBED PLAYER — Spotify's own official
+         widget, so visitors get real play/pause + volume
+         controls. No audio is hosted by this site.
+         ========================================== -->
+    <div class="spotify-embed-wrap" id="spotifyEmbedWrap">
+      <iframe id="spotifyEmbedFrame"
+        style="border-radius:14px"
+        width="100%"
+        height="152"
+        frameborder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
+
     <div class="theme-switch-wrapper">
       <label class="theme-switch">
         <input type="checkbox" class="theme-switch__checkbox" id="themeCheckbox">
@@ -1286,10 +1310,13 @@ Thanks for stopping by!">
 
       const durationSec = start && end ? Math.round((end - start) / 1000) : null;
       maybeFetchLyrics(spotify.song, spotify.artist, durationSec);
+
+      updateSpotifyEmbed(spotify.track_id);
     }
 
     function showGameCard(activity) {
       resetLyrics();
+      resetSpotifyEmbed();
       const card = document.getElementById('activityCard');
       const icon = document.getElementById('activityIcon');
       const label = document.getElementById('activityLabel');
@@ -1334,6 +1361,35 @@ Thanks for stopping by!">
       stopActivityTicker();
       clearDynamicBackground();
       resetLyrics();
+      resetSpotifyEmbed();
+    }
+
+    // ==========================================
+    // SPOTIFY EMBED PLAYER — Spotify's own official
+    // widget (iframe), swapped to the current track.
+    // ==========================================
+    let currentEmbedTrackId = null;
+
+    function updateSpotifyEmbed(trackId) {
+      const wrap = document.getElementById('spotifyEmbedWrap');
+      const frame = document.getElementById('spotifyEmbedFrame');
+      if (!trackId) {
+        wrap.style.display = 'none';
+        return;
+      }
+      if (trackId !== currentEmbedTrackId) {
+        currentEmbedTrackId = trackId;
+        frame.src = `https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0`;
+      }
+      wrap.style.display = 'block';
+    }
+
+    function resetSpotifyEmbed() {
+      currentEmbedTrackId = null;
+      const wrap = document.getElementById('spotifyEmbedWrap');
+      const frame = document.getElementById('spotifyEmbedFrame');
+      wrap.style.display = 'none';
+      frame.src = '';
     }
 
     // ==========================================
@@ -1807,3 +1863,4 @@ Thanks for stopping by!">
   <script src="oneko.js"></script>
 </body>
 </html>
+
