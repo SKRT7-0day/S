@@ -5,5 +5,12 @@
   "assets": {
     "directory": "./",
     "binding": "ASSETS"
-  }
+  },
+  "secrets_store_secrets": [
+    {
+      "binding": "DISCORD_BOT_TOKEN",
+      "store_id": "98a4d9bedd24497ab11d4e2d7d410e0d",
+      "secret_name": "DISCORD_BOT_TOKEN"
+    }
+  ]
 }
