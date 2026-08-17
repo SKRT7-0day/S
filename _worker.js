@@ -40,8 +40,9 @@ async function handleDiscordBadges(request, env) {
   }
 
   try {
+    const botToken = await env.DISCORD_BOT_TOKEN.get();
     const discordRes = await fetch(`https://discord.com/api/v10/users/${userId}`, {
-      headers: { Authorization: `Bot ${env.DISCORD_BOT_TOKEN}` },
+      headers: { Authorization: `Bot ${botToken}` },
     });
 
     if (!discordRes.ok) {
@@ -71,4 +72,3 @@ async function handleDiscordBadges(request, env) {
     });
   }
 }
-
