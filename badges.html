@@ -159,31 +159,33 @@
     const BADGE_API_URL = 'https://s.skrt7.workers.dev/api/discord-badges';
 
     const FLAG_DEFS = [
-      { bit: 0,  key: 'staff',        name: 'Discord Staff',        icon: 'fa-solid fa-shield-halved',
+      { bit: 0,  key: 'staff',        name: 'Discord Staff',        img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/discordstaff.svg',
         desc: 'Works at Discord as part of their official team.' },
-      { bit: 1,  key: 'partner',      name: 'Partnered Server Owner', icon: 'fa-solid fa-handshake',
+      { bit: 1,  key: 'partner',      name: 'Partnered Server Owner', img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/discordpartner.svg',
         desc: 'Owns a server accepted into Discord\'s Partner Program.' },
-      { bit: 2,  key: 'hypesquad',    name: 'HypeSquad Events',     icon: 'fa-solid fa-bolt',
+      { bit: 2,  key: 'hypesquad',    name: 'HypeSquad Events',     img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/hypesquadevents.svg',
         desc: 'Member of the HypeSquad Events team, helping run community events.' },
-      { bit: 3,  key: 'bugL1',        name: 'Bug Hunter (Level 1)', icon: 'fa-solid fa-bug',
+      { bit: 3,  key: 'bugL1',        name: 'Bug Hunter (Level 1)', img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/discordbughunter1.svg',
         desc: 'Has reported bugs that helped improve Discord.' },
-      { bit: 6,  key: 'bravery',      name: 'HypeSquad Bravery',    icon: 'fa-solid fa-fire',
+      { bit: 6,  key: 'bravery',      name: 'HypeSquad Bravery',    img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/hypesquadbravery.svg',
         desc: 'Member of the HypeSquad Bravery house.' },
-      { bit: 7,  key: 'brilliance',   name: 'HypeSquad Brilliance', icon: 'fa-solid fa-star',
+      { bit: 7,  key: 'brilliance',   name: 'HypeSquad Brilliance', img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/hypesquadbrilliance.svg',
         desc: 'Member of the HypeSquad Brilliance house.' },
-      { bit: 8,  key: 'balance',      name: 'HypeSquad Balance',    icon: 'fa-solid fa-scale-balanced',
+      { bit: 8,  key: 'balance',      name: 'HypeSquad Balance',    img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/hypesquadbalance.svg',
         desc: 'Member of the HypeSquad Balance house.' },
-      { bit: 9,  key: 'earlySupport', name: 'Early Supporter',      icon: 'fa-solid fa-heart',
+      { bit: 9,  key: 'earlySupport', name: 'Early Supporter',      img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/discordearlysupporter.svg',
         desc: 'Subscribed to Nitro before it changed in October 2018.' },
-      { bit: 14, key: 'bugL2',        name: 'Bug Hunter (Level 2)', icon: 'fa-solid fa-bug-slash',
+      { bit: 14, key: 'bugL2',        name: 'Bug Hunter (Level 2)', img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/discordbughunter2.svg',
         desc: 'An especially prolific bug hunter for Discord.' },
-      { bit: 17, key: 'earlyDev',     name: 'Early Verified Bot Developer', icon: 'fa-solid fa-code',
+      { bit: 17, key: 'earlyDev',     name: 'Early Verified Bot Developer', img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/discordbotdev.svg',
         desc: 'Owns a verified bot that was around before the developer badge existed.' },
-      { bit: 18, key: 'modAlumni',    name: 'Moderator Programs Alumni', icon: 'fa-solid fa-gavel',
+      { bit: 18, key: 'modAlumni',    name: 'Moderator Programs Alumni', img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/discordmod.svg',
         desc: 'Previously part of Discord\'s official moderator programs.' },
-      { bit: 22, key: 'activeDev',    name: 'Active Developer',     icon: 'fa-solid fa-laptop-code',
+      { bit: 22, key: 'activeDev',    name: 'Active Developer',     img: 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/activedeveloper.svg',
         desc: 'Has an actively used application registered with Discord in the last 30 days.' },
     ];
+
+    const NITRO_IMG = 'https://raw.githubusercontent.com/mezotv/discord-badges/main/assets/discordnitro.svg';
 
     function computeAccountAge(id) {
       // Discord IDs are snowflakes: the first 42 bits are a timestamp
@@ -230,7 +232,7 @@
       const card = document.createElement('div');
       card.className = 'badge-card';
       card.innerHTML = `
-        <div class="badge-icon-wrap"><i class="${def.icon}"></i></div>
+        <div class="badge-icon-wrap"><img src="${def.img}" alt="${def.name}" style="width:34px;height:34px;"></div>
         <p class="badge-name">${def.name}</p>
         <p class="badge-sub">Official badge</p>
       `;
@@ -246,12 +248,12 @@
       const card = document.createElement('div');
       card.className = 'badge-card';
       card.innerHTML = `
-        <div class="badge-icon-wrap"><i class="fa-solid fa-gem"></i></div>
+        <div class="badge-icon-wrap"><img src="${NITRO_IMG}" alt="${label}" style="width:34px;height:34px;"></div>
         <p class="badge-name">${label}</p>
         <p class="badge-sub">Subscriber</p>
       `;
       card.addEventListener('click', () => openBadgeModal({
-        icon: 'fa-solid fa-gem',
+        img: NITRO_IMG,
         name: label,
         desc: `Currently subscribed to ${label}. Discord's public API doesn't expose the exact subscription start date for other accounts.`,
       }));
@@ -259,7 +261,10 @@
     }
 
     function openBadgeModal(def) {
-      document.getElementById('badgeModalIcon').innerHTML = `<i class="${def.icon}"></i>`;
+      const iconEl = document.getElementById('badgeModalIcon');
+      iconEl.innerHTML = def.img
+        ? `<img src="${def.img}" alt="${def.name}" style="width:40px;height:40px;">`
+        : `<i class="${def.icon}"></i>`;
       document.getElementById('badgeModalName').textContent = def.name;
       document.getElementById('badgeModalDesc').textContent = def.desc;
       document.getElementById('badgeModalOverlay').classList.add('open');
