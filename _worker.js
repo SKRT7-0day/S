@@ -34,16 +34,29 @@ async function handleDiscordBadges(request, env) {
   }
 
   try {
+    // قراءة التوكن سواء كان Secrets Store أو Variable عادي
+    let token = env.DISCORD_TOKEN;
+    if (token && typeof token === 'object' && typeof token.get === 'function') {
+      token = await token.get('DISCORD_TOKEN') || await token.get();
+    }
+
+    if (!token) {
+      return new Response(JSON.stringify({ error: 'DISCORD_TOKEN is missing' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      });
+    }
+
     const discordRes = await fetch(`https://discord.com/api/v9/users/${userId}/profile`, {
       headers: {
-        'Authorization': env.DISCORD_TOKEN,
+        'Authorization': token,
         'Content-Type': 'application/json',
       },
     });
 
     if (!discordRes.ok) {
-      return new Response(JSON.stringify({ error: 'User not found' }), {
-        status: 404,
+      return new Response(JSON.stringify({ error: `Discord API error: ${discordRes.status}` }), {
+        status: discordRes.status,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
     }
@@ -66,7 +79,7 @@ async function handleDiscordBadges(request, env) {
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Lookup failed' }), {
+    return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     });
