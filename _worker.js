@@ -1,8 +1,3 @@
-// This runs in front of your static site. Any request that doesn't match
-// a special route below (like /api/discord-badges) gets served exactly as
-// before — index.html, oneko.js, badges.html, everything — no change to
-// your existing site at all.
-
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -11,7 +6,6 @@ export default {
       return handleDiscordBadges(request, env);
     }
 
-    // Everything else: serve the static files exactly like before.
     return env.ASSETS.fetch(request);
   },
 };
@@ -40,9 +34,11 @@ async function handleDiscordBadges(request, env) {
   }
 
   try {
-    const botToken = await env.DISCORD_BOT_TOKEN.get();
-    const discordRes = await fetch(`https://discord.com/api/v10/users/${userId}`, {
-      headers: { Authorization: `Bot ${botToken}` },
+    const discordRes = await fetch(`https://discord.com/api/v9/users/${userId}/profile`, {
+      headers: {
+        'Authorization': env.DISCORD_TOKEN,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!discordRes.ok) {
@@ -52,16 +48,20 @@ async function handleDiscordBadges(request, env) {
       });
     }
 
-    const user = await discordRes.json();
-    const avatarUrl = user.avatar
-      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith('a_') ? 'gif' : 'png'}`
-      : null;
+    const data = await discordRes.json();
+
+    const badges = (data.badges || []).map(b => ({
+      id: b.id,
+      description: b.description,
+      iconUrl: `https://cdn.discordapp.com/badge-icons/${b.icon}.png`,
+    }));
 
     return new Response(JSON.stringify({
-      username: user.global_name || user.username,
-      avatar: avatarUrl,
-      public_flags: user.public_flags || 0,
-      premium_type: user.premium_type || 0,
+      username: data.user.global_name || data.user.username,
+      avatar: data.user.avatar
+        ? `https://cdn.discordapp.com/avatars/${data.user.id}/${data.user.avatar}.${data.user.avatar.startsWith('a_') ? 'gif' : 'png'}`
+        : null,
+      badges: badges,
     }), {
       headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     });
