@@ -1,30 +1,34 @@
+<script>
 async function getBadges() {
-    const userId = document.getElementById('userIdInput').value.trim();
-    const container = document.getElementById('badgesResult');
+  const userId = document.getElementById('userIdInput').value.trim();
+  const container = document.getElementById('badgesResult');
 
-    if (!userId) return;
+  if (!userId) return;
 
-    container.innerHTML = 'جاري التحميل...';
+  container.innerHTML = 'Loading...';
 
-    const res = await fetch(`/api/badges/${userId}`);
+  try {
+    const res = await fetch(`/api/discord-badges?id=${userId}`);
     const data = await res.json();
 
-    if (!data.success) {
-        container.innerHTML = data.message;
-        return;
+    if (data.error) {
+      container.innerHTML = data.error;
+      return;
     }
 
-    if (data.badges.length === 0) {
-        container.innerHTML = 'لا توجد شارات لهذا الحساب.';
-        return;
+    if (!data.badges || data.badges.length === 0) {
+      container.innerHTML = 'No badges found.';
+      return;
     }
 
-    // عرض صور الشارات
     container.innerHTML = data.badges.map(badge => `
-        <div class="badge">
-            <img src="${badge.iconUrl}" alt="${badge.description}">
-            <span>${badge.description}</span>
-        </div>
+      <div class="badge">
+        <img src="${badge.iconUrl}" alt="${badge.description}">
+        <span>${badge.description}</span>
+      </div>
     `).join('');
+  } catch (err) {
+    container.innerHTML = 'Error loading badges.';
+  }
 }
-
+</script>
