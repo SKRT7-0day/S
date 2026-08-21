@@ -88,3 +88,4 @@ async function handleDiscordBadges(request, env) {
     });
   }
 }
+
