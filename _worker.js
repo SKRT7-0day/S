@@ -34,29 +34,31 @@ async function handleDiscordBadges(request, env) {
   }
 
   try {
-    // جلب التوكن باستخدام الاسم الجديد DISCORD_USER_TOKEN
     let token = env.DISCORD_USER_TOKEN;
     if (token && typeof token === 'object' && typeof token.get === 'function') {
       token = await token.get('DISCORD_USER_TOKEN') || await token.get();
     }
 
     if (!token) {
-      return new Response(JSON.stringify({ error: 'DISCORD_USER_TOKEN is missing' }), {
+      return new Response(JSON.stringify({ error: 'DISCORD_USER_TOKEN is missing in Cloudflare' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
     }
 
-    // إرسال الطلب بدعم توكن الحساب الشخصي
+    // إرسال الطلب مع إضافة User-Agent وهمي ليتعرف عليه ديسكورد كمتصفح طبيعي
     const discordRes = await fetch(`https://discord.com/api/v9/users/${userId}/profile`, {
       headers: {
         'Authorization': token.trim(),
-        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9028 Chrome/120.0.6099.291 Electron/28.2.10 Safari/537.36',
+        'Accept': '*/*',
+        'Accept-Language': 'en-US,en;q=0.9',
       },
     });
 
     if (!discordRes.ok) {
-      return new Response(JSON.stringify({ error: `Discord API error: ${discordRes.status}` }), {
+      const errText = await discordRes.text();
+      return new Response(JSON.stringify({ error: `Discord API Error ${discordRes.status}: ${errText}` }), {
         status: discordRes.status,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
