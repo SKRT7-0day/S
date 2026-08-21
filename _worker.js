@@ -34,19 +34,20 @@ async function handleDiscordBadges(request, env) {
   }
 
   try {
-    let token = env.DISCORD_TOKEN;
+    // جلب التوكن باستخدام الاسم الجديد DISCORD_USER_TOKEN
+    let token = env.DISCORD_USER_TOKEN;
     if (token && typeof token === 'object' && typeof token.get === 'function') {
-      token = await token.get('DISCORD_TOKEN') || await token.get();
+      token = await token.get('DISCORD_USER_TOKEN') || await token.get();
     }
 
     if (!token) {
-      return new Response(JSON.stringify({ error: 'DISCORD_TOKEN is missing' }), {
+      return new Response(JSON.stringify({ error: 'DISCORD_USER_TOKEN is missing' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
     }
 
-    // طلب بروفايل المستخدم باستخدام توكن الحساب المباشر
+    // إرسال الطلب بدعم توكن الحساب الشخصي
     const discordRes = await fetch(`https://discord.com/api/v9/users/${userId}/profile`, {
       headers: {
         'Authorization': token.trim(),
@@ -85,4 +86,3 @@ async function handleDiscordBadges(request, env) {
     });
   }
 }
-
