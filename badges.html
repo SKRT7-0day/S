@@ -2,35 +2,400 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Discord Badges Lookup</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    .card { border: 1px solid #444; background: #222; color: #fff; padding: 20px; border-radius: 10px; width: 300px; }
+    :root {
+      --bg-color: #0a0b0f;
+      --card-bg: rgba(20, 22, 30, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-color: #5865F2;
+      --text-main: #ffffff;
+      --text-sub: #949ba4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background-image: radial-gradient(circle at 50% 0%, rgba(88, 101, 242, 0.15), transparent 50%);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent-color);
+    }
+
+    .search-box button {
+      background: var(--accent-color);
+      border: none;
+      border-radius: 12px;
+      padding: 0 18px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .search-box button:hover { background: #4752c4; }
+    .search-box button:active { transform: scale(0.95); }
+
+    /* ============================================= */
+    /* بطاقة البروفايل - هادي هي الجزء اللي كتعرض الشخص */
+    /* ============================================= */
+
+    .profile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      animation: cardIn 0.4s ease forwards;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* البانر فوق الأفاتار، كيعطي عمق للبروفايل */
+    .banner {
+      width: calc(100% + 48px);
+      height: 90px;
+      margin: -24px -24px 0 -24px;
+      border-radius: 20px 20px 0 0;
+      background-size: cover;
+      background-position: center;
+      background-color: var(--accent-color);
+      position: relative;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      margin-top: -48px;
+      margin-bottom: 12px;
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 4px solid #14161e;
+      object-fit: cover;
+      display: block;
+      background: var(--bg-color);
+    }
+
+    .username-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .username {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .user-tag {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+
+    /* زر نسخ الآيدي */
+    .copy-id {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--text-sub);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 4px 10px;
+      margin-bottom: 18px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .copy-id:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .copy-id.copied {
+      color: #3ba55c;
+      border-color: #3ba55c;
+    }
+
+    .badges-container {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      padding: 14px;
+      border: 1px solid var(--border-color);
+    }
+
+    .badges-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-sub);
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .badges-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    /* كل بادج عندو لون خاص بيه، مخزون فـ --badge-color */
+    .badge-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid transparent;
+      cursor: default;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .badge-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--badge-color, var(--accent-color));
+    }
+
+    .badge-item i {
+      color: var(--badge-color, var(--accent-color));
+    }
+
+    .status-msg {
+      padding: 20px;
+      color: var(--text-sub);
+      font-size: 14px;
+      text-align: center;
+      width: 100%;
+    }
+
+    /* هيكل تحميل بسيط بدل نص "جاري التحميل" */
+    .skeleton {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .skeleton-el {
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 37%, rgba(255,255,255,0.05) 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.4s ease infinite;
+      border-radius: 8px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 100% 50%; }
+      100% { background-position: 0 50%; }
+    }
+
+    .skeleton-avatar {
+      width: 96px; height: 96px; border-radius: 50%;
+      margin-top: -48px; margin-bottom: 12px;
+    }
+    .skeleton-line { height: 14px; width: 140px; margin-bottom: 8px; }
+    .skeleton-line.short { width: 90px; }
+    .skeleton-badges { height: 70px; width: 100%; margin-top: 16px; }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h3 id="username">جاري التحميل...</h3>
-    <p id="user-id"></p>
-    <p id="flags"></p>
+  <div class="container">
+    <div class="search-box">
+      <input type="text" id="userIdInput" placeholder="Enter Discord User ID" value="1217944125555474565">
+      <button onclick="fetchUserData()"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+
+    <div id="displayArea" class="profile-card">
+      <!-- كيتعمر ديناميكياً -->
+    </div>
   </div>
 
   <script>
-    const userId = "1217944125555474565";
+    // كل بادج عندو لون مميز باش يبان فرق بينهم بصريا
+    const BADGES_MAP = {
+      1:       { name: "Discord Staff",           icon: "fa-solid fa-shield-cat",     color: "#5865F2" },
+      2:       { name: "Partnered Server Owner",   icon: "fa-solid fa-handshake",      color: "#3ba55c" },
+      4:       { name: "HypeSquad Events",         icon: "fa-solid fa-burst",          color: "#f47b67" },
+      8:       { name: "Bug Hunter Level 1",        icon: "fa-solid fa-bug",            color: "#3ba55c" },
+      64:      { name: "House Bravery",             icon: "fa-solid fa-shield-halved",  color: "#9c84ef" },
+      128:     { name: "House Brilliance",           icon: "fa-solid fa-gem",            color: "#f47b67" },
+      256:     { name: "House Balance",               icon: "fa-solid fa-scale-balanced", color: "#45ddc0" },
+      512:     { name: "Early Supporter",              icon: "fa-solid fa-piggy-bank",     color: "#ff73fa" },
+      16384:   { name: "Bug Hunter Level 2",           icon: "fa-solid fa-file-code",      color: "#3ba55c" },
+      131072:  { name: "Verified Developer",            icon: "fa-solid fa-code",           color: "#5865F2" },
+      4194304: { name: "Active Developer",               icon: "fa-solid fa-terminal",       color: "#5865F2" }
+    };
 
-    // الاتصال بالـ Backend (سيرفر Express)
-    fetch(`http://localhost:3000/api/user?id=${userId}`)
-      .then(res => res.json())
-      .then(data => {
-        // طباعة البيانات داخل العناصر الرسومية
-        document.getElementById('username').innerText = `@${data.username}`;
-        document.getElementById('user-id').innerText = `ID: ${data.id}`;
-        document.getElementById('flags').innerText = `Public Flags: ${data.public_flags}`;
-      })
-      .catch(err => {
-        document.getElementById('username').innerText = "فشل جلب البيانات";
+    function getBadges(flags) {
+      let userBadges = [];
+      for (let flag in BADGES_MAP) {
+        if ((flags & flag) == flag) {
+          userBadges.push(BADGES_MAP[flag]);
+        }
+      }
+      return userBadges;
+    }
+
+    // حساب الأفاتار الافتراضي بطريقة صحيحة بواسطة BigInt
+    // (بحال id ديال Discord كبير بزاف وما كيخدمش عادي بـ bitshift ديال JS)
+    function getDefaultAvatarIndex(userId) {
+      try {
+        return Number((BigInt(userId) >> 22n) % 6n);
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    function showSkeleton() {
+      const displayArea = document.getElementById('displayArea');
+      displayArea.innerHTML = `
+        <div class="banner skeleton-el" style="margin:-24px -24px 0 -24px; width:calc(100% + 48px);"></div>
+        <div class="skeleton">
+          <div class="skeleton-el skeleton-avatar"></div>
+          <div class="skeleton-el skeleton-line"></div>
+          <div class="skeleton-el skeleton-line short"></div>
+          <div class="skeleton-el skeleton-badges"></div>
+        </div>
+      `;
+    }
+
+    function copyUserId(id) {
+      navigator.clipboard.writeText(id).then(() => {
+        const btn = document.getElementById('copyIdBtn');
+        if (!btn) return;
+        const original = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> تم النسخ`;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = original;
+        }, 1500);
       });
-  </script>
+    }
 
+    async function fetchUserData() {
+      const userId = document.getElementById('userIdInput').value.trim();
+      const displayArea = document.getElementById('displayArea');
+
+      if (!userId) return;
+
+      // تحقق بسيط: آيدي ديسكورد لازم يكون رقم فقط
+      if (!/^\d{15,21}$/.test(userId)) {
+        displayArea.innerHTML = `<div class="status-msg"><i class="fa-solid fa-triangle-exclamation"></i><br>آيدي غير صحيح</div>`;
+        return;
+      }
+
+      showSkeleton();
+
+      try {
+        const response = await fetch(`/api/user?id=${userId}`);
+        if (!response.ok) {
+          if (response.status === 404) throw new Error("not_found");
+          throw new Error("server_error");
+        }
+
+        const data = await response.json();
+
+        const avatarUrl = data.avatar
+          ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png?size=256`
+          : `https://cdn.discordapp.com/embed/avatars/${getDefaultAvatarIndex(data.id)}.png`;
+
+        const bannerStyle = data.banner
+          ? `background-image: url('https://cdn.discordapp.com/banners/${data.id}/${data.banner}.png?size=512')`
+          : `background: linear-gradient(135deg, #5865F2, #3b3f7a)`;
+
+        const badges = getBadges(data.public_flags || 0);
+        let badgesHTML = badges.length > 0
+          ? badges.map(b => `<div class="badge-item" style="--badge-color:${b.color}" title="${b.name}"><i class="${b.icon}"></i> ${b.name}</div>`).join('')
+          : `<div class="status-msg" style="padding:6px;">ماكاينش بادجات</div>`;
+
+        displayArea.innerHTML = `
+          <div class="banner" style="${bannerStyle}"></div>
+          <div class="avatar-wrap">
+            <img class="avatar" src="${avatarUrl}" alt="avatar">
+          </div>
+          <div class="username-row">
+            <div class="username">${data.global_name || data.username}</div>
+          </div>
+          <div class="user-tag">@${data.username}</div>
+          <button id="copyIdBtn" class="copy-id" onclick="copyUserId('${data.id}')">
+            <i class="fa-regular fa-copy"></i> ${data.id}
+          </button>
+          <div class="badges-container">
+            <div class="badges-label">البادجات (${badges.length})</div>
+            <div class="badges-grid">${badgesHTML}</div>
+          </div>
+        `;
+      } catch (err) {
+        const message = err.message === "not_found"
+          ? "المستخدم ماكاينش"
+          : "فشل جلب البيانات، عاود المحاولة";
+        displayArea.innerHTML = `<div class="status-msg"><i class="fa-solid fa-circle-exclamation"></i><br>${message}</div>`;
+      }
+    }
+
+    // إمكانية البحث بضغطة Enter
+    document.getElementById('userIdInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') fetchUserData();
+    });
+
+    window.onload = fetchUserData;
+  </script>
 </body>
 </html>
