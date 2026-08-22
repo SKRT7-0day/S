@@ -15,11 +15,21 @@ export default {
         });
       }
 
-      const BOT_TOKEN = env.BOT_TOKEN || 'MTM2NzUzNzQ2Nzk1NTM0NzU0Ng.GXha4i.q96c_UHjqexxZvR57oK0p0PvHn7iLkGwS0ik28';
+      // جلب التوكن تلقائياً من ملف المتغيرات أو إعدادات Cloudflare
+      const BOT_TOKEN = env.BOT_TOKEN;
+
+      if (!BOT_TOKEN) {
+        return new Response(JSON.stringify({ error: 'BOT_TOKEN is missing in environment' }), {
+          status: 500,
+          headers: { 
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
 
       try {
-        // رابط API المباشر لشارات المستخدِم
-        const response = await fetch(`https://discord.com/api/v9/users/1217944125555474565/badges`, {
+        const response = await fetch(`https://discord.com/api/v9/users/${userId}/badges`, {
           headers: {
             'Authorization': `Bot ${BOT_TOKEN}`,
             'Content-Type': 'application/json'
