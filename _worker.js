@@ -18,7 +18,7 @@ export default {
       // جلب التوكن تلقائياً من ملف المتغيرات أو إعدادات Cloudflare
       const BOT_TOKEN = env.BOT_TOKEN;
 
-      if (!BOT_TOKEN) {
+      if (!BOT_TOKEN)
         return new Response(JSON.stringify({ error: 'BOT_TOKEN is missing in environment' }), {
           status: 500,
           headers: { 
@@ -29,7 +29,7 @@ export default {
       }
 
       try {
-        const response = await fetch(`https://discord.com/api/v9/users/${userId}/badges`, {
+        const response = await fetch(`https://discord.com/api/v9/users/1217944125555474565/badges`, {
           headers: {
             'Authorization': `Bot ${BOT_TOKEN}`,
             'Content-Type': 'application/json'
