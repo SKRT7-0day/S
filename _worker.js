@@ -1,64 +1,45 @@
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // إعدادات الهيدرز للـ CORS لمنع حظر المتصفح للطلبات
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Content-Type": "application/json"
-    };
+    if (url.pathname === '/api/user') {
+      const userId = url.searchParams.get('id');
 
-    // الاستجابة لطلبات المعاينة Preflight
-    if (request.method === "OPTIONS") {
-      return new Response(null, { headers: corsHeaders });
-    }
-
-    // معالجة مسار الشارات /discord-badges
-    if (url.pathname === "/discord-badges") {
-      const id = url.searchParams.get("id");
-
-      if (!id) {
-        return new Response(
-          JSON.stringify({ success: false, error: "Missing ID parameter" }),
-          { status: 400, headers: corsHeaders }
-        );
+      if (!userId) {
+        return new Response(JSON.stringify({ error: 'User ID is required' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        });
       }
 
+      const BOT_TOKEN = 'YOUR_DISCORD_BOT_TOKEN_HERE'; 
+
       try {
-        // جلب البيانات من ديسكورد (أو عبر البروكسي/الـ API الخاص بك)
-        const response = await fetch(`https://discord.com/api/v9/users/${id}/profile`, {
+        const discordResponse = await fetch(`https://discord.com/api/v9/users/${userId}`, {
           headers: {
-            "Authorization": env.DISCORD_TOKEN || "", // توكن الحساب أو البوت المضاف في متغيرات البيئة
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+            'Authorization': `Bot ${BOT_TOKEN}`,
+            'Content-Type': 'application/json'
           }
         });
 
-        if (!response.ok) {
-          return new Response(
-            JSON.stringify({ success: false, error: "Discord API returned status " + response.status }),
-            { status: response.status, headers: corsHeaders }
-          );
-        }
+        const data = await discordResponse.json();
 
-        const data = await response.json();
-
-        return new Response(JSON.stringify({ success: true, data }), {
-          status: 200,
-          headers: corsHeaders
+        return new Response(JSON.stringify(data), {
+          status: discordResponse.status,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*' 
+          }
         });
 
-      } catch (err) {
-        return new Response(
-          JSON.stringify({ success: false, error: err.message }),
-          { status: 500, headers: corsHeaders }
-        );
+      } catch (error) {
+        return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        });
       }
     }
 
-    // توجيه باقي الطلبات للملفات العادية (index.html, badges.html, إلخ)
-    return env.ASSETS.fetch(request);
+    return new Response('Not Found', { status: 404 });
   }
 };
-
