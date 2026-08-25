@@ -818,9 +818,10 @@
 
     async function loadServersList() {
       try {
+        const cacheBuster = Date.now();
         const res = await fetch(
-          `${SUPABASE_URL}/rest/v1/discord_servers?select=*&order=created_at.desc`,
-          { headers: supabaseHeaders() }
+          `${SUPABASE_URL}/rest/v1/discord_servers?select=*&order=created_at.desc&_=${cacheBuster}`,
+          { headers: supabaseHeaders(), cache: 'no-store' }
         );
         if (!res.ok) return [];
         const rows = await res.json();
@@ -1254,3 +1255,4 @@
   </script>
 </body>
 </html>
+
