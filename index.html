@@ -896,7 +896,7 @@ Thanks for stopping by!">
       width: 100%;
       max-width: 480px;
       height: 150px;
-      margin: 0 auto;
+      margin: 0 auto 10px;
       overflow: hidden;
       touch-action: none;
       isolation: isolate;
@@ -998,16 +998,17 @@ Thanks for stopping by!">
 
   <div class="container">
 
+    <div class="particle-text" id="particleTextName" aria-label="SKRT7">
+      <canvas class="particle-text__canvas" id="particleTextCanvas" aria-hidden="true"></canvas>
+      <span class="particle-text__sr">SKRT7</span>
+    </div>
+
     <div class="avatar-wrapper">
       <img class="avatar" id="discordAvatar" src="images/avatar.png" alt="SKRT7">
       <img class="avatar-decoration" id="avatarDecoration" alt="">
       <span class="status-dot status-offline" id="statusDot" title="Offline"></span>
     </div>
 
-    <div class="particle-text" id="particleTextName" aria-label="SKRT7">
-      <canvas class="particle-text__canvas" id="particleTextCanvas" aria-hidden="true"></canvas>
-      <span class="particle-text__sr">SKRT7</span>
-    </div>
     <p class="bio blur-text" id="blurBio"></p>
 
     <div class="now-line" id="nowLine">
