@@ -895,7 +895,7 @@ Thanks for stopping by!">
       display: block;
       width: 100%;
       max-width: 480px;
-      height: 130px;
+      height: 150px;
       margin: 0 auto;
       overflow: hidden;
       touch-action: none;
@@ -906,6 +906,26 @@ Thanks for stopping by!">
     }
     body.page-loaded .particle-text {
       opacity: 1;
+    }
+
+    .blur-text {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35em;
+      row-gap: 0.15em;
+    }
+    .blur-text span {
+      display: inline-block;
+      filter: blur(10px);
+      opacity: 0;
+      transform: translateY(-16px);
+      transition: filter 0.6s ease, opacity 0.6s ease, transform 0.6s ease;
+    }
+    .blur-text.in-view span {
+      filter: blur(0px);
+      opacity: 1;
+      transform: translateY(0);
     }
     .particle-text__canvas {
       position: absolute;
@@ -988,7 +1008,7 @@ Thanks for stopping by!">
       <canvas class="particle-text__canvas" id="particleTextCanvas" aria-hidden="true"></canvas>
       <span class="particle-text__sr">SKRT7</span>
     </div>
-    <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
+    <p class="bio blur-text" id="blurBio"></p>
 
     <div class="now-line" id="nowLine">
       <i class="fa-solid fa-code-branch"></i>
@@ -1117,16 +1137,16 @@ Thanks for stopping by!">
       if (!ctx) return;
 
       const text = 'SKRT7';
-      const particleSize = 2.2;
-      const density = 4;
+      const particleSize = 2.4;
+      const density = 3;
       const color = '#f8fafc';
       const highlightColor = '#a855f7';
-      const scatter = 190;
-      const gatherDuration = 1600;
-      const stagger = 420;
+      const scatter = 100;
+      const gatherDuration = 1100;
+      const stagger = 220;
       const pointerRepel = 42;
       const repelRadius = 120;
-      const idleDrift = 0.8;
+      const idleDrift = 0.3;
       const fontWeight = 800;
       const fontFamily = window.getComputedStyle(container).fontFamily || 'sans-serif';
 
@@ -1250,7 +1270,7 @@ Thanks for stopping by!">
         canvas.height = Math.max(1, Math.floor(height * dpr));
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        let resolvedSize = Math.min(Math.max(width * 0.16, 42), 128);
+        let resolvedSize = Math.min(Math.max(width * 0.24, 60), 140);
         let font = `${fontWeight} ${resolvedSize}px ${fontFamily}`;
 
         const offscreen = document.createElement('canvas');
@@ -1374,6 +1394,49 @@ Thanks for stopping by!">
       sampleText();
     }
 
+    function initBlurBio() {
+      const phrases = [
+        "Wow, this looks incredible!",
+        "Have you ever seen anything like this?!",
+        "This is seriously amazing!",
+        "I can't believe how cool this is!",
+        "Look at that! Isn't it beautiful?",
+        "What an incredible sight!",
+        "This turned out better than I expected!",
+        "How awesome is this?!",
+        "Okay, this is actually insane!",
+        "Tell me this isn't the coolest thing ever!"
+      ];
+      const KEY = 'skrt7_bio_phrase_index';
+      let lastIdx = parseInt(localStorage.getItem(KEY) || '-1', 10);
+      if (isNaN(lastIdx)) lastIdx = -1;
+      let idx = Math.floor(Math.random() * phrases.length);
+      if (phrases.length > 1) {
+        while (idx === lastIdx) {
+          idx = Math.floor(Math.random() * phrases.length);
+        }
+      }
+      const phrase = phrases[idx];
+      localStorage.setItem(KEY, String(idx));
+
+      const el = document.getElementById('blurBio');
+      if (!el) return;
+      el.innerHTML = '';
+      const words = phrase.split(' ');
+      words.forEach((word, i) => {
+        const span = document.createElement('span');
+        span.textContent = word;
+        span.style.transitionDelay = (i * 90) + 'ms';
+        el.appendChild(span);
+      });
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.classList.add('in-view');
+        });
+      });
+    }
+
     const themeCheckbox = document.getElementById('themeCheckbox');
 
     if (localStorage.getItem('theme') === 'light') {
@@ -1406,6 +1469,7 @@ Thanks for stopping by!">
         initAddServerBubble();
         initTimeProgress();
         initParticleText();
+        initBlurBio();
       }, 2500);
     });
 
