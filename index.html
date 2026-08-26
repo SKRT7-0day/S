@@ -478,7 +478,7 @@ Thanks for stopping by!">
     }
     @keyframes celebrateColors { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
     @keyframes partyPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); } 100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); } }
-    p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
+    p.bio { color: var(--sub-text); font-size: 1.5rem; font-weight: 700; margin: 0 auto 25px; max-width: 92%; line-height: 1.35; }
 
     .now-line {
       display: inline-flex;
@@ -998,10 +998,7 @@ Thanks for stopping by!">
 
   <div class="container">
 
-    <div class="particle-text" id="particleTextName" aria-label="SKRT7">
-      <canvas class="particle-text__canvas" id="particleTextCanvas" aria-hidden="true"></canvas>
-      <span class="particle-text__sr">SKRT7</span>
-    </div>
+    <p class="bio blur-text" id="blurBio"></p>
 
     <div class="avatar-wrapper">
       <img class="avatar" id="discordAvatar" src="images/avatar.png" alt="SKRT7">
@@ -1009,7 +1006,10 @@ Thanks for stopping by!">
       <span class="status-dot status-offline" id="statusDot" title="Offline"></span>
     </div>
 
-    <p class="bio blur-text" id="blurBio"></p>
+    <div class="particle-text" id="particleTextName" aria-label="SKRT7">
+      <canvas class="particle-text__canvas" id="particleTextCanvas" aria-hidden="true"></canvas>
+      <span class="particle-text__sr">SKRT7</span>
+    </div>
 
     <div class="now-line" id="nowLine">
       <i class="fa-solid fa-code-branch"></i>
@@ -2243,4 +2243,3 @@ Thanks for stopping by!">
   <script src="oneko.js"></script>
 </body>
 </html>
-
