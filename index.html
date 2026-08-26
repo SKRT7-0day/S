@@ -71,9 +71,6 @@ Thanks for stopping by!">
       position: relative;
     }
 
-    /* Dynamic background: the current Spotify album art (or game art) itself,
-       blurred and darkened, fills the whole page behind everything. Two
-       stacked layers crossfade smoothly whenever the track/game changes. */
     .dynamic-bg-layer {
       position: fixed;
       inset: -60px;
@@ -90,7 +87,6 @@ Thanks for stopping by!">
       opacity: 1;
     }
 
-    /* A subtle color-matched glow on top of the blurred photo for extra richness */
     .dynamic-bg-tint {
       position: fixed;
       inset: 0;
@@ -106,9 +102,6 @@ Thanks for stopping by!">
 
     .container { margin-top: 10vh; position: relative; z-index: 1; }
 
-    /* ==========================================
-       "ADD YOUR SERVER" FLOATING BUBBLE
-       ========================================== */
     .add-server-bubble {
       position: fixed;
       top: 12%;
@@ -170,7 +163,7 @@ Thanks for stopping by!">
       0%, 100% { box-shadow: 0 10px 26px rgba(168, 85, 247, 0.45); }
       50% { box-shadow: 0 10px 34px rgba(168, 85, 247, 0.75); }
     }
-    
+
     .avatar-wrapper {
       position: relative;
       width: 128px;
@@ -301,9 +294,6 @@ Thanks for stopping by!">
       vertical-align: middle;
     }
 
-    /* ==========================================
-       LIVE ACTIVITY CARD (Spotify / Playing a game)
-       ========================================== */
     .activity-card {
       display: none;
       width: 90%;
@@ -350,7 +340,6 @@ Thanks for stopping by!">
       z-index: 1;
     }
 
-    /* Soft blurred echo of the art behind it for a premium "glow" feel */
     .activity-icon-wrap::before {
       content: "";
       position: absolute;
@@ -438,10 +427,6 @@ Thanks for stopping by!">
       color: var(--sub-text);
     }
 
-    /* ==========================================
-       SYNCED LYRICS — fetched live from lrclib.net
-       based on the currently playing Spotify track.
-       ========================================== */
     .lyrics-panel {
       display: none;
       margin-top: 14px;
@@ -495,9 +480,6 @@ Thanks for stopping by!">
     @keyframes partyPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.3)); } 100% { transform: scale(1.06); filter: drop-shadow(0 0 12px #a855f7); } }
     p.bio { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 20px; }
 
-    /* ==========================================
-       NOW LINE — live "latest project" pulled from GitHub
-       ========================================== */
     .now-line {
       display: inline-flex;
       align-items: center;
@@ -525,9 +507,6 @@ Thanks for stopping by!">
       text-decoration: underline;
     }
 
-    /* ==========================================
-       VISITOR COUNTER — plain text, no box/button look.
-       ========================================== */
     .visitor-badge {
       display: block;
       margin: 6px auto 18px;
@@ -676,7 +655,6 @@ Thanks for stopping by!">
     }
     .ship-btn i { margin-right: 10px; font-size: 1.15rem; }
 
-    /* Primary CTA keeps a solid fill so it stands out from the rest */
     .ship-btn.primary {
       background: linear-gradient(135deg, #a855f7, #9333ea);
       border-color: transparent;
@@ -688,7 +666,6 @@ Thanks for stopping by!">
       box-shadow: 0 10px 26px rgba(168, 85, 247, 0.45);
     }
 
-    /* Brand color lives on the icon only, not the whole button */
     .ship-btn.discord i { color: #5865F2; }
     .ship-btn.instagram i { color: #e1306c; }
     .ship-btn.github i { color: #ffffff; }
@@ -712,9 +689,6 @@ Thanks for stopping by!">
       visibility: hidden;
     }
 
-    /* Keep the cat (and any other decorative character) hidden while the
-       colorful loading screen is still showing, so it can't pop in and
-       clash with the loading animation. Revealed by JS once loading ends. */
     #oneko {
       opacity: 0 !important;
       pointer-events: none !important;
@@ -743,14 +717,13 @@ Thanks for stopping by!">
 
     @keyframes move { 0% { transform: rotate(0deg); } 100% { transform: rotate(359deg); } }
 
-    /* ستايل الرابط الباهت اللي تحت الأزرار */
     .bottom-links {
       margin-top: 35px;
       display: flex;
       justify-content: center;
       gap: 20px;
     }
-    
+
     .bottom-link {
       color: var(--sub-text);
       text-decoration: none;
@@ -758,15 +731,11 @@ Thanks for stopping by!">
       transition: color 0.3s ease;
       font-weight: 500;
     }
-    
+
     .bottom-link:hover {
       color: var(--text-color);
     }
 
-    /* ==========================================
-       TIME PROGRESS WIDGET — matches the big
-       "X% of YEAR has passed" reference style
-       ========================================== */
     .time-progress-widget {
       width: 92%;
       max-width: 420px;
@@ -806,9 +775,6 @@ Thanks for stopping by!">
       transition: width 1.3s cubic-bezier(0.25, 0.8, 0.35, 1);
     }
 
-    /* ==========================================
-       RATING WIDGET
-       ========================================== */
     .rating-widget {
       margin: 30px auto 10px;
       display: flex;
@@ -850,9 +816,6 @@ Thanks for stopping by!">
       font-weight: 700;
     }
 
-    /* ==========================================
-       AURA THEME PICKER
-       ========================================== */
     .aura-bg-container {
       position: fixed;
       inset: -60px;
@@ -927,8 +890,44 @@ Thanks for stopping by!">
     .aura-swatch.dots { background: linear-gradient(135deg, #7c3aed, #a855f7); }
     .aura-swatch.neon { background: linear-gradient(135deg, #ff0080, #00ffff); }
 
+    .particle-text {
+      position: relative;
+      display: block;
+      width: 100%;
+      max-width: 480px;
+      height: 130px;
+      margin: 0 auto;
+      overflow: hidden;
+      touch-action: none;
+      isolation: isolate;
+      cursor: crosshair;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    body.page-loaded .particle-text {
+      opacity: 1;
+    }
+    .particle-text__canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .particle-text__sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
   </style>
-</head> 
+</head>
 
 <body>
 
@@ -984,11 +983,10 @@ Thanks for stopping by!">
       <img class="avatar-decoration" id="avatarDecoration" alt="">
       <span class="status-dot status-offline" id="statusDot" title="Offline"></span>
     </div>
-    
-    <div>
-      <div class="celebration-container" id="interactiveName">
-        <h1 class="celebration-name">SKRT7.</h1>
-      </div>
+
+    <div class="particle-text" id="particleTextName" aria-label="SKRT7">
+      <canvas class="particle-text__canvas" id="particleTextCanvas" aria-hidden="true"></canvas>
+      <span class="particle-text__sr">SKRT7</span>
     </div>
     <p class="bio">Developer & Discord Server Manager. Welcome to my space.</p>
 
@@ -1006,7 +1004,6 @@ Thanks for stopping by!">
       <span id="visitorCount">···</span>
       <span class="visitor-label">visits</span>
     </div>
-    <!-- Live "Listening to Spotify" / "Playing a game" card -->
     <div class="activity-card" id="activityCard">
       <div class="activity-card-header">
         <div class="activity-icon-wrap">
@@ -1029,11 +1026,6 @@ Thanks for stopping by!">
       <div class="lyrics-panel" id="lyricsPanel"></div>
     </div>
 
-    <!-- ==========================================
-         SPOTIFY EMBED PLAYER — Spotify's own official
-         widget, so visitors get real play/pause + volume
-         controls. No audio is hosted by this site.
-         ========================================== -->
     <div class="spotify-embed-wrap" id="spotifyEmbedWrap">
       <iframe id="spotifyEmbedFrame"
         style="border-radius:14px"
@@ -1085,9 +1077,6 @@ Thanks for stopping by!">
       <a href="https://www.facebook.com/share/18giPaZseb/" target="_blank" class="ship-btn facebook"><i class="fa-brands fa-facebook"></i> Facebook</a>
     </div>
 
-    <!-- ==========================================
-         TIME PROGRESS — live year progress bar
-         ========================================== -->
     <div class="time-progress-widget" id="timeProgressWidget">
       <p class="tp-heading" id="tpHeading">— % of — has passed</p>
       <p class="tp-subtext" id="tpSubtext">—</p>
@@ -1096,14 +1085,10 @@ Thanks for stopping by!">
       </div>
     </div>
 
-    <!-- الزر الجديد "about" المربوط بملف about.html -->
     <div class="bottom-links">
       <a href="about.html" class="bottom-link">about</a>
     </div>
 
-    <!-- ==========================================
-         RATING — shared star rating (CountAPI-backed)
-         ========================================== -->
     <div class="rating-widget" id="ratingWidget">
       <div class="rating-stars" id="ratingStars">
         <i class="fa-solid fa-star rating-star" data-value="1"></i>
@@ -1123,50 +1108,288 @@ Thanks for stopping by!">
     </footer>
   </div>
   <script>
-    const nameContainer = document.getElementById('interactiveName');
-    const colors = ['#ff007f', '#a855f7', '#3b82f6', '#ffd700', '#00ffcc'];
 
-    function spawnConfetti(e) {
-      if(Math.random() > 0.6) return; 
-      const rect = nameContainer.getBoundingClientRect();
-      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    function initParticleText() {
+      const container = document.getElementById('particleTextName');
+      const canvas = document.getElementById('particleTextCanvas');
+      if (!container || !canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
 
-      const confetti = document.createElement('span');
-      confetti.style.position = 'absolute'; confetti.style.width = '7px'; confetti.style.height = '7px';
-      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.borderRadius = (Math.random() > 0.5) ? '50%' : '2px';
-      confetti.style.pointerEvents = 'none'; confetti.style.left = x + 'px'; confetti.style.top = y + 'px';
-      
-      const moveX = (Math.random() - 0.5) * 120; const moveY = (Math.random() - 1) * 100; 
+      const text = 'SKRT7';
+      const particleSize = 2.2;
+      const density = 4;
+      const color = '#f8fafc';
+      const highlightColor = '#a855f7';
+      const scatter = 190;
+      const gatherDuration = 1600;
+      const stagger = 420;
+      const pointerRepel = 42;
+      const repelRadius = 120;
+      const idleDrift = 0.8;
+      const fontWeight = 800;
+      const fontFamily = window.getComputedStyle(container).fontFamily || 'sans-serif';
 
-      confetti.animate([
-        { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
-        { transform: `translate(${moveX}px, ${moveY}px) scale(0) rotate(${Math.random() * 360}deg)`, opacity: 0 }
-      ], { duration: 800 + Math.random() * 500, easing: 'ease-out' });
+      function hexToRgb(hex) {
+        const clean = hex.replace('#', '').trim();
+        if (!/^[0-9a-fA-F]{6}$/.test(clean)) return null;
+        return { r: parseInt(clean.slice(0, 2), 16), g: parseInt(clean.slice(2, 4), 16), b: parseInt(clean.slice(4, 6), 16) };
+      }
+      function mixRgb(from, to, amount) {
+        return {
+          r: Math.round(from.r + (to.r - from.r) * amount),
+          g: Math.round(from.g + (to.g - from.g) * amount),
+          b: Math.round(from.b + (to.b - from.b) * amount)
+        };
+      }
+      function rgbToCss(rgb) { return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`; }
+      function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+      function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
-      nameContainer.appendChild(confetti);
-      setTimeout(() => confetti.remove(), 1300);
+      let particles = [];
+      let animationFrame = null;
+      let gathering = false;
+      let gatherStart = 0;
+      let reducedMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+      let width = 0, height = 0, dpr = 1;
+
+      const pointer = { active: false, x: 0, y: 0, smoothX: 0, smoothY: 0 };
+
+      function startGather(fromScatter) {
+        if (!particles.length) return;
+        const now = performance.now();
+        const spread = reducedMotion ? 0 : scatter;
+        particles.forEach(p => {
+          if (fromScatter) {
+            const angle = p.seed * Math.PI * 2;
+            const distance = spread * (0.35 + p.depth * 0.75);
+            p.x = p.targetX + Math.cos(angle) * distance + (p.depth - 0.5) * spread * 0.55;
+            p.y = p.targetY + Math.sin(angle) * distance + (p.seed - 0.5) * spread * 0.55;
+          }
+          p.startX = p.x;
+          p.startY = p.y;
+          p.delay = reducedMotion ? 0 : p.seed * stagger;
+        });
+        gatherStart = now;
+        gathering = true;
+      }
+
+      function drawParticle(p) {
+        const size = p.size;
+        ctx.fillStyle = p.color;
+        if (size <= 2.1) {
+          ctx.fillRect(p.x - size / 2, p.y - size / 2, size, size);
+          return;
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, size / 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function render(now) {
+        ctx.clearRect(0, 0, width, height);
+        ctx.shadowBlur = reducedMotion ? 0 : particleSize * 3;
+        ctx.shadowColor = highlightColor;
+
+        pointer.smoothX += (pointer.x - pointer.smoothX) * 0.18;
+        pointer.smoothY += (pointer.y - pointer.smoothY) * 0.18;
+
+        let complete = true;
+        particles.forEach(p => {
+          let baseX = p.targetX, baseY = p.targetY, progress = 1;
+
+          if (gathering) {
+            const local = (now - gatherStart - p.delay) / Math.max(1, reducedMotion ? 1 : gatherDuration);
+            progress = clamp(local, 0, 1);
+            const eased = easeOutCubic(progress);
+            baseX = p.startX + (p.targetX - p.startX) * eased;
+            baseY = p.startY + (p.targetY - p.startY) * eased;
+            if (progress < 1) complete = false;
+          } else if (!reducedMotion && idleDrift > 0) {
+            const dt = now * 0.001;
+            baseX += Math.sin(dt * 0.9 + p.seed * 10) * idleDrift * p.depth;
+            baseY += Math.cos(dt * 0.75 + p.depth * 10) * idleDrift * p.depth;
+          }
+
+          if (pointer.active && !reducedMotion) {
+            const dx = baseX - pointer.smoothX, dy = baseY - pointer.smoothY;
+            const dist = Math.hypot(dx, dy);
+            if (dist > 0 && dist < repelRadius) {
+              const force = Math.pow(1 - dist / repelRadius, 2) * pointerRepel;
+              baseX += (dx / dist) * force;
+              baseY += (dy / dist) * force;
+            }
+          }
+
+          const follow = reducedMotion ? 1 : 0.22;
+          p.x += (baseX - p.x) * follow;
+          p.y += (baseY - p.y) * follow;
+
+          ctx.globalAlpha = clamp(0.35 + progress * 0.65, 0, 1);
+          drawParticle(p);
+        });
+
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
+        if (gathering && complete) gathering = false;
+        animationFrame = requestAnimationFrame(render);
+      }
+
+      function ensureRenderLoop() {
+        if (animationFrame === null) animationFrame = requestAnimationFrame(render);
+      }
+
+      function sampleText() {
+        const rect = container.getBoundingClientRect();
+        width = Math.floor(rect.width);
+        height = Math.floor(rect.height);
+        if (width <= 0 || height <= 0) return;
+
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.max(1, Math.floor(width * dpr));
+        canvas.height = Math.max(1, Math.floor(height * dpr));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        let resolvedSize = Math.min(Math.max(width * 0.16, 42), 128);
+        let font = `${fontWeight} ${resolvedSize}px ${fontFamily}`;
+
+        const offscreen = document.createElement('canvas');
+        const offCtx = offscreen.getContext('2d', { willReadFrequently: true });
+        if (!offCtx) return;
+
+        const maxTextWidth = width * 0.92;
+        offCtx.font = font;
+        let metrics = offCtx.measureText(text);
+        let measuredWidth = Math.max(1, metrics.width);
+        if (measuredWidth > maxTextWidth) {
+          resolvedSize = Math.max(18, resolvedSize * (maxTextWidth / measuredWidth));
+          font = `${fontWeight} ${resolvedSize}px ${fontFamily}`;
+          offCtx.font = font;
+          metrics = offCtx.measureText(text);
+        }
+
+        const left = Math.ceil(metrics.actualBoundingBoxLeft || 0);
+        const right = Math.ceil(metrics.actualBoundingBoxRight || metrics.width);
+        const ascent = Math.ceil(metrics.actualBoundingBoxAscent || resolvedSize * 0.78);
+        const descent = Math.ceil(metrics.actualBoundingBoxDescent || resolvedSize * 0.22);
+        const padding = Math.max(12, Math.ceil(resolvedSize * 0.08));
+        const textWidth = Math.max(1, left + right);
+        const textHeight = Math.max(1, ascent + descent);
+
+        offscreen.width = textWidth + padding * 2;
+        offscreen.height = textHeight + padding * 2;
+        offCtx.clearRect(0, 0, offscreen.width, offscreen.height);
+        offCtx.font = font;
+        offCtx.textAlign = 'left';
+        offCtx.textBaseline = 'alphabetic';
+        offCtx.fillStyle = '#ffffff';
+        offCtx.fillText(text, padding - left, padding + ascent);
+
+        const imageData = offCtx.getImageData(0, 0, offscreen.width, offscreen.height);
+        const targets = [];
+        const step = Math.max(2, Math.floor(density));
+
+        for (let y = 0; y < offscreen.height; y += step) {
+          for (let x = 0; x < offscreen.width; x += step) {
+            const alpha = imageData.data[(y * offscreen.width + x) * 4 + 3];
+            if (alpha > 40) {
+              targets.push({
+                x: width / 2 - offscreen.width / 2 + x,
+                y: height / 2 - offscreen.height / 2 + y,
+                alpha: alpha / 255
+              });
+            }
+          }
+        }
+
+        const maxParticles = Math.max(900, Math.min(5200, Math.floor((width * height) / 90)));
+        const stride = Math.max(1, Math.ceil(targets.length / maxParticles));
+        const baseRgb = hexToRgb(color);
+        const highlightRgb = hexToRgb(highlightColor);
+        const selected = targets.filter((_, index) => index % stride === 0);
+
+        particles = selected.map((target, index) => {
+          const seed = ((index * 9301 + 49297) % 233280) / 233280;
+          const depth = 0.45 + (((index * 233 + 97) % 1000) / 1000) * 0.9;
+          const blend = baseRgb && highlightRgb ? clamp(target.x / Math.max(1, width) + (seed - 0.5) * 0.35, 0, 1) : 0;
+          const particleColor = baseRgb && highlightRgb ? rgbToCss(mixRgb(baseRgb, highlightRgb, blend)) : color;
+          const angle = seed * Math.PI * 2;
+          const distance = (reducedMotion ? 0 : scatter) * (0.35 + depth * 0.75);
+          const startX = target.x + Math.cos(angle) * distance + (seed - 0.5) * scatter * 0.45;
+          const startY = target.y + Math.sin(angle) * distance + (depth - 0.9) * scatter * 0.45;
+
+          return {
+            x: reducedMotion ? target.x : startX,
+            y: reducedMotion ? target.y : startY,
+            startX, startY,
+            targetX: target.x, targetY: target.y,
+            size: Math.max(0.6, particleSize * (0.75 + target.alpha * 0.45)),
+            color: particleColor,
+            seed, depth,
+            delay: seed * stagger
+          };
+        });
+
+        pointer.x = width / 2;
+        pointer.y = height / 2;
+        pointer.smoothX = pointer.x;
+        pointer.smoothY = pointer.y;
+
+        if (reducedMotion) {
+          particles.forEach(p => {
+            p.x = p.targetX; p.y = p.targetY;
+            p.startX = p.targetX; p.startY = p.targetY;
+            p.delay = 0;
+          });
+          gathering = false;
+        } else {
+          startGather(false);
+        }
+
+        ensureRenderLoop();
+      }
+
+      let resizeFrame = null;
+      function queueSample() {
+        if (resizeFrame) cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(sampleText);
+      }
+
+      canvas.addEventListener('pointermove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        pointer.x = e.clientX - rect.left;
+        pointer.y = e.clientY - rect.top;
+        pointer.active = true;
+      });
+      canvas.addEventListener('pointerleave', () => { pointer.active = false; });
+      canvas.addEventListener('click', () => startGather(true));
+
+      if (window.ResizeObserver) {
+        const resizeObserver = new ResizeObserver(queueSample);
+        resizeObserver.observe(container);
+      } else {
+        window.addEventListener('resize', queueSample);
+      }
+
+      sampleText();
     }
-    nameContainer.addEventListener('mousemove', spawnConfetti);
-    nameContainer.addEventListener('touchmove', spawnConfetti);
 
     const themeCheckbox = document.getElementById('themeCheckbox');
-    
+
     if (localStorage.getItem('theme') === 'light') {
       document.body.classList.add('light-theme');
-      themeCheckbox.checked = false; 
+      themeCheckbox.checked = false;
     } else {
-      themeCheckbox.checked = true; 
+      themeCheckbox.checked = true;
     }
 
     themeCheckbox.addEventListener('change', () => {
       document.body.classList.toggle('light-theme');
       localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-      
+
       const statusDot = document.getElementById('statusDot');
       if (statusDot) {
-        void statusDot.offsetHeight; 
+        void statusDot.offsetHeight;
         statusDot.style.filter = 'brightness(1.01)';
         setTimeout(() => statusDot.style.filter = '', 10);
       }
@@ -1178,18 +1401,14 @@ Thanks for stopping by!">
         if (loader) {
           loader.classList.add('fade-out');
         }
-        // Only now let the cat (and similar decorative characters) appear —
-        // matches the loading screen's own fade transition so nothing pops
-        // in early or clashes with the loading animation.
+
         document.body.classList.add('page-loaded');
         initAddServerBubble();
         initTimeProgress();
+        initParticleText();
       }, 2500);
     });
 
-    // ==========================================
-    // "ADD YOUR SERVER" FLOATING BUBBLE — first visit only
-    // ==========================================
     function initAddServerBubble() {
       const SEEN_KEY = 'skrt7_add_server_bubble_seen';
       if (localStorage.getItem(SEEN_KEY)) return;
@@ -1214,11 +1433,8 @@ Thanks for stopping by!">
 
     const DISCORD_ID = "1217944125555474565";
 
-    // ==========================================
-    // LIVE ACTIVITY CARD (Spotify / Playing a game)
-    // ==========================================
     let activityTicker = null;
-    let activityTickerMode = null; // 'spotify' | 'game' | null
+    let activityTickerMode = null;
     let activityTickerData = null;
     let currentLyricsLines = null;
     let currentLyricsKey = null;
@@ -1277,10 +1493,6 @@ Thanks for stopping by!">
       return null;
     }
 
-    // ==========================================
-    // DYNAMIC BACKGROUND — tints the page with the
-    // dominant color of the current album/game art
-    // ==========================================
     let lastDynamicBgUrl = null;
     const dynamicColorCache = new Map();
 
@@ -1318,7 +1530,7 @@ Thanks for stopping by!">
       });
     }
 
-    let activeBgLayer = 'A'; // which of dynamicBgA/dynamicBgB is currently showing
+    let activeBgLayer = 'A';
 
     async function applyDynamicBackground(imgUrl) {
       if (!imgUrl || imgUrl === lastDynamicBgUrl) return;
@@ -1327,7 +1539,6 @@ Thanks for stopping by!">
       const card = document.getElementById('activityCard');
       card.style.setProperty('--art-bg-echo', `url("${imgUrl}")`);
 
-      // Crossfade: paint the image onto the currently-hidden layer, then swap.
       const showing = document.getElementById(activeBgLayer === 'A' ? 'dynamicBgA' : 'dynamicBgB');
       const hidden = document.getElementById(activeBgLayer === 'A' ? 'dynamicBgB' : 'dynamicBgA');
 
@@ -1342,7 +1553,7 @@ Thanks for stopping by!">
           rgb = await extractDominantColor(imgUrl);
           dynamicColorCache.set(imgUrl, rgb);
         }
-        if (lastDynamicBgUrl !== imgUrl) return; // a newer track/game took over meanwhile
+        if (lastDynamicBgUrl !== imgUrl) return;
 
         const [r, g, b] = rgb;
         const tint = document.getElementById('dynamicBgTint');
@@ -1353,8 +1564,7 @@ Thanks for stopping by!">
         card.style.setProperty('--card-tint', `rgba(${r}, ${g}, ${b}, 0.22)`);
         card.style.setProperty('--card-ring', `rgba(${r}, ${g}, ${b}, 0.35)`);
       } catch (err) {
-        // CORS-blocked or failed to load — the blurred photo background still
-        // works either way; this only skips the extra color-matched glow.
+
         console.warn('Dynamic background color extraction failed:', err);
       }
     }
@@ -1460,10 +1670,6 @@ Thanks for stopping by!">
       resetSpotifyEmbed();
     }
 
-    // ==========================================
-    // SPOTIFY EMBED PLAYER — Spotify's own official
-    // widget (iframe), swapped to the current track.
-    // ==========================================
     let currentEmbedTrackId = null;
 
     function updateSpotifyEmbed(trackId) {
@@ -1488,11 +1694,6 @@ Thanks for stopping by!">
       frame.src = '';
     }
 
-    // ==========================================
-    // SYNCED LYRICS — fetched live from the free
-    // lrclib.net API based on the current Spotify
-    // track, then highlighted in sync with playback.
-    // ==========================================
     function resetLyrics() {
       currentLyricsLines = null;
       currentLyricsKey = null;
@@ -1562,7 +1763,7 @@ Thanks for stopping by!">
         const activeEl = track.querySelector(`[data-index="${activeIndex}"]`);
         if (activeEl) {
           activeEl.classList.add('active');
-          // Center the active line inside the fixed-height panel.
+
           const panel = document.getElementById('lyricsPanel');
           const offset = activeEl.offsetTop - (panel.clientHeight / 2) + (activeEl.clientHeight / 2);
           track.style.transform = `translateY(${-offset}px)`;
@@ -1576,7 +1777,7 @@ Thanks for stopping by!">
         return;
       }
       const key = `${artist}::${song}`;
-      if (key === currentLyricsKey) return; // already loaded for this track
+      if (key === currentLyricsKey) return;
       currentLyricsKey = key;
       currentLyricsLines = null;
       currentActiveLyricIndex = -1;
@@ -1596,7 +1797,7 @@ Thanks for stopping by!">
         if (!res.ok) throw new Error('Not found');
         const data = await res.json();
 
-        if (key !== currentLyricsKey) return; // track changed while we were fetching
+        if (key !== currentLyricsKey) return;
 
         if (data.syncedLyrics) {
           currentLyricsLines = parseLRC(data.syncedLyrics);
@@ -1627,11 +1828,11 @@ Thanks for stopping by!">
     async function updateDiscordPresence() {
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
-        
+
         if (!res.ok) return;
-        
+
         const json = await res.json();
-        
+
         if (!json.success) return;
 
         const data = json.data;
@@ -1644,21 +1845,21 @@ Thanks for stopping by!">
           avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${avatarExt}?size=256`;
           avatarImg.style.display = 'block';
         } else {
-          avatarImg.style.display = 'block'; 
+          avatarImg.style.display = 'block';
         }
 
         if (user && user.accent_color) {
           const accentColor = '#' + user.accent_color.toString(16).padStart(6, '0').toUpperCase();
-          
+
           const r = parseInt(accentColor.slice(1, 3), 16);
           const g = parseInt(accentColor.slice(3, 5), 16);
           const b = parseInt(accentColor.slice(5, 7), 16);
-          
+
           const lighterColor = `rgb(${Math.min(r + 50, 255)}, ${Math.min(g + 50, 255)}, ${Math.min(b + 50, 255)})`;
           const darkerColor = `rgb(${Math.max(r - 50, 0)}, ${Math.max(g - 50, 0)}, ${Math.max(b - 50, 0)})`;
-          
+
           const gradient = `linear-gradient(45deg, ${accentColor}, ${lighterColor}, ${accentColor}, ${darkerColor}, ${accentColor})`;
-          
+
           document.documentElement.style.setProperty('--gradient-color', gradient);
         }
 
@@ -1675,11 +1876,11 @@ Thanks for stopping by!">
 
         const statusDot = document.getElementById('statusDot');
         const status = data.discord_status || 'offline';
-        
+
         statusDot.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
-        
+
         statusDot.classList.add('status-' + status);
-        
+
         const statusLabels = {
           'online': '🟢 Online',
           'idle': '🌙 Idle (Away)',
@@ -1690,9 +1891,9 @@ Thanks for stopping by!">
 
         const customStatusEl = document.getElementById('discordCustomStatus');
         let customStatusText = '';
-        
+
         if (data.activities && data.activities.length > 0) {
-          const customStatus = data.activities.find(a => a.type === 4); 
+          const customStatus = data.activities.find(a => a.type === 4);
           if (customStatus && customStatus.state) {
             customStatusText = customStatus.state;
             if (customStatus.emoji) {
@@ -1708,7 +1909,7 @@ Thanks for stopping by!">
             }
           }
         }
-        
+
         customStatusEl.innerHTML = customStatusText ? customStatusText : '';
 
         const container = document.getElementById('customStatusContainer');
@@ -1730,9 +1931,6 @@ Thanks for stopping by!">
     updateDiscordPresence();
     setInterval(updateDiscordPresence, 5000);
 
-    // ==========================================
-    // NOW LINE — live "latest project" from GitHub
-    // ==========================================
     const GITHUB_USERNAME = 'SKRT7-0day';
 
     fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=1`)
@@ -1753,17 +1951,12 @@ Thanks for stopping by!">
         if (el) el.textContent = 'latest project: unavailable';
       });
 
-    // ==========================================
-    // VISITOR COUNTER — free, no signup, no API key.
-    // Increments by 1 every time this script runs,
-    // then animates counting up from 0 to the total.
-    // ==========================================
     function animateCountUp(el, target, duration) {
       const start = 0;
       const startTime = performance.now();
       function tick(now) {
         const progress = Math.min((now - startTime) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
         const current = Math.floor(start + (target - start) * eased);
         el.textContent = current.toLocaleString();
         if (progress < 1) {
@@ -1791,7 +1984,7 @@ Thanks for stopping by!">
             localStorage.setItem(VISIT_LOCAL_FLAG, '1');
           }
           const target = data.value;
-          const duration = Math.min(400 + target * 15, 1800); // scales a bit with size, capped
+          const duration = Math.min(400 + target * 15, 1800);
           animateCountUp(el, target, duration);
         }
       })
@@ -1801,11 +1994,6 @@ Thanks for stopping by!">
         if (el) el.textContent = '—';
       });
 
-    // ==========================================
-    // STAR RATING — shared average via CountAPI
-    // (two counters: sum of all ratings + how many
-    // people rated). One vote per browser.
-    // ==========================================
     const RATING_SUM_KEY = 'skrt7-workers-dev-rating-sum';
     const RATING_COUNT_KEY = 'skrt7-workers-dev-rating-count';
     const RATING_LOCAL_FLAG = 'skrt7_rating_value';
@@ -1854,13 +2042,12 @@ Thanks for stopping by!">
         ratingStars.forEach(s => s.classList.remove('hovered'));
       });
       star.addEventListener('click', () => {
-        if (localStorage.getItem(RATING_LOCAL_FLAG)) return; // already voted from this browser
+        if (localStorage.getItem(RATING_LOCAL_FLAG)) return;
         const val = parseInt(star.dataset.value, 10);
         localStorage.setItem(RATING_LOCAL_FLAG, String(val));
         ratingWidget.classList.add('rated');
         paintStars(val);
 
-        // sum += val, count += 1  (get-then-set, fine for this scale of traffic)
         Promise.all([
           fetch(`${RATING_BASE}/get/${RATING_SUM_KEY}`).then(r => r.json()).catch(() => ({ value: 0 })),
           fetch(`${RATING_BASE}/get/${RATING_COUNT_KEY}`).then(r => r.json()).catch(() => ({ value: 0 })),
@@ -1877,11 +2064,6 @@ Thanks for stopping by!">
 
     refreshRatingDisplay();
 
-    // ==========================================
-    // TIME PROGRESS — big "X% of YEAR has passed"
-    // heading + date/time + thick bar, live.
-    // When the bar fills 100%, the year is over.
-    // ==========================================
     const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
     function updateTimeProgress() {
@@ -1898,12 +2080,9 @@ Thanks for stopping by!">
 
       document.getElementById('tpSubtext').textContent = dateStr;
       document.getElementById('tpFill').style.width = yearPct.toFixed(2) + '%';
-      animateYearHeading(yearPct, year, 1300); // same duration as the bar's CSS transition
+      animateYearHeading(yearPct, year, 1300);
     }
 
-    // On first load, force the fill to visibly animate in from 0% to the
-    // real percentage — without this, the CSS transition can get skipped
-    // since the width would be set before the browser's first paint.
     let lastDisplayedYearPct = 0;
 
     function animateYearHeading(target, year, duration) {
@@ -1912,7 +2091,7 @@ Thanks for stopping by!">
       const start = performance.now();
       function tick(now) {
         const t = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - t, 3); // cubic ease-out, matches the bar's transition curve
+        const eased = 1 - Math.pow(1 - t, 3);
         const current = from + (target - from) * eased;
         headingEl.textContent = `${current.toFixed(0)}% of ${year} has passed`;
         if (t < 1) {
@@ -1939,11 +2118,10 @@ Thanks for stopping by!">
       const fillEl = document.getElementById('tpFill');
       document.getElementById('tpSubtext').textContent = dateStr;
 
-      const ANIM_DURATION = 1300; // must match the .tp-bar-fill CSS transition duration
+      const ANIM_DURATION = 1300;
 
       fillEl.style.width = '0%';
-      // Force a reflow so the browser registers the 0% width before we
-      // change it, guaranteeing the transition actually plays.
+
       void fillEl.offsetWidth;
       requestAnimationFrame(() => {
         fillEl.style.width = yearPct.toFixed(2) + '%';
@@ -1954,9 +2132,6 @@ Thanks for stopping by!">
 
     setInterval(updateTimeProgress, 60000);
 
-    // ==========================================
-    // AURA BACKGROUND THEME PICKER
-    // ==========================================
     (function() {
       const AURA_KEY = 'skrt7_aura_theme';
       const btn = document.getElementById('auraPickerBtn');
@@ -2000,7 +2175,7 @@ Thanks for stopping by!">
     })();
   </script>
 
-  <!-- oneko cat widget -->
   <script src="oneko.js"></script>
 </body>
 </html>
+
