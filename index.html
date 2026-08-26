@@ -850,10 +850,106 @@ Thanks for stopping by!">
       font-weight: 700;
     }
 
+    /* ==========================================
+       AURA THEME PICKER
+       ========================================== */
+    .aura-bg-container {
+      position: fixed;
+      inset: -60px;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .aura-layer {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      transform: translateZ(0);
+      will-change: transform;
+      pointer-events: none;
+    }
+    .aura-active .aura-layer { opacity: 1; }
+
+    .aura-golden .aura-layer-1 { background: linear-gradient(rgba(0,0,0,0) 0%, rgba(255,183,77,0.12) 28%, rgb(255,255,255) 18%, rgb(255,138,61) 68%, rgb(183,77,0) 100%); mix-blend-mode: multiply; filter: blur(180px); }
+    .aura-golden .aura-layer-2 { background: linear-gradient(rgba(0,0,0,0) 0%, rgba(255,183,77,0.22) 34%, rgb(255,255,255) 66%, rgb(255,138,61) 82%, rgb(183,77,0) 100%); mix-blend-mode: multiply; filter: blur(144px); }
+
+    .aura-aqua .aura-layer-1 { background: radial-gradient(circle at 25% 40%, rgba(34,211,238,0.34) 0%, rgba(103,232,249,0.12) 32%, transparent 55%), radial-gradient(circle at 72% 58%, rgba(14,165,233,0.28) 0%, rgba(125,211,252,0.10) 34%, transparent 58%); mix-blend-mode: normal; filter: blur(90px); }
+    .aura-aqua .aura-layer-2 { background: radial-gradient(circle at 25% 40%, rgba(255,255,255,0.65) 0%, transparent 12%); mix-blend-mode: multiply; filter: blur(43px); }
+    .aura-aqua .aura-layer-3 { background: radial-gradient(circle at 72% 58%, rgba(255,255,255,0.55) 0%, transparent 13%); mix-blend-mode: multiply; filter: blur(50px); }
+    .aura-aqua .aura-layer-4 { background: linear-gradient(135deg, rgba(255,255,255,0.42) 0%, transparent 45%, rgba(6,182,212,0.12) 100%); mix-blend-mode: multiply; filter: blur(72px); }
+
+    .aura-dots .aura-layer-1 { background: radial-gradient(circle, rgba(139,92,246,0.2) 1px, transparent 1px); background-size: 20px 20px; mix-blend-mode: normal; }
+    .aura-dots .aura-layer-2 { background: radial-gradient(circle at 40% 40%, rgba(124,58,237,0.6) 0%, transparent 50%); mix-blend-mode: screen; filter: blur(252px); }
+    .aura-dots .aura-layer-3 { background: radial-gradient(circle at 70% 65%, rgba(168,85,247,0.4) 0%, transparent 40%); mix-blend-mode: screen; filter: blur(198px); }
+    body.light-theme.aura-dots .aura-layer-2, body.light-theme.aura-dots .aura-layer-3 { mix-blend-mode: multiply; }
+
+    .aura-neon .aura-layer-1 { background: radial-gradient(circle at 15% 20%, rgba(255,0,128,0.7) 0%, transparent 50%); mix-blend-mode: screen; filter: blur(260px); }
+    .aura-neon .aura-layer-2 { background: radial-gradient(circle at 85% 15%, rgba(0,255,255,0.6) 0%, transparent 45%); mix-blend-mode: screen; filter: blur(252px); }
+    .aura-neon .aura-layer-3 { background: radial-gradient(circle at 50% 80%, rgba(255,255,0,0.4) 0%, transparent 55%); mix-blend-mode: screen; filter: blur(260px); }
+    .aura-neon .aura-layer-4 { background: radial-gradient(circle at 70% 50%, rgba(255,0,255,0.3) 0%, transparent 40%); mix-blend-mode: overlay; filter: blur(216px); }
+    body.light-theme.aura-neon .aura-layer-1, body.light-theme.aura-neon .aura-layer-2, body.light-theme.aura-neon .aura-layer-3, body.light-theme.aura-neon .aura-layer-4 { mix-blend-mode: multiply; }
+
+    .aura-picker-btn {
+      position: fixed; top: 18px; right: 18px; z-index: 60;
+      width: 44px; height: 44px; border-radius: 50%;
+      background-color: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-color); font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+    .aura-picker-btn:hover { transform: scale(1.08); }
+
+    .aura-picker-panel {
+      position: fixed; top: 68px; right: 18px; z-index: 60;
+      background-color: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 14px; display: none;
+      flex-direction: column; gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4); width: 190px;
+    }
+    .aura-picker-panel.open { display: flex; }
+    .aura-picker-title {
+      font-size: 0.78rem; font-weight: 700; color: var(--sub-text);
+      text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 2px;
+    }
+    .aura-option {
+      display: flex; align-items: center; gap: 10px; padding: 6px 8px;
+      border-radius: 10px; cursor: pointer; color: var(--text-color);
+      font-size: 0.85rem; transition: background-color 0.15s ease;
+    }
+    .aura-option:hover { background-color: rgba(255,255,255,0.06); }
+    .aura-option.active { background-color: rgba(168,85,247,0.15); }
+    .aura-swatch { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2); }
+    .aura-swatch.default { background: linear-gradient(135deg, #333, #555); }
+    .aura-swatch.golden { background: linear-gradient(135deg, #ffb74d, #b74d00); }
+    .aura-swatch.aqua { background: linear-gradient(135deg, #22d3ee, #0ea5e9); }
+    .aura-swatch.dots { background: linear-gradient(135deg, #7c3aed, #a855f7); }
+    .aura-swatch.neon { background: linear-gradient(135deg, #ff0080, #00ffff); }
+
   </style>
 </head> 
 
 <body>
+
+  <button class="aura-picker-btn" id="auraPickerBtn" title="Background theme" aria-label="Background theme">
+    <i class="fa-solid fa-palette"></i>
+  </button>
+  <div class="aura-picker-panel" id="auraPickerPanel">
+    <div class="aura-picker-title">Background</div>
+    <div class="aura-option" data-theme="default"><span class="aura-swatch default"></span> Default</div>
+    <div class="aura-option" data-theme="golden"><span class="aura-swatch golden"></span> Golden Hour</div>
+    <div class="aura-option" data-theme="aqua"><span class="aura-swatch aqua"></span> Aqua Bubble</div>
+    <div class="aura-option" data-theme="dots"><span class="aura-swatch dots"></span> Dot Matrix</div>
+    <div class="aura-option" data-theme="neon"><span class="aura-swatch neon"></span> Neon Tokyo</div>
+  </div>
+
+  <div class="aura-bg-container" id="auraBgContainer">
+    <div class="aura-layer aura-layer-1" aria-hidden="true"></div>
+    <div class="aura-layer aura-layer-2" aria-hidden="true"></div>
+    <div class="aura-layer aura-layer-3" aria-hidden="true"></div>
+    <div class="aura-layer aura-layer-4" aria-hidden="true"></div>
+  </div>
 
   <div class="dynamic-bg-layer" id="dynamicBgA"></div>
   <div class="dynamic-bg-layer" id="dynamicBgB"></div>
@@ -1857,10 +1953,54 @@ Thanks for stopping by!">
     }
 
     setInterval(updateTimeProgress, 60000);
+
+    // ==========================================
+    // AURA BACKGROUND THEME PICKER
+    // ==========================================
+    (function() {
+      const AURA_KEY = 'skrt7_aura_theme';
+      const btn = document.getElementById('auraPickerBtn');
+      const panel = document.getElementById('auraPickerPanel');
+      const container = document.getElementById('auraBgContainer');
+      const options = document.querySelectorAll('.aura-option');
+      const themeClasses = ['aura-golden', 'aura-aqua', 'aura-dots', 'aura-neon'];
+
+      function applyAuraTheme(theme) {
+        themeClasses.forEach(c => container.classList.remove(c));
+        container.classList.remove('aura-active');
+        if (theme && theme !== 'default') {
+          container.classList.add('aura-' + theme);
+          container.classList.add('aura-active');
+        }
+        options.forEach(opt => opt.classList.toggle('active', opt.dataset.theme === theme));
+      }
+
+      const saved = localStorage.getItem(AURA_KEY) || 'default';
+      applyAuraTheme(saved);
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        panel.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+          panel.classList.remove('open');
+        }
+      });
+
+      options.forEach(opt => {
+        opt.addEventListener('click', () => {
+          const theme = opt.dataset.theme;
+          applyAuraTheme(theme);
+          localStorage.setItem(AURA_KEY, theme);
+          panel.classList.remove('open');
+        });
+      });
+    })();
   </script>
 
   <!-- oneko cat widget -->
   <script src="oneko.js"></script>
 </body>
 </html>
-
