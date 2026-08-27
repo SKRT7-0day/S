@@ -51,7 +51,6 @@
     .tag.dimmed { background-color: transparent; border: 1px solid var(--sub-text); color: var(--sub-text); }
     .tag.loading { opacity: 0.5; }
 
-    /* LANGUAGE LOGO BADGES — colored square icon matching each language's real brand color */
     .lang-badge {
       display: inline-flex; align-items: center; gap: 6px;
       background-color: rgba(255, 255, 255, 0.05); border-radius: 8px;
@@ -168,9 +167,6 @@
     .warning-card[dir="rtl"] { font-family: 'Tahoma', 'Segoe UI', sans-serif; }
     .warning-card[dir="rtl"] .warning-text { text-align: right; direction: rtl; }
 
-    /* ==========================================
-       AI PROJECT RECOMMENDER
-       ========================================== */
     .ai-recommender {
       background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(59, 130, 246, 0.06));
       border: 1px solid rgba(168, 85, 247, 0.3);
@@ -299,6 +295,55 @@
       font-size: 0.85rem;
     }
     .ai-result-link:hover { text-decoration: underline; }
+
+    .hero-rotate {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin: 10px 0 36px;
+      text-align: center;
+    }
+    .hero-rotate-label {
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--text-color);
+      letter-spacing: -0.02em;
+    }
+    .hero-rotate-box {
+      display: inline-flex;
+      align-items: center;
+      background-color: var(--accent-color);
+      color: #fff;
+      padding: 6px 22px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+    }
+    .text-rotate {
+      display: flex;
+      flex-wrap: wrap;
+      white-space: pre-wrap;
+      position: relative;
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .text-rotate-element {
+      display: inline-block;
+      transform: translateY(100%);
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    }
+    .text-rotate-element.enter {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .text-rotate-element.exit {
+      transform: translateY(-120%);
+      opacity: 0;
+    }
   </style>
 </head>
 <body class="warning-active">
@@ -330,6 +375,11 @@
     <div class="header">
       <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
       <h1>My Projects</h1>
+    </div>
+
+    <div class="hero-rotate">
+      <span class="hero-rotate-label">Exploring</span>
+      <span class="hero-rotate-box"><span class="text-rotate" id="rotatingText"></span></span>
     </div>
 
     <div class="tabs">
@@ -426,7 +476,6 @@
     const COUNTER_BASE = 'https://countapi.mileshilliard.com/api/v1';
     const COUNTER_PREFIX = 'skrt7-bio-projects_';
 
-    // Real brand colors for each language's little logo square
     const LANG_STYLES = {
       'JavaScript':   { bg: '#f7df1e', color: '#000000', label: 'JS' },
       'TypeScript':   { bg: '#3178c6', color: '#ffffff', label: 'TS' },
@@ -449,7 +498,6 @@
       'Kotlin':       { bg: '#7f52ff', color: '#ffffff', label: 'KT' },
       'Lua':          { bg: '#000080', color: '#ffffff', label: 'LU' },
 
-      // Non-language manual tags — real brand icon + color instead of plain text
       'Discord':      { bg: '#5865F2', color: '#ffffff', icon: 'fa-brands fa-discord' },
       'Termux':       { bg: '#000000', color: '#00e676', icon: 'fa-solid fa-terminal' }
     };
@@ -538,9 +586,6 @@
       return card;
     }
 
-    // Renders a tag as a colored language logo badge when the name is a
-    // recognized language, otherwise falls back to the plain pill style
-    // (used for non-language tags like "Termux", "Discord").
     function tagMarkup(name) {
       const style = LANG_STYLES[name];
       if (!style) {
@@ -660,12 +705,6 @@
 
     document.addEventListener('DOMContentLoaded', init);
 
-    // ==========================================
-    // AI PROJECT RECOMMENDER
-    // Rule-based matching (no external API, no key,
-    // no cost) that scores each project against the
-    // visitor's picked interests and explains the pick.
-    // ==========================================
     const AI_INTERESTS = [
       { key: 'discord', label: 'Discord', matches: ['discord'] },
       { key: 'automation', label: 'Automation / 24-7', matches: ['node.js', 'termux', '24/7', 'online'] },
@@ -1252,6 +1291,49 @@
         });
       }
     });
+
+    function initRotatingText() {
+      const el = document.getElementById('rotatingText');
+      if (!el) return;
+
+      const texts = ['Projects', 'Scripts', 'Bots', 'Automation', 'Tools'];
+      let index = 0;
+      const rotationInterval = 2200;
+      const staggerDuration = 30;
+      const exitDuration = 380;
+
+      function renderChars(text) {
+        el.innerHTML = '';
+        Array.from(text).forEach((ch, i) => {
+          const span = document.createElement('span');
+          span.className = 'text-rotate-element';
+          span.textContent = ch === ' ' ? '\u00A0' : ch;
+          span.style.transitionDelay = (i * staggerDuration) + 'ms';
+          el.appendChild(span);
+        });
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            el.querySelectorAll('.text-rotate-element').forEach(span => span.classList.add('enter'));
+          });
+        });
+      }
+
+      function next() {
+        index = (index + 1) % texts.length;
+        const current = el.querySelectorAll('.text-rotate-element');
+        current.forEach((span, i) => {
+          span.style.transitionDelay = (i * staggerDuration) + 'ms';
+          span.classList.remove('enter');
+          span.classList.add('exit');
+        });
+        setTimeout(() => renderChars(texts[index]), exitDuration);
+      }
+
+      renderChars(texts[index]);
+      setInterval(next, rotationInterval);
+    }
+
+    document.addEventListener('DOMContentLoaded', initRotatingText);
   </script>
 </body>
 </html>
