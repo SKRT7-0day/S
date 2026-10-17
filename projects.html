@@ -408,6 +408,7 @@
         <input type="text" class="add-server-input" id="serverInviteInput" placeholder="Paste a Discord invite link or code (e.g. discord.gg/abc123)">
         <button class="add-server-btn" id="addServerBtn">Add</button>
       </div>
+      <div id="turnstileBox"></div>
       <div class="add-server-status" id="addServerStatus"></div>
 
       <div class="server-search-row">
@@ -833,6 +834,28 @@
     const SUPABASE_KEY = 'sb_publishable_6j06PssSHe4wTsv5PXp2JA_fKVS4DKa';
     const WORKER_URL = 'https://skrt7-servers-api.xdbronah.workers.dev/api/add-server';
 
+    // Cloudflare Turnstile (public site key; the secret lives only in the Worker)
+    const TURNSTILE_SITE_KEY = 'PASTE_YOUR_TURNSTILE_SITE_KEY_HERE';
+    let turnstileWidgetId = null;
+    let turnstileToken = null;
+
+    function onTurnstileLoad() {
+      turnstileWidgetId = turnstile.render('#turnstileBox', {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: 'dark',
+        appearance: 'interaction-only',
+        callback: (token) => { turnstileToken = token; },
+        'expired-callback': () => { turnstileToken = null; },
+        'error-callback': () => { turnstileToken = null; }
+      });
+    }
+
+    // Tokens are single-use, so every attempt needs a fresh one.
+    function resetTurnstile() {
+      turnstileToken = null;
+      if (window.turnstile && turnstileWidgetId !== null) turnstile.reset(turnstileWidgetId);
+    }
+
     function supabaseHeaders(extra) {
       return Object.assign({
         'apikey': SUPABASE_KEY,
@@ -881,8 +904,8 @@
 
     function escapeHtml(str) {
       const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
+      div.textContent = str == null ? '' : String(str);
+      return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
     let justAddedCode = null;
@@ -975,22 +998,22 @@
 
       const fallbackLetter = (server.name || '?').charAt(0).toUpperCase();
       const iconHTML = server.icon
-        ? `<img class="server-icon" src="${server.icon}" alt="" onerror="this.outerHTML='<div class=&quot;server-icon&quot;>${fallbackLetter}</div>'">`
+        ? `<img class="server-icon" src="${escapeHtml(server.icon)}" alt="" onerror="this.outerHTML='<div class=&quot;server-icon&quot;>${fallbackLetter}</div>'">`
         : `<div class="server-icon">${fallbackLetter}</div>`;
 
       const tagHTML = (server.tag && server.tag_badge)
-        ? `<div class="server-tag-chip"><img src="${server.tag_badge}" alt=""><span>${server.tag}</span></div>`
+        ? `<div class="server-tag-chip"><img src="${escapeHtml(server.tag_badge)}" alt=""><span>${escapeHtml(server.tag)}</span></div>`
         : '';
 
       const infoBadgeHTML = server.description
-        ? `<span class="server-info-badge" role="button" data-code="${server.code}" aria-label="Server description">!</span>`
+        ? `<span class="server-info-badge" role="button" data-code="${escapeHtml(server.code)}" aria-label="Server description">!</span>`
         : '';
 
       card.innerHTML = `
         ${iconHTML}
         <div class="server-info">
           <div class="server-name-row">
-            <p class="server-name">${server.name}</p>
+            <p class="server-name">${escapeHtml(server.name)}</p>
             ${tagHTML}
             ${infoBadgeHTML}
           </div>
@@ -1000,7 +1023,7 @@
             <span>${server.total ?? '?'} members</span>
           </div>
         </div>
-        <a href="https://discord.gg/${server.code}" target="_blank" class="server-join-btn">Join</a>
+        <a href="https://discord.gg/${escapeHtml(server.code)}" target="_blank" rel="noopener noreferrer" class="server-join-btn">Join</a>
       `;
       return card;
     }
@@ -1068,7 +1091,7 @@
       }
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="servers-empty">No servers match "${query}".</div>`;
+        grid.innerHTML = `<div class="servers-empty">No servers match "${escapeHtml(query)}".</div>`;
         return;
       }
 
@@ -1112,6 +1135,12 @@
 
         const code = extractInviteCode(raw);
 
+        if (!turnstileToken) {
+          statusEl.className = 'add-server-status error';
+          statusEl.textContent = 'Verifying that you are human. Wait a few seconds and press Add again.';
+          return;
+        }
+
         addBtn.disabled = true;
         statusEl.className = 'add-server-status loading';
         statusEl.textContent = 'Looking up server...';
@@ -1120,14 +1149,14 @@
           const res = await fetch(WORKER_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code })
+            body: JSON.stringify({ code, turnstileToken })
           });
 
           const data = await res.json().catch(() => ({}));
 
           if (res.ok && data.success) {
             statusEl.className = 'add-server-status success';
-            statusEl.innerHTML = `<span class="success-check"><i class="fa-solid fa-check"></i></span> ${data.server.name} added successfully!`;
+            statusEl.innerHTML = `<span class="success-check"><i class="fa-solid fa-check"></i></span> ${escapeHtml(data.server.name)} added successfully!`;
             const newServer = normalizeServer(data.server);
             justAddedCode = newServer.code;
             fireConfetti();
@@ -1160,6 +1189,7 @@
           statusEl.textContent = 'Network error. Try again.';
         }
 
+        resetTurnstile();
         addBtn.disabled = false;
       });
 
@@ -1337,5 +1367,6 @@
 
     document.addEventListener('DOMContentLoaded', initRotatingText);
   </script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad" async defer></script>
 </body>
 </html>
