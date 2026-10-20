@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html class="theme-dark" lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SKRT7 | نافذة على العلم</title>
+  <meta name="description" content="الزمن، الاستنساخ، وتجارب علمية غيّرت العالم، بمصادر موثوقة وروابط للتوسع.">
+  <meta name="theme-color" content="#a855f7">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #07080B;
+      --text: #E8EAF0;
+      --card: #12141C;
+      --card2: #1A1D29;
+      --sub: #9AA4B5;
+      --line: rgba(255,255,255,0.08);
+      --accent: #a855f7;
+      --a-rgb: 168,85,247;
+      --head: 'Reem Kufi', 'IBM Plex Sans Arabic', sans-serif;
+      --body: 'IBM Plex Sans Arabic', 'Tajawal', sans-serif;
+    }
+    body.light-theme {
+      --bg: #F6F7FB;
+      --text: #0F172A;
+      --card: #FFFFFF;
+      --card2: #EEF1F8;
+      --sub: #5B667A;
+      --line: rgba(15,23,42,0.1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      line-height: 1.8;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.3s ease;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 90px 20px 70px;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.55;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .orb.o1 { width: 340px; height: 340px; background: #22d3ee; top: -80px; right: -60px; }
+    .orb.o2 { width: 380px; height: 380px; background: #a855f7; bottom: -120px; left: -80px; }
+    .orb.o3 { width: 260px; height: 260px; background: #34d399; top: 45%; left: 40%; opacity: 0.28; }
+    .stars { position: absolute; inset: 0; pointer-events: none; }
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--text);
+      opacity: 0;
+      animation: twinkle 4s ease-in-out infinite;
+    }
+    @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.6); } 50% { opacity: 0.8; transform: scale(1.3); } }
+
+    .home-link {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .home-link:hover { transform: translateY(-2px); border-color: var(--accent); }
+
+    .hero-inner { position: relative; z-index: 2; max-width: 720px; }
+    .hero-kicker {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(var(--a-rgb), 0.12);
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-family: var(--head);
+      font-size: clamp(2.6rem, 11vw, 5.2rem);
+      line-height: 1.15;
+      margin: 0 0 18px;
+      font-weight: 700;
+      background: linear-gradient(120deg, #22d3ee, #a855f7 45%, #34d399);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 6s linear infinite;
+    }
+    @keyframes shine { to { background-position: 200% center; } }
+    .hero p { color: var(--sub); font-size: 1.05rem; margin: 0 auto 30px; max-width: 560px; }
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 26px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      color: #fff;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.98rem;
+      text-decoration: none;
+      box-shadow: 0 10px 28px rgba(168,85,247,0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hero-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(168,85,247,0.55); }
+    .scroll-cue {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      color: var(--sub);
+      font-size: 1.2rem;
+      animation: bob 1.8s ease-in-out infinite;
+    }
+    @keyframes bob { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 9px); } }
+
+    .topnav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topnav-inner {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      scrollbar-width: none;
+    }
+    .topnav-inner::-webkit-scrollbar { display: none; }
+    .nav-pill {
+      flex-shrink: 0;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--sub);
+      padding: 7px 15px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .nav-pill:hover { color: var(--text); }
+    .nav-pill.active {
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 4px 14px rgba(var(--a-rgb), 0.4);
+    }
+    .progress {
+      position: absolute;
+      bottom: -1px;
+      right: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(270deg, #22d3ee, #a855f7);
+    }
+
+    .topic { padding: 84px 0; scroll-margin-top: 54px; }
+    .topic.s-time { --a: #22d3ee; --a-rgb: 34,211,238; }
+    .topic.s-clone { --a: #34d399; --a-rgb: 52,211,153; }
+    .topic.s-exp { --a: #fbbf24; --a-rgb: 251,191,36; }
+    .topic.s-facts { --a: #f472b6; --a-rgb: 244,114,182; }
+    .topic.s-src { --a: #60a5fa; --a-rgb: 96,165,250; }
+    .topic.s-vid { --a: #fb7185; --a-rgb: 251,113,133; }
+    .topic .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--a);
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+    .topic h2 {
+      font-family: var(--head);
+      font-size: clamp(1.8rem, 6vw, 2.7rem);
+      line-height: 1.3;
+      margin: 0 0 16px;
+      font-weight: 700;
+    }
+    .topic p.lead { color: var(--sub); font-size: 1.02rem; margin: 0 0 22px; }
+    .topic-grid { display: grid; gap: 34px; align-items: center; }
+    @media (min-width: 860px) {
+      .topic-grid { grid-template-columns: 1fr 1fr; gap: 50px; }
+      .topic.flip .figure { order: 2; }
+    }
+
+    .figure {
+      position: relative;
+      border-radius: 26px;
+      padding: 14px;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(var(--a-rgb), 0.22), transparent 68%),
+        var(--card);
+      border: 1px solid rgba(var(--a-rgb), 0.28);
+      box-shadow: 0 24px 60px rgba(var(--a-rgb), 0.14);
+      overflow: hidden;
+    }
+    .figure svg { width: 100%; height: auto; display: block; }
+    .figure-caption {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--sub);
+      padding: 6px 0 2px;
+    }
+
+    .points { display: grid; gap: 12px; margin: 0 0 22px; }
+    .point {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .point:hover { transform: translateX(-4px); border-color: rgba(var(--a-rgb), 0.5); }
+    .point p { margin: 6px 0 0; font-size: 0.94rem; color: var(--text); }
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 11px;
+      border-radius: 999px;
+    }
+    .badge.proven { background: rgba(35,165,90,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.4); }
+    .badge.theory { background: rgba(251,191,36,0.14); color: #fbbf24; border: 1px solid rgba(251,191,36,0.4); }
+    .badge.unproven { background: rgba(239,68,68,0.14); color: #f87171; border: 1px solid rgba(248,113,113,0.4); }
+    body.light-theme .badge.proven { color: #047857; }
+    body.light-theme .badge.theory { color: #b45309; }
+    body.light-theme .badge.unproven { color: #b91c1c; }
+
+    .links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.86rem;
+      background: rgba(var(--a-rgb), 0.12);
+      border: 1px solid rgba(var(--a-rgb), 0.4);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .link-btn:hover { transform: translateY(-2px); background: rgba(var(--a-rgb), 0.24); }
+    .link-btn i { font-size: 0.78rem; color: var(--a); }
+
+    .fun {
+      margin-top: 26px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px dashed rgba(var(--a-rgb), 0.5);
+      background: rgba(var(--a-rgb), 0.07);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .fun i { color: var(--a); font-size: 1.3rem; margin-top: 4px; }
+    .fun strong { display: block; margin-bottom: 2px; }
+    .fun span { color: var(--sub); font-size: 0.92rem; }
+
+    .sub-title {
+      font-family: var(--head);
+      font-size: 1.35rem;
+      margin: 44px 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sub-title i { color: var(--a); }
+
+    .steps { position: relative; padding-right: 34px; display: grid; gap: 14px; }
+    .steps::before {
+      content: "";
+      position: absolute;
+      right: 13px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--a), transparent);
+      opacity: 0.5;
+    }
+    .step {
+      position: relative;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    .step-num {
+      position: absolute;
+      right: -34px;
+      top: 14px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--a);
+      color: #04120c;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 5px rgba(var(--a-rgb), 0.18);
+    }
+    .step h4 { margin: 0 0 4px; font-size: 1rem; font-family: var(--head); font-weight: 500; }
+    .step p { margin: 0; color: var(--sub); font-size: 0.92rem; }
+
+    .split { display: grid; gap: 14px; margin-top: 8px; }
+    @media (min-width: 700px) { .split { grid-template-columns: 1fr 1fr; } }
+    .info-card {
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    .info-card h4 { margin: 0 0 6px; font-family: var(--head); font-size: 1.05rem; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+    .info-card h4 i { color: var(--a); }
+    .info-card p { margin: 0; color: var(--sub); font-size: 0.92rem; }
+
+    .exp-track {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 6px 20px 18px;
+      margin: 0 -20px;
+      scrollbar-width: none;
+    }
+    .exp-track::-webkit-scrollbar { display: none; }
+    .exp-card {
+      flex: 0 0 82%;
+      max-width: 330px;
+      scroll-snap-align: center;
+      position: relative;
+      padding: 22px 20px;
+      border-radius: 22px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .exp-card:hover { transform: translateY(-6px); border-color: rgba(var(--a-rgb), 0.6); }
+    .exp-card::after {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(var(--a-rgb), 0.16);
+      filter: blur(40px);
+      top: -60px;
+      left: -60px;
+    }
+    .exp-year {
+      font-family: var(--head);
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--a);
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .exp-card h3 { margin: 0 0 4px; font-family: var(--head); font-size: 1.15rem; font-weight: 500; position: relative; }
+    .exp-place { color: var(--a); font-size: 0.8rem; font-weight: 600; margin-bottom: 10px; display: block; position: relative; }
+    .exp-card p { margin: 0 0 14px; color: var(--sub); font-size: 0.9rem; position: relative; }
+    .exp-card a {
+      position: relative;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .exp-card a i { color: var(--a); font-size: 0.75rem; }
+    .exp-card.highlight { border-color: rgba(var(--a-rgb), 0.7); box-shadow: 0 14px 40px rgba(var(--a-rgb), 0.16); }
+    .swipe-hint { color: var(--sub); font-size: 0.8rem; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
+
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+    .stat {
+      padding: 22px 16px;
+      border-radius: 20px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--head);
+      font-size: 2.6rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--a);
+      direction: ltr;
+      display: inline-block;
+    }
+    .stat-label { color: var(--sub); font-size: 0.85rem; margin-top: 6px; }
+
+    .checklist { display: grid; gap: 10px; margin: 0 0 8px; padding: 0; list-style: none; }
+    .checklist li {
+      display: flex;
+      gap: 12px;
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      font-size: 0.94rem;
+    }
+    .checklist i { color: var(--a); margin-top: 6px; }
+
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+    .src-card {
+      display: block;
+      text-decoration: none;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .src-card:hover { transform: translateY(-5px); border-color: rgba(var(--a-rgb), 0.6); }
+    .src-card .src-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(var(--a-rgb), 0.15);
+      color: var(--a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+    }
+    .src-card h4 { margin: 0 0 4px; font-family: var(--head); font-weight: 500; font-size: 1.05rem; }
+    .src-card p { margin: 0; color: var(--sub); font-size: 0.85rem; line-height: 1.6; }
+
+    .vid-card {
+      display: block;
+      text-decoration: none;
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid var(--line);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .vid-card:hover { transform: translateY(-5px); border-color: rgba(var(--a-rgb), 0.6); }
+    .vid-thumb {
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 2rem;
+      position: relative;
+    }
+    .vid-thumb::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.22), transparent 60%);
+    }
+    .vid-thumb i { position: relative; z-index: 1; transition: transform 0.25s ease; }
+    .vid-card:hover .vid-thumb i { transform: scale(1.2); }
+    .vid-body { padding: 14px 16px 16px; }
+    .vid-body h4 { margin: 0 0 4px; font-family: var(--head); font-weight: 500; font-size: 1.02rem; }
+    .vid-body p { margin: 0; color: var(--sub); font-size: 0.85rem; line-height: 1.6; }
+    .g1 { background: linear-gradient(135deg, #f43f5e, #fb923c); }
+    .g2 { background: linear-gradient(135deg, #6366f1, #22d3ee); }
+    .g3 { background: linear-gradient(135deg, #10b981, #3b82f6); }
+    .g4 { background: linear-gradient(135deg, #ef4444, #a855f7); }
+    .g5 { background: linear-gradient(135deg, #34d399, #0ea5e9); }
+    .g6 { background: linear-gradient(135deg, #f59e0b, #ec4899); }
+
+    .divider { height: 1px; background: linear-gradient(to left, transparent, var(--line), transparent); border: 0; margin: 0; }
+    footer { text-align: center; padding: 44px 20px 60px; color: var(--sub); font-size: 0.85rem; }
+    footer .note {
+      max-width: 560px;
+      margin: 0 auto 18px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+    .reveal { opacity: 0; transform: translateY(34px); transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .reveal.zoom { transform: scale(0.92); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    .hand { transform-origin: 200px 170px; }
+    .hand.min { animation: spin 6s linear infinite; }
+    .hand.hr { animation: spin 72s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .glow-ring { animation: pulse 3.5s ease-in-out infinite; transform-origin: 200px 170px; }
+    @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .orb, .star, .hero h1, .scroll-cue, .hand, .glow-ring { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero" id="top">
+    <a href="index.html" class="home-link"><i class="fa-solid fa-arrow-right"></i> الرئيسية</a>
+    <div class="orb o1" data-speed="0.18"></div>
+    <div class="orb o2" data-speed="-0.12"></div>
+    <div class="orb o3" data-speed="0.08"></div>
+    <div class="stars" id="stars"></div>
+    <div class="hero-inner">
+      <span class="hero-kicker"><i class="fa-solid fa-atom"></i> علم · أبحاث · تجارب</span>
+      <h1>نافذة على العلم</h1>
+      <p>الزمن، الاستنساخ، وتجارب غيّرت فهمنا للعالم. معلومات مبسّطة، مُصنّفة حسب درجة إثباتها، ومعها روابط لمصادر يمكنك التحقق منها بنفسك.</p>
+      <a href="#time" class="hero-btn">ابدأ الرحلة <i class="fa-solid fa-arrow-down"></i></a>
+    </div>
+    <i class="fa-solid fa-chevron-down scroll-cue"></i>
+  </header>
+
+  <nav class="topnav" id="topnav">
+    <div class="topnav-inner">
+      <a href="#time" class="nav-pill" data-target="time">السفر عبر الزمن</a>
+      <a href="#clone" class="nav-pill" data-target="clone">الاستنساخ</a>
+      <a href="#experiments" class="nav-pill" data-target="experiments">تجارب غيّرت العالم</a>
+      <a href="#facts" class="nav-pill" data-target="facts">أرقام</a>
+      <a href="#sources" class="nav-pill" data-target="sources">مصادر البحث</a>
+      <a href="#videos" class="nav-pill" data-target="videos">فيديوهات الشرح</a>
+    </div>
+    <div class="progress" id="progress"></div>
+  </nav>
+
+  <section class="topic s-time" id="time">
+    <div class="wrap">
+      <div class="topic-grid">
+        <div class="figure reveal zoom">
+          <svg id="timeArt" viewBox="0 0 400 340" role="img" aria-label="رسم يوضح انحناء الزمكان حول ساعة"></svg>
+          <div class="figure-caption">رسم توضيحي لانحناء الزمكان (Spacetime)</div>
+        </div>
+        <div>
+          <span class="eyebrow reveal"><i class="fa-solid fa-hourglass-half"></i> الفيزياء</span>
+          <h2 class="reveal">السفر عبر الزمن: بين الخيال والفيزياء</h2>
+          <p class="lead reveal">حسب النسبية الخاصة لأينشتاين (1905) الزمن ليس مطلقًا: كلما زادت سرعتك، أو قويت الجاذبية حولك، تباطأ زمنك مقارنةً بمراقب بعيد. يسمّى هذا <strong>تمدّد الزمن (Time Dilation)</strong>، وقد قِيس فعليًا.</p>
+          <div class="points">
+            <div class="point reveal">
+              <span class="badge proven">مثبت علميًا</span>
+              <p>رائد الفضاء سيرغي كريكاليف قضى نحو 803 أيام في المدار، فسبق ساعات الأرض بنحو 0.02 ثانية، أي «سافر» إلى المستقبل بجزء ضئيل جدًا.</p>
+            </div>
+            <div class="point reveal">
+              <span class="badge proven">مثبت علميًا</span>
+              <p>ساعات أقمار GPS تسبق ساعات الأرض بنحو 38 ميكروثانية يوميًا (صافي أثر الجاذبية والسرعة)، ولولا التصحيح لتراكم خطأ الموقع بنحو 10 كيلومترات كل يوم.</p>
+            </div>
+            <div class="point reveal">
+              <span class="badge theory">نظري</span>
+              <p>الثقوب الدودية (Wormholes) حلول رياضية لمعادلات النسبية العامة، لكنها تحتاج «مادة غريبة» بطاقة سالبة لم تُرصد قط.</p>
+            </div>
+            <div class="point reveal">
+              <span class="badge unproven">غير مثبت</span>
+              <p>السفر إلى الماضي: لا دليل عليه، ويصطدم بمفارقات مثل «مفارقة الجد». واقترح هوكينغ عام 1992 «حدس حماية التسلسل الزمني» لمنعه.</p>
+            </div>
+          </div>
+          <div class="links reveal">
+            <a class="link-btn" href="https://en.wikipedia.org/wiki/Time_dilation" target="_blank" rel="noopener">تمدّد الزمن <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="link-btn" href="https://en.wikipedia.org/wiki/Hafele%E2%80%93Keating_experiment" target="_blank" rel="noopener">تجربة هافيل–كيتنغ <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="link-btn" href="https://en.wikipedia.org/wiki/Wormhole" target="_blank" rel="noopener">الثقوب الدودية <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="link-btn" href="https://spaceplace.nasa.gov/" target="_blank" rel="noopener">NASA Space Place <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="fun reveal">
+        <i class="fa-solid fa-champagne-glasses"></i>
+        <div>
+          <strong>حفلة هوكينغ للمسافرين عبر الزمن (2009)</strong>
+          <span>أقام ستيفن هوكينغ حفلة ثم أرسل دعواتها بعد انتهائها، على أمل أن يحضر مسافر من المستقبل. لم يحضر أحد، وكان ذلك «دليله» الطريف على صعوبة السفر إلى الماضي.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="topic s-clone flip" id="clone">
+    <div class="wrap">
+      <div class="topic-grid">
+        <div class="figure reveal zoom">
+          <svg id="dnaArt" viewBox="0 0 400 340" role="img" aria-label="رسم لسلسلة الحمض النووي DNA الحلزونية"></svg>
+          <div class="figure-caption">الحمض النووي DNA: ما يُنقل في عملية الاستنساخ</div>
+        </div>
+        <div>
+          <span class="eyebrow reveal"><i class="fa-solid fa-dna"></i> الأحياء</span>
+          <h2 class="reveal">الاستنساخ: من النعجة دوللي إلى أسئلة المستقبل</h2>
+          <p class="lead reveal">في <strong>5 يوليو 1996</strong> وُلدت في معهد روزلين قرب إدنبرة (اسكتلندا) النعجة دوللي، أول ثدييٍّ يُستنسخ من خلية جسدية لحيوان بالغ، بقيادة إيان ويلموت وكيث كامبل. أُعلن عنها في فبراير 1997 ونُشر البحث في مجلة Nature.</p>
+          <div class="links reveal">
+            <a class="link-btn" href="https://www.nature.com/articles/385810a0" target="_blank" rel="noopener">البحث الأصلي في Nature <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="link-btn" href="https://en.wikipedia.org/wiki/Dolly_(sheep)" target="_blank" rel="noopener">دوللي (ويكيبيديا) <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="link-btn" href="https://www.genome.gov/about-genomics/fact-sheets/Cloning" target="_blank" rel="noopener">ملخص NIH عن الاستنساخ <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="link-btn" href="https://www.ed.ac.uk/roslin" target="_blank" rel="noopener">معهد روزلين <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sub-title reveal"><i class="fa-solid fa-flask"></i> كيف وُلدت دوللي؟ (تقنية SCNT)</h3>
+      <div class="steps">
+        <div class="step reveal"><span class="step-num">1</span><h4>خلية من الغدة الثديية</h4><p>أُخذت خلية جسدية من نعجة بالغة عمرها نحو ست سنوات من سلالة فين دورست.</p></div>
+        <div class="step reveal"><span class="step-num">2</span><h4>تفريغ البويضة</h4><p>أُزيلت النواة من بويضة نعجة من سلالة سكوتش بلاك فيس، فصارت بلا مادة وراثية.</p></div>
+        <div class="step reveal"><span class="step-num">3</span><h4>الدمج بنبضة كهربائية</h4><p>دُمجت الخلية المانحة مع البويضة الفارغة بنبضة كهربائية، فبدأت تنقسم كأنها جنين.</p></div>
+        <div class="step reveal"><span class="step-num">4</span><h4>الزرع في أم بديلة</h4><p>نُقل الجنين بعد أيام من نموه في المختبر إلى رحم نعجة بديلة.</p></div>
+        <div class="step reveal"><span class="step-num">5</span><h4>الولادة: 5 يوليو 1996</h4><p>وُلدت دوللي وراثيًا شبه مطابقة للنعجة المانحة. وسُمّيت تيمّنًا بالمغنية دوللي بارتون لأن الخلية جاءت من غدة ثديية.</p></div>
+      </div>
+
+      <h3 class="sub-title reveal"><i class="fa-solid fa-circle-question"></i> أسئلة شائعة</h3>
+      <div class="split">
+        <div class="info-card reveal">
+          <h4><i class="fa-solid fa-percent"></i> كم محاولة لزمت؟</h4>
+          <p>بحسب البحث المنشور، من 277 بويضة مُدمجة وُلد حمل ناجح واحد فقط، وكانت هي دوللي. لذلك عُدّت التقنية صعبة جدًا في بدايتها.</p>
+        </div>
+        <div class="info-card reveal">
+          <h4><i class="fa-solid fa-heart-pulse"></i> كم عاشت دوللي؟</h4>
+          <p>عاشت حتى 14 فبراير 2003، وأُنهيت حياتها بسبب مرض رئوي متقدم. ولم يثبت علميًا أن الاستنساخ هو سبب مرضها. وأنجبت ست حملان بالتزاوج الطبيعي، ويُعرض جسدها محنّطًا في متحف اسكتلندا الوطني.</p>
+        </div>
+        <div class="info-card reveal">
+          <h4><i class="fa-solid fa-person"></i> هل استُنسخ إنسان؟</h4>
+          <p>لا يوجد حتى اليوم استنساخ بشري تناسلي مثبت علميًا. ادعاءات مثل Clonaid عام 2002 لم تُدعَّم بأي دليل. وتحظر معظم الدول هذا النوع من الاستنساخ لأسباب أخلاقية وطبية.</p>
+        </div>
+        <div class="info-card reveal">
+          <h4><i class="fa-solid fa-paw"></i> ماذا بعد دوللي؟</h4>
+          <p>في 2013 أنتج فريق جامعة أوريغون للصحة والعلوم خلايا جذعية جنينية بشرية بتقنية SCNT (للبحث وليس للولادة). وفي 2018 استُنسخ قردان مكاك في الصين، هما Zhong Zhong وHua Hua.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="topic s-exp" id="experiments">
+    <div class="wrap">
+      <span class="eyebrow reveal"><i class="fa-solid fa-microscope"></i> تاريخ العلم</span>
+      <h2 class="reveal">تجارب غيّرت العالم</h2>
+      <p class="lead reveal">خمس تجارب كبرى، كل واحدة غيّرت سؤالًا كنا نظن أن جوابه محسوم. اسحب البطاقات يمينًا ويسارًا لتتنقل بينها.</p>
+      <div class="exp-track reveal">
+        <article class="exp-card">
+          <div class="exp-year">1887</div>
+          <h3>تجربة ميكلسون–مورلي</h3>
+          <span class="exp-place">كليفلاند، أمريكا</span>
+          <p>حاولت قياس حركة الأرض خلال «الأثير» المفترض، فلم تجد أي أثر. هذه النتيجة «الصفرية» مهّدت للنسبية.</p>
+          <a href="https://en.wikipedia.org/wiki/Michelson%E2%80%93Morley_experiment" target="_blank" rel="noopener">اقرأ المزيد <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        </article>
+        <article class="exp-card">
+          <div class="exp-year">1952</div>
+          <h3>تجربة ميلر–يوري</h3>
+          <span class="exp-place">جامعة شيكاغو، أمريكا</span>
+          <p>مرّر ستانلي ميلر شرارات كهربائية في غازات تحاكي الأرض البدائية، فتكوّنت أحماض أمينية، وهي لبنات الحياة.</p>
+          <a href="https://en.wikipedia.org/wiki/Miller%E2%80%93Urey_experiment" target="_blank" rel="noopener">اقرأ المزيد <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        </article>
+        <article class="exp-card">
+          <div class="exp-year">1971</div>
+          <h3>تجربة هافيل–كيتنغ</h3>
+          <span class="exp-place">حول العالم، بطائرات تجارية</span>
+          <p>حملت ساعات ذرية على طائرات حول الأرض، فاختلفت قراءاتها عن ساعة ثابتة بما توقعته النسبية تمامًا.</p>
+          <a href="https://en.wikipedia.org/wiki/Hafele%E2%80%93Keating_experiment" target="_blank" rel="noopener">اقرأ المزيد <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        </article>
+        <article class="exp-card highlight">
+          <div class="exp-year">1996</div>
+          <h3>استنساخ النعجة دوللي</h3>
+          <span class="exp-place">معهد روزلين، اسكتلندا</span>
+          <p>أول ثديي يُستنسخ من خلية جسدية بالغة. أثبتت أن الخلية المتخصصة يمكن «إعادة برمجتها» لتصنع كائنًا كاملًا.</p>
+          <a href="https://en.wikipedia.org/wiki/Dolly_(sheep)" target="_blank" rel="noopener">اقرأ المزيد <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        </article>
+        <article class="exp-card">
+          <div class="exp-year">2015</div>
+          <h3>رصد الموجات الثقالية (LIGO)</h3>
+          <span class="exp-place">الولايات المتحدة</span>
+          <p>رُصد في 14 سبتمبر 2015 تموّج في الزمكان ناتج عن اندماج ثقبين أسودين على بعد نحو 1.3 مليار سنة ضوئية، وأُعلن عنه في فبراير 2016.</p>
+          <a href="https://en.wikipedia.org/wiki/First_observation_of_gravitational_waves" target="_blank" rel="noopener">اقرأ المزيد <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        </article>
+      </div>
+      <div class="swipe-hint"><i class="fa-solid fa-hand-pointer"></i> اسحب للتنقل بين التجارب</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="topic s-facts" id="facts">
+    <div class="wrap">
+      <span class="eyebrow reveal"><i class="fa-solid fa-chart-simple"></i> بالأرقام</span>
+      <h2 class="reveal">أرقام تستحق التوقف</h2>
+      <p class="lead reveal">أرقام وردت في الأقسام السابقة، مجمّعة في مكان واحد.</p>
+      <div class="stats">
+        <div class="stat reveal zoom"><span class="stat-num"><span class="count" data-target="277">0</span></span><div class="stat-label">بويضة مُدمجة لينجح حمل واحد (دوللي)</div></div>
+        <div class="stat reveal zoom"><span class="stat-num"><span class="count" data-target="38">0</span></span><div class="stat-label">ميكروثانية يوميًا تصحّحها أقمار GPS</div></div>
+        <div class="stat reveal zoom"><span class="stat-num"><span class="count" data-target="803">0</span></span><div class="stat-label">يومًا قضاها كريكاليف في المدار</div></div>
+        <div class="stat reveal zoom"><span class="stat-num"><span class="count" data-target="6">0</span></span><div class="stat-label">سنوات تقريبًا عاشتها دوللي</div></div>
+        <div class="stat reveal zoom"><span class="stat-num"><span class="count" data-target="1.3" data-decimals="1">0</span></span><div class="stat-label">مليار سنة ضوئية: بعد مصدر موجات LIGO</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="topic s-src" id="sources">
+    <div class="wrap">
+      <span class="eyebrow reveal"><i class="fa-solid fa-book-open"></i> للتوسع والتحقق</span>
+      <h2 class="reveal">مصادر البحث الموثوقة</h2>
+      <p class="lead reveal">لا تكتفِ بما تقرأه هنا؛ تحقق من المعلومة من مصدرها. هذه مواقع يعتمدها الباحثون.</p>
+
+      <h3 class="sub-title reveal"><i class="fa-solid fa-circle-check"></i> قبل أن تصدّق أي معلومة علمية</h3>
+      <ul class="checklist">
+        <li class="reveal"><i class="fa-solid fa-check"></i> هل المصدر مجلة محكّمة أو جهة رسمية (جامعة، وكالة فضاء، منظمة صحية)؟</li>
+        <li class="reveal"><i class="fa-solid fa-check"></i> هل تؤكد النتيجة مصادر أو مختبرات مستقلة، أم مصدر واحد فقط؟</li>
+        <li class="reveal"><i class="fa-solid fa-check"></i> ما تاريخ النشر؟ فالعلم يتحدّث، وما قيل قبل سنوات قد يتغيّر.</li>
+        <li class="reveal"><i class="fa-solid fa-check"></i> فرّق بين «ملاحظة» و«فرضية» و«نظرية»؛ والأوراق المنشورة على arXiv قد لم تُحكَّم بعد.</li>
+      </ul>
+
+      <h3 class="sub-title reveal"><i class="fa-solid fa-magnifying-glass"></i> أين تبحث؟</h3>
+      <div class="cards-grid">
+        <a class="src-card reveal" href="https://scholar.google.com" target="_blank" rel="noopener"><div class="src-icon"><i class="fa-solid fa-graduation-cap"></i></div><h4>Google Scholar</h4><p>محرك بحث للأوراق الأكاديمية والاستشهادات.</p></a>
+        <a class="src-card reveal" href="https://pubmed.ncbi.nlm.nih.gov" target="_blank" rel="noopener"><div class="src-icon"><i class="fa-solid fa-staff-snake"></i></div><h4>PubMed</h4><p>قاعدة أبحاث الطب والأحياء من المكتبة الوطنية الأمريكية للطب.</p></a>
+        <a class="src-card reveal" href="https://arxiv.org" target="_blank" rel="noopener"><div class="src-icon"><i class="fa-solid fa-file-lines"></i></div><h4>arXiv</h4><p>أوراق الفيزياء والرياضيات وعلوم الحاسوب قبل التحكيم.</p></a>
+        <a class="src-card reveal" href="https://www.nature.com" target="_blank" rel="noopener"><div class="src-icon"><i class="fa-solid fa-leaf"></i></div><h4>Nature</h4><p>من أعرق المجلات العلمية، وفيها نُشر بحث دوللي.</p></a>
+        <a class="src-card reveal" href="https://www.science.org" target="_blank" rel="noopener"><div class="src-icon"><i class="fa-solid fa-flask-vial"></i></div><h4>Science</h4><p>مجلة محكّمة تنشر أبرز الاكتشافات الحديثة.</p></a>
+        <a class="src-card reveal" href="https://www.nasa.gov" target="_blank" rel="noopener"><div class="src-icon"><i class="fa-solid fa-rocket"></i></div><h4>NASA</h4><p>الفضاء والفيزياء الفلكية من المصدر الرسمي.</p></a>
+        <a class="src-card reveal" href="https://www.genome.gov" target="_blank" rel="noopener"><div class="src-icon"><i class="fa-solid fa-dna"></i></div><h4>NIH Genome</h4><p>شروحات رسمية عن الجينات والاستنساخ.</p></a>
+        <a class="src-card reveal" href="https://www.khanacademy.org" target="_blank" rel="noopener"><div class="src-icon"><i class="fa-solid fa-chalkboard-user"></i></div><h4>Khan Academy</h4><p>دروس مجانية مبسّطة في الفيزياء والأحياء.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section class="topic s-vid" id="videos">
+    <div class="wrap">
+      <span class="eyebrow reveal"><i class="fa-solid fa-circle-play"></i> شاهد وتعلّم</span>
+      <h2 class="reveal">فيديوهات الشرح</h2>
+      <p class="lead reveal">قنوات تشرح العلم بتحريك بسيط ومعلومات مدقّقة. المحتوى باللغة الإنجليزية، ويمكنك تفعيل الترجمة من يوتيوب.</p>
+      <div class="cards-grid">
+        <a class="vid-card reveal" href="https://www.youtube.com/@kurzgesagt" target="_blank" rel="noopener"><div class="vid-thumb g1"><i class="fa-solid fa-circle-play"></i></div><div class="vid-body"><h4>Kurzgesagt</h4><p>مواضيع علمية وكونية بتحريك مبسّط وجميل.</p></div></a>
+        <a class="vid-card reveal" href="https://www.youtube.com/@pbsspacetime" target="_blank" rel="noopener"><div class="vid-thumb g2"><i class="fa-solid fa-circle-play"></i></div><div class="vid-body"><h4>PBS Space Time</h4><p>الزمن، النسبية، والثقوب السوداء بعمق.</p></div></a>
+        <a class="vid-card reveal" href="https://www.youtube.com/@veritasium" target="_blank" rel="noopener"><div class="vid-thumb g3"><i class="fa-solid fa-circle-play"></i></div><div class="vid-body"><h4>Veritasium</h4><p>تجارب وأفكار تصحّح المفاهيم الخاطئة.</p></div></a>
+        <a class="vid-card reveal" href="https://www.youtube.com/@TED-Ed" target="_blank" rel="noopener"><div class="vid-thumb g4"><i class="fa-solid fa-circle-play"></i></div><div class="vid-body"><h4>TED-Ed</h4><p>دروس قصيرة في العلوم والتاريخ.</p></div></a>
+        <a class="vid-card reveal" href="https://www.youtube.com/results?search_query=Dolly+the+sheep+cloning+explained" target="_blank" rel="noopener"><div class="vid-thumb g5"><i class="fa-solid fa-magnifying-glass"></i></div><div class="vid-body"><h4>بحث: النعجة دوللي</h4><p>نتائج يوتيوب عن قصة الاستنساخ وشرحها.</p></div></a>
+        <a class="vid-card reveal" href="https://www.youtube.com/results?search_query=time+dilation+explained" target="_blank" rel="noopener"><div class="vid-thumb g6"><i class="fa-solid fa-magnifying-glass"></i></div><div class="vid-body"><h4>بحث: تمدّد الزمن</h4><p>نتائج يوتيوب تشرح الزمن والنسبية.</p></div></a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="note"><i class="fa-solid fa-circle-info"></i> هذه الصفحة للتعليم والثقافة العامة، وتم تبسيط بعض التفاصيل. للتأكد من أي رقم أو تاريخ، ارجع إلى المصادر المرفقة.</div>
+    <a href="index.html"><i class="fa-solid fa-arrow-right"></i> العودة إلى الرئيسية</a>
+    <div style="margin-top:14px;">© 2026 SKRT7</div>
+  </footer>
+
+  <script>
+    (function () {
+      if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-theme');
+      }
+
+      const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const starsWrap = document.getElementById('stars');
+      if (starsWrap) {
+        for (let i = 0; i < 38; i++) {
+          const s = document.createElement('span');
+          s.className = 'star';
+          s.style.top = (Math.random() * 100) + '%';
+          s.style.left = (Math.random() * 100) + '%';
+          s.style.animationDelay = (Math.random() * 4) + 's';
+          s.style.animationDuration = (3 + Math.random() * 3) + 's';
+          starsWrap.appendChild(s);
+        }
+      }
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const siblings = el.parentElement ? Array.from(el.parentElement.children).filter(c => c.classList.contains('reveal')) : [];
+            const idx = Math.max(0, siblings.indexOf(el));
+            el.style.transitionDelay = Math.min(idx * 90, 450) + 'ms';
+            el.classList.add('in');
+            revealObserver.unobserve(el);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => {
+        if (reduced) {
+          el.classList.add('in');
+        } else {
+          revealObserver.observe(el);
+        }
+      });
+
+      function animateCount(el) {
+        const target = parseFloat(el.dataset.target);
+        const decimals = parseInt(el.dataset.decimals || '0', 10);
+        if (reduced) {
+          el.textContent = target.toFixed(decimals);
+          return;
+        }
+        const duration = 1600;
+        const start = performance.now();
+        function tick(now) {
+          const t = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = (target * eased).toFixed(decimals);
+          if (t < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      const countObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCount(entry.target);
+            countObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.6 });
+      document.querySelectorAll('.count').forEach(el => countObserver.observe(el));
+
+      const pills = Array.from(document.querySelectorAll('.nav-pill'));
+      const sectionIds = ['time', 'clone', 'experiments', 'facts', 'sources', 'videos'];
+      const navScroller = document.querySelector('.topnav-inner');
+      const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            pills.forEach(p => {
+              const on = p.dataset.target === id;
+              p.classList.toggle('active', on);
+              if (on && navScroller) {
+                const left = p.offsetLeft - navScroller.clientWidth / 2 + p.clientWidth / 2;
+                navScroller.scrollTo({ left: left, behavior: 'smooth' });
+              }
+            });
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      sectionIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) navObserver.observe(el);
+      });
+
+      const progressEl = document.getElementById('progress');
+      const orbs = Array.from(document.querySelectorAll('.orb'));
+      let ticking = false;
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+          if (progressEl) progressEl.style.width = pct + '%';
+          if (!reduced && window.scrollY < window.innerHeight * 1.2) {
+            orbs.forEach(o => {
+              const speed = parseFloat(o.dataset.speed || '0');
+              o.style.transform = 'translateY(' + (window.scrollY * speed) + 'px)';
+            });
+          }
+          ticking = false;
+        });
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      function buildTimeArt() {
+        const svg = document.getElementById('timeArt');
+        if (!svg) return;
+        let out = '<defs><radialGradient id="tg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#22d3ee" stop-opacity="0.55"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></radialGradient></defs>';
+        out += '<circle class="glow-ring" cx="200" cy="170" r="125" fill="url(#tg)"/>';
+        const rings = 9;
+        const data = [];
+        for (let i = 0; i < rings; i++) {
+          const t = 1 - i / (rings - 1);
+          const rx = 26 + 140 * t * t;
+          data.push({ rx: rx, ry: rx * 0.24, y: 30 + i * 17.5 });
+        }
+        [-1, -0.62, -0.2, 0.2, 0.62, 1].forEach(a => {
+          const k = Math.sqrt(1 - a * a);
+          let top = '';
+          let bottom = '';
+          data.forEach((d, i) => {
+            const x = 200 + a * d.rx;
+            top += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + (d.y + d.ry * k).toFixed(1) + ' ';
+            bottom += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + (340 - (d.y + d.ry * k)).toFixed(1) + ' ';
+          });
+          out += '<path d="' + top + '" fill="none" stroke="#22d3ee" stroke-opacity="0.22" stroke-width="1.1"/>';
+          out += '<path d="' + bottom + '" fill="none" stroke="#22d3ee" stroke-opacity="0.22" stroke-width="1.1"/>';
+        });
+        data.forEach((d, i) => {
+          const op = (0.25 + 0.65 * (i / (rings - 1))).toFixed(2);
+          out += '<ellipse cx="200" cy="' + d.y + '" rx="' + d.rx.toFixed(1) + '" ry="' + d.ry.toFixed(1) + '" fill="none" stroke="#22d3ee" stroke-opacity="' + op + '" stroke-width="1.6"/>';
+          out += '<ellipse cx="200" cy="' + (340 - d.y) + '" rx="' + d.rx.toFixed(1) + '" ry="' + d.ry.toFixed(1) + '" fill="none" stroke="#22d3ee" stroke-opacity="' + op + '" stroke-width="1.6"/>';
+        });
+        out += '<circle cx="200" cy="170" r="38" fill="#0b1018" stroke="#22d3ee" stroke-width="2.5"/>';
+        for (let i = 0; i < 12; i++) {
+          const ang = (i * 30) * Math.PI / 180;
+          const r1 = i % 3 === 0 ? 29 : 32;
+          out += '<line x1="' + (200 + Math.sin(ang) * r1).toFixed(1) + '" y1="' + (170 - Math.cos(ang) * r1).toFixed(1) + '" x2="' + (200 + Math.sin(ang) * 35).toFixed(1) + '" y2="' + (170 - Math.cos(ang) * 35).toFixed(1) + '" stroke="#22d3ee" stroke-width="' + (i % 3 === 0 ? 2 : 1) + '" stroke-linecap="round"/>';
+        }
+        out += '<line class="hand hr" x1="200" y1="170" x2="200" y2="150" stroke="#e8eaf0" stroke-width="3" stroke-linecap="round"/>';
+        out += '<line class="hand min" x1="200" y1="170" x2="200" y2="141" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"/>';
+        out += '<circle cx="200" cy="170" r="3.5" fill="#22d3ee"/>';
+        svg.innerHTML = out;
+      }
+
+      function buildDna() {
+        const svg = document.getElementById('dnaArt');
+        if (!svg) return;
+        const NS = 'http://www.w3.org/2000/svg';
+        svg.innerHTML = '<defs><linearGradient id="dg1" x1="0" x2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#22d3ee"/></linearGradient><linearGradient id="dg2" x1="0" x2="1"><stop offset="0" stop-color="#a855f7"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs>';
+        const rungsGroup = document.createElementNS(NS, 'g');
+        const s1 = document.createElementNS(NS, 'path');
+        const s2 = document.createElementNS(NS, 'path');
+        [s1, s2].forEach((p, i) => {
+          p.setAttribute('fill', 'none');
+          p.setAttribute('stroke', i === 0 ? 'url(#dg1)' : 'url(#dg2)');
+          p.setAttribute('stroke-width', '5');
+          p.setAttribute('stroke-linecap', 'round');
+        });
+        const rungCount = 20;
+        const rungs = [];
+        for (let i = 0; i < rungCount; i++) {
+          const l = document.createElementNS(NS, 'line');
+          l.setAttribute('stroke-width', '2.4');
+          l.setAttribute('stroke-linecap', 'round');
+          l.setAttribute('stroke', i % 2 === 0 ? '#fbbf24' : '#60a5fa');
+          rungsGroup.appendChild(l);
+          rungs.push(l);
+        }
+        svg.appendChild(rungsGroup);
+        svg.appendChild(s1);
+        svg.appendChild(s2);
+
+        const amp = 72;
+        const k = 0.028;
+        let phase = 0;
+        let running = false;
+
+        function draw() {
+          let d1 = '';
+          let d2 = '';
+          for (let x = 12; x <= 388; x += 4) {
+            const y1 = 170 + amp * Math.sin(k * x * 3 + phase);
+            const y2 = 170 - amp * Math.sin(k * x * 3 + phase);
+            d1 += (x === 12 ? 'M' : 'L') + x + ' ' + y1.toFixed(1) + ' ';
+            d2 += (x === 12 ? 'M' : 'L') + x + ' ' + y2.toFixed(1) + ' ';
+          }
+          s1.setAttribute('d', d1);
+          s2.setAttribute('d', d2);
+          rungs.forEach((l, i) => {
+            const x = 24 + i * 18.5;
+            const y = amp * Math.sin(k * x * 3 + phase);
+            l.setAttribute('x1', x);
+            l.setAttribute('x2', x);
+            l.setAttribute('y1', (170 + y).toFixed(1));
+            l.setAttribute('y2', (170 - y).toFixed(1));
+            l.setAttribute('stroke-opacity', (0.3 + 0.7 * Math.abs(Math.cos(k * x * 3 + phase))).toFixed(2));
+          });
+        }
+
+        function loop() {
+          if (!running) return;
+          phase += 0.025;
+          draw();
+          requestAnimationFrame(loop);
+        }
+
+        draw();
+        if (reduced) return;
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !running) {
+              running = true;
+              loop();
+            } else if (!entry.isIntersecting) {
+              running = false;
+            }
+          });
+        }, { threshold: 0.1 });
+        io.observe(svg);
+      }
+
+      buildTimeArt();
+      buildDna();
+
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href').slice(1);
+          const target = document.getElementById(id);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
