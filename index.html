@@ -667,7 +667,6 @@ Thanks for stopping by!">
     }
 
     .ship-btn.discord i { color: #5865F2; }
-    .ship-btn.science i { color: #a855f7; }
     .ship-btn.instagram i { color: #e1306c; }
     .ship-btn.github i { color: #ffffff; }
     .ship-btn.youtube i { color: #FF0000; }
@@ -1090,7 +1089,7 @@ Thanks for stopping by!">
 
     <div class="button-stack">
       <a href="projects.html" class="ship-btn primary"><i class="fa-solid fa-folder-open"></i> My Projects</a>
-      <a href="science.html" class="ship-btn science"><i class="fa-solid fa-atom"></i> Science · نافذة على العلم</a>
+      <a href="science.html" class="ship-btn primary"><i class="fa-solid fa-flask"></i> Science</a>
       <a href="https://discord.com/users/1217944125555474565" target="_blank" class="ship-btn discord"><i class="fa-brands fa-discord"></i> My Discord Profile</a>
       <a href="https://discord.gg/Vk8WJhpQW4" target="_blank" class="ship-btn discord"><i class="fa-brands fa-discord"></i> Discord</a>
       <a href="https://www.instagram.com/skrt7_66" target="_blank" class="ship-btn instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
@@ -2243,5 +2242,235 @@ Thanks for stopping by!">
   </script>
 
   <script src="oneko.js"></script>
+  <style>
+    .cat-bubble {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 99999;
+      max-width: 210px;
+      padding: 9px 14px;
+      border-radius: 16px;
+      background: #fff;
+      color: #1b1b24;
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+      direction: rtl;
+      box-shadow: 0 8px 26px rgba(0,0,0,0.35);
+      pointer-events: none;
+      opacity: 0;
+      transform: translate3d(-9999px, -9999px, 0) scale(0.6);
+      transition: opacity 0.25s ease;
+      will-change: transform, opacity;
+    }
+    .cat-bubble.show { opacity: 1; }
+    .cat-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -7px;
+      left: var(--tail, 50%);
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      transform: translateX(-50%) rotate(45deg);
+      border-radius: 3px;
+    }
+    .cat-bubble.pop span { display: inline-block; animation: catPop 0.35s cubic-bezier(0.2, 1.6, 0.4, 1); }
+    @keyframes catPop { from { transform: scale(0.7); } to { transform: scale(1); } }
+  </style>
+  <script>
+    (function () {
+      const P = {
+        far: [
+          'ياااه أنا آتي!',
+          'هاااا اقتربت من إمساكك',
+          'تعال إلي!',
+          'تعال هنا!',
+          'لا تهرب مني!',
+          'أنا أسرع منك، صدقني',
+          'شفتك! أنا جاي!',
+          'انتظرني لحظة!',
+          'أنت لي اليوم',
+          'وقّف مكانك لا تتحرك',
+          'ركضت كثير وتعبت...',
+          'يا ماوس صغير، تعال',
+          'لا لا لا، لا تروح بعيد',
+          'أنا وراك وراك وراك',
+          'هيا نلعب لعبة المطاردة',
+          'قريب قريب قريب...',
+          'سأمسك بك مهما حصل',
+          'بسرعة بسرعة بسرعة!'
+        ],
+        near: [
+          'مسكتك! 😼',
+          'أخيراً وصلت لك',
+          'الحين أنت محاصر',
+          'هههه ما عاد تقدر تهرب',
+          'اقتربت جداً جداً',
+          'مياو! وصلت',
+          'هيه لا تروح الحين',
+          'فزت عليك هالمرة',
+          'نص خطوة وأمسكك'
+        ],
+        idle: [
+          'وين رحت؟',
+          'حرّك الماوس عاد!',
+          'أنا أنتظرك...',
+          'أحد هنا؟',
+          'ملل ملل ملل',
+          'تلعب معي؟',
+          'مياو~',
+          'لا تتركني وحدي',
+          'ليش وقفت؟',
+          'تعال نكمل اللعب'
+        ],
+        sleep: [
+          'zzZ... zzZ...',
+          'أحلام حلوة...',
+          'خمس دقائق بس وأصحى...',
+          'هاااا... نعسان...'
+        ],
+        touch: [
+          'أوووه لا تلمسني!',
+          'مياااو!',
+          'هههه تدغدغني',
+          'هذا أنا، لا تخاف',
+          'أوه! حنّيت عليك',
+          'لحظة لحظة، ما نكلم الناس كذا'
+        ],
+        greet: [
+          'هلا والله! 👋',
+          'أهلاً بك في عالمي',
+          'حيّاك الله، تفضل',
+          'هلا بالضيف الكريم'
+        ],
+        time1: [
+          'ما شاء الله، بقيت معنا كثير',
+          'تعجبك الصفحة؟',
+          'أنت ضيف لطيف بصراحة'
+        ],
+        time2: [
+          'أنت صرت صديقي الحين',
+          'ما كنت أتوقع تبقى كل هالوقت',
+          'ممتن لوجودك معي'
+        ]
+      };
+
+      const bubble = document.createElement('div');
+      bubble.className = 'cat-bubble';
+      bubble.setAttribute('aria-hidden', 'true');
+      const text = document.createElement('span');
+      bubble.appendChild(text);
+      document.body.appendChild(bubble);
+
+      let mx = window.innerWidth / 2;
+      let my = window.innerHeight / 2;
+      let lastMove = performance.now();
+      const born = performance.now();
+      let lastSaid = '';
+      let visible = false;
+      let hideAt = 0;
+      let nextAt = born + 2600;
+      let greeted = false;
+      let timeStage = 0;
+      let lastState = 'far';
+
+      function track(x, y) {
+        mx = x;
+        my = y;
+        lastMove = performance.now();
+      }
+      window.addEventListener('mousemove', e => track(e.clientX, e.clientY), { passive: true });
+      window.addEventListener('touchstart', e => { if (e.touches[0]) track(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+      window.addEventListener('touchmove', e => { if (e.touches[0]) track(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+
+      function pick(list) {
+        let t;
+        let guard = 0;
+        do {
+          t = list[Math.floor(Math.random() * list.length)];
+          guard++;
+        } while (t === lastSaid && guard < 8);
+        lastSaid = t;
+        return t;
+      }
+
+      function say(list, ms) {
+        text.textContent = pick(list);
+        bubble.classList.remove('pop');
+        void bubble.offsetWidth;
+        bubble.classList.add('pop', 'show');
+        visible = true;
+        const now = performance.now();
+        hideAt = now + (ms || 3200);
+        nextAt = hideAt + 1200 + Math.random() * 2200;
+      }
+
+      function cat() {
+        return document.getElementById('oneko');
+      }
+
+      document.addEventListener('click', e => {
+        const c = cat();
+        if (!c) return;
+        const r = c.getBoundingClientRect();
+        if (e.clientX >= r.left - 8 && e.clientX <= r.right + 8 && e.clientY >= r.top - 8 && e.clientY <= r.bottom + 8) {
+          say(P.touch, 2600);
+        }
+      });
+
+      function frame(now) {
+        const c = cat();
+        if (c && document.body.classList.contains('page-loaded')) {
+          const r = c.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const bw = bubble.offsetWidth;
+          const bh = bubble.offsetHeight;
+          let x = cx - bw / 2;
+          x = Math.max(8, Math.min(window.innerWidth - bw - 8, x));
+          let y = r.top - bh - 14;
+          if (y < 8) y = r.bottom + 14;
+          bubble.style.setProperty('--tail', Math.max(16, Math.min(bw - 16, cx - x)) + 'px');
+          bubble.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+
+          const dist = Math.hypot(mx - cx, my - cy);
+          const still = now - lastMove;
+          let state = 'far';
+          if (still > 14000) state = 'sleep';
+          else if (still > 3500) state = 'idle';
+          else if (dist < 90) state = 'near';
+
+          if (!greeted && now - born > 1800) {
+            greeted = true;
+            say(P.greet, 3000);
+          } else if (state !== lastState && (state === 'near' || state === 'sleep' || state === 'idle') && now > nextAt - 2200) {
+            say(P[state], 3000);
+          }
+          lastState = state;
+
+          const elapsed = now - born;
+          if (timeStage === 0 && elapsed > 60000) {
+            timeStage = 1;
+            say(P.time1, 3800);
+          } else if (timeStage === 1 && elapsed > 150000) {
+            timeStage = 2;
+            say(P.time2, 3800);
+          } else if (visible && now > hideAt) {
+            visible = false;
+            bubble.classList.remove('show');
+          } else if (!visible && now > nextAt && greeted) {
+            say(P[state] || P.far, 3000 + Math.random() * 900);
+          }
+        } else {
+          bubble.classList.remove('show');
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+  </script>
 </body>
-      </html>
+</html>
