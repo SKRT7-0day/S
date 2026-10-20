@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#a855f7">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&family=Space+Grotesk:wght@500;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -540,14 +540,132 @@
     .glow-ring { animation: pulse 3.5s ease-in-out infinite; transform-origin: 200px 170px; }
     @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
 
+
+    html[lang="en"] { --head: 'Space Grotesk', sans-serif; --body: 'DM Sans', sans-serif; }
+    html[lang="en"] body { line-height: 1.7; }
+    html[lang="en"] .hero h1 { letter-spacing: -1px; }
+    html[dir="ltr"] .home-link { right: auto; left: 18px; }
+    html[dir="ltr"] .progress { right: auto; left: 0; }
+    html[dir="ltr"] .point:hover { transform: translateX(4px); }
+    html[dir="ltr"] .steps { padding-right: 0; padding-left: 34px; }
+    html[dir="ltr"] .steps::before { right: auto; left: 13px; }
+    html[dir="ltr"] .step-num { right: auto; left: -34px; }
+    html[dir="ltr"] .exp-card::after { left: auto; right: -60px; }
+    html[dir="ltr"] .divider { background: linear-gradient(to right, transparent, var(--line), transparent); }
+    .lang-btn {
+      position: fixed;
+      bottom: 18px;
+      left: 18px;
+      z-index: 80;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      font-family: 'Space Grotesk', 'IBM Plex Sans Arabic', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .lang-btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+
+
+    .intro {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      transition: clip-path 0.9s cubic-bezier(0.77, 0, 0.18, 1), opacity 0.4s ease 0.6s;
+      clip-path: circle(150% at 50% 50%);
+    }
+    .intro.done { clip-path: circle(0% at 50% 50%); opacity: 0; pointer-events: none; }
+    .intro-atom { width: 96px; height: 96px; position: relative; }
+    .intro-atom i {
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      animation: orbit 1.4s linear infinite;
+    }
+    .intro-atom i:nth-child(2) { inset: 12px; border-color: #22d3ee; border-left-color: transparent; border-right-color: transparent; animation-duration: 1s; animation-direction: reverse; }
+    .intro-atom i:nth-child(3) { inset: 26px; border-color: #34d399; border-top-color: transparent; border-bottom-color: transparent; animation-duration: 0.8s; }
+    .intro-atom b {
+      position: absolute;
+      inset: 40px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 24px var(--accent);
+      animation: pulse2 1.2s ease-in-out infinite;
+    }
+    @keyframes orbit { to { transform: rotate(360deg); } }
+    @keyframes pulse2 { 0%, 100% { transform: scale(0.8); } 50% { transform: scale(1.25); } }
+    .intro-word {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      letter-spacing: 8px;
+      font-size: 1.1rem;
+      color: var(--sub);
+      direction: ltr;
+    }
+    .intro-bar { width: 140px; height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; }
+    .intro-bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #22d3ee, #a855f7); animation: fill 1.3s ease forwards; }
+    @keyframes fill { to { width: 100%; } }
+
+    body:not(.ready) .hero-inner > *, body:not(.ready) .home-link, body:not(.ready) .lang-btn { opacity: 0; }
+    body.ready .hero-inner > * { animation: heroIn 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+    body.ready .hero-inner > *:nth-child(1) { animation-delay: 0.55s; }
+    body.ready .hero-inner > *:nth-child(2) { animation-delay: 0.7s; }
+    body.ready .hero-inner > *:nth-child(3) { animation-delay: 0.85s; }
+    body.ready .hero-inner > *:nth-child(4) { animation-delay: 1s; }
+    body.ready .home-link, body.ready .lang-btn { animation: fadeIn 0.8s ease 1.2s both; }
+    @keyframes heroIn { from { opacity: 0; transform: translateY(40px) scale(0.96); filter: blur(12px); } to { opacity: 1; transform: none; filter: blur(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .lang-wipe {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      pointer-events: none;
+      background: linear-gradient(135deg, #7c3aed, #22d3ee);
+      clip-path: circle(0% at var(--wx, 10%) var(--wy, 90%));
+      opacity: 0;
+    }
+    .lang-wipe span {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', 'Reem Kufi', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.4rem, 12vw, 5rem);
+      color: #fff;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .reveal { opacity: 1; transform: none; transition: none; }
+      .intro { display: none; }
+      body:not(.ready) .hero-inner > *, body:not(.ready) .home-link, body:not(.ready) .lang-btn { opacity: 1; }
+      body.ready .hero-inner > * { animation: none; }
       .orb, .star, .hero h1, .scroll-cue, .hand, .glow-ring { animation: none !important; }
     }
   </style>
 </head>
 <body>
+
+  <div class="intro" id="intro"><div class="intro-atom"><i></i><i></i><i></i><b></b></div><div class="intro-word">SKRT7</div><div class="intro-bar"><span></span></div></div>
+  <div class="lang-wipe" id="langWipe"><span id="wipeText"></span></div>
+  <button class="lang-btn" id="langBtn" type="button">English</button>
 
   <header class="hero" id="top">
     <a href="index.html" class="home-link"><i class="fa-solid fa-arrow-right"></i> الرئيسية</a>
@@ -568,7 +686,7 @@
     <div class="topnav-inner">
       <a href="#time" class="nav-pill" data-target="time">السفر عبر الزمن</a>
       <a href="#clone" class="nav-pill" data-target="clone">الاستنساخ</a>
-      <a href="#experiments" class="nav-pill" data-target="experiments">تجارب غيّرت العالم</a>
+      <a href="#experiments" class="nav-pill" data-target="experiments">التجارب</a>
       <a href="#facts" class="nav-pill" data-target="facts">أرقام</a>
       <a href="#sources" class="nav-pill" data-target="sources">مصادر البحث</a>
       <a href="#videos" class="nav-pill" data-target="videos">فيديوهات الشرح</a>
@@ -1030,6 +1148,86 @@
 
       buildTimeArt();
       buildDna();
+
+
+      const EN = {"الرئيسية": "Home", "علم · أبحاث · تجارب": "Science · Research · Experiments", "نافذة على العلم": "A Window on Science", "الزمن، الاستنساخ، وتجارب غيّرت فهمنا للعالم. معلومات مبسّطة، مُصنّفة حسب درجة إثباتها، ومعها روابط لمصادر يمكنك التحقق منها بنفسك.": "Time, cloning, and the experiments that changed how we see the world. Simple explanations, labeled by how well they are proven, with links to sources you can check yourself.", "ابدأ الرحلة": "Start the journey", "السفر عبر الزمن": "Time Travel", "الاستنساخ": "Cloning", "التجارب": "Experiments", "تجارب غيّرت العالم": "Experiments That Changed the World", "أرقام": "By the Numbers", "مصادر البحث": "Research Sources", "فيديوهات الشرح": "Explainer Videos", "رسم توضيحي لانحناء الزمكان (Spacetime)": "Illustration of spacetime curving around a clock (Spacetime)", "الفيزياء": "Physics", "السفر عبر الزمن: بين الخيال والفيزياء": "Time Travel: Between Fiction and Physics", "حسب النسبية الخاصة لأينشتاين (1905) الزمن ليس مطلقًا: كلما زادت سرعتك، أو قويت الجاذبية حولك، تباطأ زمنك مقارنةً بمراقب بعيد. يسمّى هذا": "According to Einstein's special relativity (1905), time is not absolute: the faster you move, or the stronger the gravity around you, the slower your clock runs compared with a distant observer. This is called ", "تمدّد الزمن (Time Dilation)": "time dilation", "، وقد قِيس فعليًا.": ", and it has been measured in real experiments.", "مثبت علميًا": "Proven", "رائد الفضاء سيرغي كريكاليف قضى نحو 803 أيام في المدار، فسبق ساعات الأرض بنحو 0.02 ثانية، أي «سافر» إلى المستقبل بجزء ضئيل جدًا.": "Cosmonaut Sergei Krikalev spent about 803 days in orbit, ending up roughly 0.02 seconds ahead of Earth clocks. In a tiny way, he \"traveled\" into the future.", "ساعات أقمار GPS تسبق ساعات الأرض بنحو 38 ميكروثانية يوميًا (صافي أثر الجاذبية والسرعة)، ولولا التصحيح لتراكم خطأ الموقع بنحو 10 كيلومترات كل يوم.": "GPS satellite clocks run about 38 microseconds per day ahead of Earth clocks (net effect of gravity and speed). Without correction, position errors would pile up by about 10 kilometers every day.", "نظري": "Theoretical", "الثقوب الدودية (Wormholes) حلول رياضية لمعادلات النسبية العامة، لكنها تحتاج «مادة غريبة» بطاقة سالبة لم تُرصد قط.": "Wormholes are mathematical solutions to general relativity, but they would need \"exotic matter\" with negative energy, which has never been observed.", "غير مثبت": "Unproven", "السفر إلى الماضي: لا دليل عليه، ويصطدم بمفارقات مثل «مفارقة الجد». واقترح هوكينغ عام 1992 «حدس حماية التسلسل الزمني» لمنعه.": "Travel to the past: there is no evidence for it, and it runs into paradoxes like the \"grandfather paradox\". In 1992 Hawking proposed the \"chronology protection conjecture\" to forbid it.", "تمدّد الزمن": "Time dilation", "تجربة هافيل–كيتنغ": "Hafele–Keating experiment", "الثقوب الدودية": "Wormholes", "حفلة هوكينغ للمسافرين عبر الزمن (2009)": "Hawking's Party for Time Travelers (2009)", "أقام ستيفن هوكينغ حفلة ثم أرسل دعواتها بعد انتهائها، على أمل أن يحضر مسافر من المستقبل. لم يحضر أحد، وكان ذلك «دليله» الطريف على صعوبة السفر إلى الماضي.": "Stephen Hawking threw a party and only sent out the invitations afterward, hoping a visitor from the future would show up. Nobody came, which was his playful \"evidence\" that travel to the past is hard.", "الحمض النووي DNA: ما يُنقل في عملية الاستنساخ": "DNA: what gets passed on in cloning", "الأحياء": "Biology", "الاستنساخ: من النعجة دوللي إلى أسئلة المستقبل": "Cloning: From Dolly the Sheep to Questions About the Future", "في": "On ", "5 يوليو 1996": "5 July 1996", "وُلدت في معهد روزلين قرب إدنبرة (اسكتلندا) النعجة دوللي، أول ثدييٍّ يُستنسخ من خلية جسدية لحيوان بالغ، بقيادة إيان ويلموت وكيث كامبل. أُعلن عنها في فبراير 1997 ونُشر البحث في مجلة Nature.": " at the Roslin Institute near Edinburgh, Scotland, Dolly the sheep was born, the first mammal cloned from an adult animal's somatic cell, led by Ian Wilmut and Keith Campbell. She was announced in February 1997 and the research was published in Nature.", "البحث الأصلي في Nature": "The original paper in Nature", "دوللي (ويكيبيديا)": "Dolly (Wikipedia)", "ملخص NIH عن الاستنساخ": "NIH cloning fact sheet", "معهد روزلين": "Roslin Institute", "كيف وُلدت دوللي؟ (تقنية SCNT)": "How was Dolly made? (SCNT technique)", "خلية من الغدة الثديية": "A cell from the mammary gland", "أُخذت خلية جسدية من نعجة بالغة عمرها نحو ست سنوات من سلالة فين دورست.": "A somatic cell was taken from an adult ewe about six years old, of the Finn Dorset breed.", "تفريغ البويضة": "Emptying the egg", "أُزيلت النواة من بويضة نعجة من سلالة سكوتش بلاك فيس، فصارت بلا مادة وراثية.": "The nucleus was removed from an egg of a Scottish Blackface ewe, leaving it with no genetic material.", "الدمج بنبضة كهربائية": "Fusion with an electric pulse", "دُمجت الخلية المانحة مع البويضة الفارغة بنبضة كهربائية، فبدأت تنقسم كأنها جنين.": "The donor cell was fused with the empty egg using an electric pulse, and it began to divide like an embryo.", "الزرع في أم بديلة": "Implantation in a surrogate", "نُقل الجنين بعد أيام من نموه في المختبر إلى رحم نعجة بديلة.": "After a few days of growing in the lab, the embryo was moved into the womb of a surrogate ewe.", "الولادة: 5 يوليو 1996": "Birth: 5 July 1996", "وُلدت دوللي وراثيًا شبه مطابقة للنعجة المانحة. وسُمّيت تيمّنًا بالمغنية دوللي بارتون لأن الخلية جاءت من غدة ثديية.": "Dolly was born genetically almost identical to the donor sheep. She was named after singer Dolly Parton because the cell came from a mammary gland.", "أسئلة شائعة": "Common questions", "كم محاولة لزمت؟": "How many attempts did it take?", "بحسب البحث المنشور، من 277 بويضة مُدمجة وُلد حمل ناجح واحد فقط، وكانت هي دوللي. لذلك عُدّت التقنية صعبة جدًا في بدايتها.": "According to the published paper, out of 277 fused eggs only one pregnancy succeeded, and it was Dolly. That is why the technique was considered extremely difficult at first.", "كم عاشت دوللي؟": "How long did Dolly live?", "عاشت حتى 14 فبراير 2003، وأُنهيت حياتها بسبب مرض رئوي متقدم. ولم يثبت علميًا أن الاستنساخ هو سبب مرضها. وأنجبت ست حملان بالتزاوج الطبيعي، ويُعرض جسدها محنّطًا في متحف اسكتلندا الوطني.": "She lived until 14 February 2003 and was euthanized because of advanced lung disease. It has not been proven that cloning caused her illness. She had six lambs through natural mating, and her body is displayed at the National Museum of Scotland.", "هل استُنسخ إنسان؟": "Has a human been cloned?", "لا يوجد حتى اليوم استنساخ بشري تناسلي مثبت علميًا. ادعاءات مثل Clonaid عام 2002 لم تُدعَّم بأي دليل. وتحظر معظم الدول هذا النوع من الاستنساخ لأسباب أخلاقية وطبية.": "To this day there is no scientifically verified reproductive human cloning. Claims such as Clonaid in 2002 were never backed by evidence. Most countries ban this kind of cloning for ethical and medical reasons.", "ماذا بعد دوللي؟": "What came after Dolly?", "في 2013 أنتج فريق جامعة أوريغون للصحة والعلوم خلايا جذعية جنينية بشرية بتقنية SCNT (للبحث وليس للولادة). وفي 2018 استُنسخ قردان مكاك في الصين، هما Zhong Zhong وHua Hua.": "In 2013 a team at Oregon Health & Science University produced human embryonic stem cells using SCNT (for research, not birth). In 2018 two macaque monkeys, Zhong Zhong and Hua Hua, were cloned in China.", "تاريخ العلم": "History of Science", "خمس تجارب كبرى، كل واحدة غيّرت سؤالًا كنا نظن أن جوابه محسوم. اسحب البطاقات يمينًا ويسارًا لتتنقل بينها.": "Five major experiments, each of which changed a question we thought was settled. Swipe the cards left and right to move between them.", "تجربة ميكلسون–مورلي": "Michelson–Morley experiment", "كليفلاند، أمريكا": "Cleveland, USA", "حاولت قياس حركة الأرض خلال «الأثير» المفترض، فلم تجد أي أثر. هذه النتيجة «الصفرية» مهّدت للنسبية.": "It tried to measure Earth's motion through the supposed \"aether\" and found no trace. This \"null\" result paved the way for relativity.", "اقرأ المزيد": "Read more", "تجربة ميلر–يوري": "Miller–Urey experiment", "جامعة شيكاغو، أمريكا": "University of Chicago, USA", "مرّر ستانلي ميلر شرارات كهربائية في غازات تحاكي الأرض البدائية، فتكوّنت أحماض أمينية، وهي لبنات الحياة.": "Stanley Miller passed electric sparks through gases imitating early Earth, and amino acids, the building blocks of life, formed.", "حول العالم، بطائرات تجارية": "Around the world, on commercial flights", "حملت ساعات ذرية على طائرات حول الأرض، فاختلفت قراءاتها عن ساعة ثابتة بما توقعته النسبية تمامًا.": "Atomic clocks were flown around the Earth, and their readings differed from a stationary clock exactly as relativity predicted.", "استنساخ النعجة دوللي": "Cloning of Dolly the Sheep", "معهد روزلين، اسكتلندا": "Roslin Institute, Scotland", "أول ثديي يُستنسخ من خلية جسدية بالغة. أثبتت أن الخلية المتخصصة يمكن «إعادة برمجتها» لتصنع كائنًا كاملًا.": "The first mammal cloned from an adult somatic cell. It showed that a specialized cell can be \"reprogrammed\" to create a whole animal.", "رصد الموجات الثقالية (LIGO)": "Detection of gravitational waves (LIGO)", "الولايات المتحدة": "United States", "رُصد في 14 سبتمبر 2015 تموّج في الزمكان ناتج عن اندماج ثقبين أسودين على بعد نحو 1.3 مليار سنة ضوئية، وأُعلن عنه في فبراير 2016.": "On 14 September 2015 a ripple in spacetime was detected, caused by two black holes merging about 1.3 billion light-years away. It was announced in February 2016.", "اسحب للتنقل بين التجارب": "Swipe to browse the experiments", "بالأرقام": "In Numbers", "أرقام تستحق التوقف": "Numbers Worth Pausing For", "أرقام وردت في الأقسام السابقة، مجمّعة في مكان واحد.": "Figures from the earlier sections, gathered in one place.", "بويضة مُدمجة لينجح حمل واحد (دوللي)": "fused eggs for one successful pregnancy (Dolly)", "ميكروثانية يوميًا تصحّحها أقمار GPS": "microseconds per day corrected by GPS satellites", "يومًا قضاها كريكاليف في المدار": "days Krikalev spent in orbit", "سنوات تقريبًا عاشتها دوللي": "years Dolly lived, roughly", "مليار سنة ضوئية: بعد مصدر موجات LIGO": "billion light-years: distance of the LIGO source", "للتوسع والتحقق": "To go deeper and verify", "مصادر البحث الموثوقة": "Trusted Research Sources", "لا تكتفِ بما تقرأه هنا؛ تحقق من المعلومة من مصدرها. هذه مواقع يعتمدها الباحثون.": "Don't settle for what you read here; check the claim at its source. These are sites researchers rely on.", "قبل أن تصدّق أي معلومة علمية": "Before you believe any scientific claim", "هل المصدر مجلة محكّمة أو جهة رسمية (جامعة، وكالة فضاء، منظمة صحية)؟": "Is the source a peer-reviewed journal or an official body (university, space agency, health organization)?", "هل تؤكد النتيجة مصادر أو مختبرات مستقلة، أم مصدر واحد فقط؟": "Is the result confirmed by independent sources or labs, or does it rest on a single source?", "ما تاريخ النشر؟ فالعلم يتحدّث، وما قيل قبل سنوات قد يتغيّر.": "What is the publication date? Science updates, and what was said years ago may change.", "فرّق بين «ملاحظة» و«فرضية» و«نظرية»؛ والأوراق المنشورة على arXiv قد لم تُحكَّم بعد.": "Tell \"observation\", \"hypothesis\" and \"theory\" apart; papers on arXiv may not have been peer-reviewed yet.", "أين تبحث؟": "Where to search", "محرك بحث للأوراق الأكاديمية والاستشهادات.": "A search engine for academic papers and citations.", "قاعدة أبحاث الطب والأحياء من المكتبة الوطنية الأمريكية للطب.": "A medical and biology research database from the US National Library of Medicine.", "أوراق الفيزياء والرياضيات وعلوم الحاسوب قبل التحكيم.": "Physics, math and computer science papers before peer review.", "من أعرق المجلات العلمية، وفيها نُشر بحث دوللي.": "One of the most respected scientific journals, where the Dolly paper was published.", "مجلة محكّمة تنشر أبرز الاكتشافات الحديثة.": "A peer-reviewed journal publishing major recent discoveries.", "الفضاء والفيزياء الفلكية من المصدر الرسمي.": "Space and astrophysics from the official source.", "شروحات رسمية عن الجينات والاستنساخ.": "Official explainers on genes and cloning.", "دروس مجانية مبسّطة في الفيزياء والأحياء.": "Free, simple lessons in physics and biology.", "شاهد وتعلّم": "Watch and Learn", "قنوات تشرح العلم بتحريك بسيط ومعلومات مدقّقة. المحتوى باللغة الإنجليزية، ويمكنك تفعيل الترجمة من يوتيوب.": "Channels that explain science with simple animation and fact-checked information. Content is in English, and you can turn on subtitles on YouTube.", "مواضيع علمية وكونية بتحريك مبسّط وجميل.": "Science and cosmic topics with simple, beautiful animation.", "الزمن، النسبية، والثقوب السوداء بعمق.": "Time, relativity, and black holes in depth.", "تجارب وأفكار تصحّح المفاهيم الخاطئة.": "Experiments and ideas that fix common misconceptions.", "دروس قصيرة في العلوم والتاريخ.": "Short lessons in science and history.", "بحث: النعجة دوللي": "Search: Dolly the sheep", "نتائج يوتيوب عن قصة الاستنساخ وشرحها.": "YouTube results on the story of cloning and how it works.", "بحث: تمدّد الزمن": "Search: time dilation", "نتائج يوتيوب تشرح الزمن والنسبية.": "YouTube results explaining time and relativity.", "هذه الصفحة للتعليم والثقافة العامة، وتم تبسيط بعض التفاصيل. للتأكد من أي رقم أو تاريخ، ارجع إلى المصادر المرفقة.": "This page is for education and general knowledge, and some details have been simplified. To verify any number or date, refer to the attached sources.", "العودة إلى الرئيسية": "Back to home", "__title": "SKRT7 | A Window on Science"};
+      const AR_TITLE = document.title;
+      const nodes = [];
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode(n) {
+          const p = n.parentNode;
+          if (!p || p.closest('script,style,button')) return NodeFilter.FILTER_REJECT;
+          return EN[n.nodeValue.trim()] ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      while (walker.nextNode()) {
+        const n = walker.currentNode;
+        nodes.push({ node: n, ar: n.nodeValue, en: n.nodeValue.replace(n.nodeValue.trim(), EN[n.nodeValue.trim()]) });
+      }
+      const ariaMap = [
+        ['timeArt', 'رسم يوضح انحناء الزمكان حول ساعة', 'Illustration of spacetime curving around a clock'],
+        ['dnaArt', 'رسم لسلسلة الحمض النووي DNA الحلزونية', 'Illustration of a DNA double helix']
+      ];
+      const langBtn = document.getElementById('langBtn');
+      function setLang(lang) {
+        const en = lang === 'en';
+        document.documentElement.lang = en ? 'en' : 'ar';
+        document.documentElement.dir = en ? 'ltr' : 'rtl';
+        nodes.forEach(o => { o.node.nodeValue = en ? o.en : o.ar; });
+        document.title = en ? EN.__title : AR_TITLE;
+        ariaMap.forEach(a => {
+          const el = document.getElementById(a[0]);
+          if (el) el.setAttribute('aria-label', en ? a[2] : a[1]);
+        });
+        langBtn.textContent = en ? 'العربية' : 'English';
+        try { localStorage.setItem('skrt7_sci_lang', lang); } catch (e) {}
+      }
+      const wipe = document.getElementById('langWipe');
+      const wipeText = document.getElementById('wipeText');
+      let switching = false;
+      langBtn.addEventListener('click', () => {
+        if (switching) return;
+        const next = document.documentElement.lang === 'en' ? 'ar' : 'en';
+        if (reduced || !wipe.animate) { setLang(next); return; }
+        switching = true;
+        const r = langBtn.getBoundingClientRect();
+        wipe.style.setProperty('--wx', (r.left + r.width / 2) + 'px');
+        wipe.style.setProperty('--wy', (r.top + r.height / 2) + 'px');
+        wipeText.textContent = next === 'en' ? 'English' : 'العربية';
+        wipeText.style.opacity = 0;
+        wipe.style.opacity = 1;
+        const grow = wipe.animate(
+          [{ clipPath: 'circle(0% at var(--wx) var(--wy))' }, { clipPath: 'circle(150% at var(--wx) var(--wy))' }],
+          { duration: 650, easing: 'cubic-bezier(0.7, 0, 0.2, 1)', fill: 'forwards' }
+        );
+        wipeText.animate([{ opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'none' }], { duration: 400, delay: 300, fill: 'forwards', easing: 'ease-out' });
+        grow.onfinish = () => {
+          setLang(next);
+          window.scrollTo(0, window.scrollY);
+          setTimeout(() => {
+            const out = wipe.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 550, easing: 'ease', fill: 'forwards' });
+            out.onfinish = () => {
+              grow.cancel();
+              wipe.style.opacity = 0;
+              wipeText.getAnimations().forEach(a => a.cancel());
+              switching = false;
+            };
+          }, 250);
+        };
+      });
+      const intro = document.getElementById('intro');
+      function startPage() {
+        if (intro) intro.classList.add('done');
+        document.body.classList.add('ready');
+        setTimeout(() => { if (intro) intro.remove(); }, 1600);
+      }
+      if (reduced) startPage();
+      else if (document.readyState === 'complete') setTimeout(startPage, 1300);
+      else window.addEventListener('load', () => setTimeout(startPage, 1300));
+      setTimeout(startPage, 4000);
+      let saved = null;
+      try { saved = localStorage.getItem('skrt7_sci_lang'); } catch (e) {}
+      if (saved === 'en') setLang('en');
 
       document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
