@@ -1190,6 +1190,7 @@
         const next = document.documentElement.lang === 'en' ? 'ar' : 'en';
         if (reduced || !wipe.animate) { setLang(next); return; }
         switching = true;
+        wipe.getAnimations().forEach(a => a.cancel());
         const r = langBtn.getBoundingClientRect();
         wipe.style.setProperty('--wx', (r.left + r.width / 2) + 'px');
         wipe.style.setProperty('--wy', (r.top + r.height / 2) + 'px');
@@ -1207,9 +1208,9 @@
           setTimeout(() => {
             const out = wipe.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 550, easing: 'ease', fill: 'forwards' });
             out.onfinish = () => {
-              grow.cancel();
-              wipe.style.opacity = 0;
+              wipe.getAnimations().forEach(a => a.cancel());
               wipeText.getAnimations().forEach(a => a.cancel());
+              wipe.style.opacity = 0;
               switching = false;
             };
           }, 250);
