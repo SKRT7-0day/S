@@ -476,6 +476,20 @@
       .champ-card::before, .champ-ring, .champ-glow, .crown-wrap, .champ-name, .sp, .row.podium::before, .row.p1 .name, .tw path { animation: none !important; }
     }
 
+    .info-list { display: grid; gap: 10px; margin: 0 0 16px; padding: 0; list-style: none; }
+    .info-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.9rem; line-height: 1.7; }
+    .info-list i { margin-top: 5px; width: 18px; text-align: center; flex-shrink: 0; }
+    .info-list .yes i { color: #34d399; }
+    .info-list .no i { color: #f87171; }
+    .info-list .tip i { color: #fbbf24; }
+    .modal-sub { text-align: center; color: var(--sub); font-size: 0.78rem; margin: 10px 0 0; }
+    .modal-actions { display: grid; gap: 10px; }
+    .modal-box .btn.secondary { background: var(--card2); color: var(--text); box-shadow: none; border: 1px solid var(--line); }
+    .modal-box .btn.danger { background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 10px 28px rgba(239,68,68,0.35); }
+    .modal-box .btn.discord { background: linear-gradient(135deg, #5865f2, #4752c4); box-shadow: 0 10px 28px rgba(88,101,242,0.45); }
+    .linklike { background: none; border: none; padding: 0; color: var(--accent); font: inherit; font-weight: 600; cursor: pointer; text-decoration: underline; }
+    .modal-box { max-height: 90vh; overflow-y: auto; }
+
     .toast {
       position: fixed;
       bottom: 22px;
@@ -579,9 +593,42 @@
             <div class="rule"><i class="fa-solid fa-star"></i><span><b>النجوم</b> تعطيك 10 نقاط، وكل 3 نجوم متتالية ترفع المضاعف حتى x5.</span></div>
             <div class="rule"><i class="fa-solid fa-skull-crossbones"></i><span><b>الأشواك الحمراء</b> تنقص قلباً وتصفّر المضاعف. عندك 3 قلوب.</span></div>
             <div class="rule"><i class="fa-solid fa-heart"></i><span><b>القلب الوردي</b> يعوّض قلباً ويعطيك 25 نقطة.</span></div>
+            <div class="rule"><i class="fa-solid fa-lock"></i><span><b>خصوصيتك:</b> نطلب من ديسكورد اسمك وصورتك فقط. <button class="linklike" id="privacyLink" type="button">التفاصيل</button></span></div>
             <div class="rule"><i class="fa-solid fa-shield-halved"></i><span><b>لعب نزيه:</b> السيرفر يعيد تشغيل جولتك كاملة ويحسب النقاط بنفسه، فأي نتيجة معدّلة تُرفض.</span></div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="noticeModal" role="dialog" aria-modal="true" aria-labelledby="noticeTitle">
+    <div class="modal-box">
+      <h3 id="noticeTitle">قبل الدخول: ماذا نطلب من ديسكورد؟</h3>
+      <ul class="info-list">
+        <li class="yes"><i class="fa-solid fa-circle-check"></i><span>ربط حسابك يتم عبر تطبيق ديسكورد رسمي باسم <b>SKRT7 Game</b>، ولا يحتاج كلمة سر.</span></li>
+        <li class="yes"><i class="fa-solid fa-circle-check"></i><span>الصلاحية الوحيدة المطلوبة هي <b>الاطلاع على اسم حسابك وصورته</b> (مع إطار الصورة إن وُجد). لا غير.</span></li>
+        <li class="no"><i class="fa-solid fa-circle-xmark"></i><span>لا نطلب بريدك، ولا قائمة أصدقائك، ولا سيرفراتك، ولا رسائلك، ولا أي تصرف باسمك.</span></li>
+        <li class="tip"><i class="fa-solid fa-magnifying-glass"></i><span><b>تحقّق بنفسك:</b> في شاشة الموافقة من ديسكورد، اقرأ قائمة الصلاحيات في الأسفل، وستجدها محصورة في معلومات حسابك الأساسية.</span></li>
+        <li class="yes"><i class="fa-solid fa-database"></i><span>نحفظ فقط: معرّف حسابك واسمك وصورتك ونقاطك وترتيبك.</span></li>
+      </ul>
+      <div class="modal-actions">
+        <button class="btn discord" id="noticeGo" type="button"><i class="fa-brands fa-discord"></i> فهمت، تابع إلى ديسكورد</button>
+        <button class="btn secondary" id="noticeClose" type="button">إلغاء</button>
+      </div>
+      <p class="modal-sub" id="noticeOnce">هذا البيان يظهر مرة واحدة فقط.</p>
+    </div>
+  </div>
+
+  <div class="modal" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="modal-box">
+      <h3 id="logoutTitle">تسجيل الخروج؟</h3>
+      <ul class="info-list">
+        <li class="yes"><i class="fa-solid fa-floppy-disk"></i><span>حسابك وتقدمك (نقاطك وأفضل نتيجة وترتيبك) <b>محفوظة في الموقع</b> ولن تُحذف.</span></li>
+        <li class="tip"><i class="fa-solid fa-right-from-bracket"></i><span>الخروج يُنهي جلستك على هذا الجهاز فقط، وتستطيع العودة في أي وقت بحساب ديسكورد نفسه لتجد كل شيء كما تركته.</span></li>
+      </ul>
+      <div class="modal-actions">
+        <button class="btn danger" id="logoutYes" type="button"><i class="fa-solid fa-right-from-bracket"></i> نعم، تسجيل الخروج</button>
+        <button class="btn secondary" id="logoutNo" type="button">البقاء مسجلاً</button>
       </div>
     </div>
   </div>
@@ -787,9 +834,50 @@ function createGame(seed) {
         loadBoard(currentRange);
       }
 
-      function loginDiscord() {
+      const LS_NOTICE = 'skrt7_game_notice_seen';
+      function goDiscord() {
         window.location.href = API + '/api/auth/discord';
       }
+      function openModal(id) {
+        const m = $(id);
+        m.classList.add('open');
+        const b = m.querySelector('.btn');
+        if (b) setTimeout(() => b.focus(), 120);
+      }
+      function closeModal(id) {
+        $(id).classList.remove('open');
+      }
+      function openNotice(forLogin) {
+        $('noticeGo').style.display = forLogin ? '' : 'none';
+        $('noticeOnce').style.display = forLogin ? '' : 'none';
+        $('noticeClose').textContent = forLogin ? 'إلغاء' : 'حسناً';
+        openModal('noticeModal');
+      }
+      function loginDiscord() {
+        let seen = false;
+        try { seen = localStorage.getItem(LS_NOTICE) === '1'; } catch (e) {}
+        if (seen) goDiscord();
+        else openNotice(true);
+      }
+      $('noticeGo').addEventListener('click', () => {
+        try { localStorage.setItem(LS_NOTICE, '1'); } catch (e) {}
+        closeModal('noticeModal');
+        goDiscord();
+      });
+      $('noticeClose').addEventListener('click', () => closeModal('noticeModal'));
+      $('privacyLink').addEventListener('click', () => openNotice(false));
+      $('logoutNo').addEventListener('click', () => closeModal('logoutModal'));
+      $('logoutYes').addEventListener('click', () => {
+        closeModal('logoutModal');
+        setAuth(null, null);
+        toast('تم تسجيل الخروج. حسابك وتقدمك محفوظان');
+      });
+      document.querySelectorAll('.modal').forEach(m => {
+        m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+      });
+      window.addEventListener('keydown', e => {
+        if (e.key === 'Escape') document.querySelectorAll('.modal.open').forEach(m => m.classList.remove('open'));
+      });
 
       const ERRORS = {
         denied: 'ألغيت تسجيل الدخول',
@@ -830,9 +918,8 @@ function createGame(seed) {
       }
 
       $('accBtn').addEventListener('click', () => {
-        if (user) {
-          if (confirm('تسجيل الخروج؟')) { setAuth(null, null); toast('تم تسجيل الخروج'); }
-        } else loginDiscord();
+        if (user) openModal('logoutModal');
+        else loginDiscord();
       });
 
       const CROWN = '<svg viewBox="0 0 120 80" aria-hidden="true"><path d="M8 66 L16 20 L42 46 L60 8 L78 46 L104 20 L112 66 Z" fill="url(#crownGrad)" stroke="#92400e" stroke-width="2" stroke-linejoin="round"/><rect x="8" y="64" width="104" height="14" rx="5" fill="url(#crownGrad)" stroke="#92400e" stroke-width="2"/><path d="M8 66 L16 20 L42 46 L60 8 L78 46 L104 20 L112 66 Z" fill="url(#crownShine)"/><rect x="8" y="64" width="104" height="14" rx="5" fill="url(#crownShine)"/><circle cx="16" cy="20" r="6" fill="#f43f5e" stroke="#fff" stroke-opacity="0.6"/><circle cx="60" cy="8" r="7" fill="#22d3ee" stroke="#fff" stroke-opacity="0.6"/><circle cx="104" cy="20" r="6" fill="#a855f7" stroke="#fff" stroke-opacity="0.6"/><circle cx="36" cy="71" r="3.5" fill="#f43f5e"/><circle cx="60" cy="71" r="3.5" fill="#22d3ee"/><circle cx="84" cy="71" r="3.5" fill="#a855f7"/><g class="tw" fill="#fff"><path d="M0-8 L2-2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2-2Z" transform="translate(16 18)"/><path d="M0-8 L2-2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2-2Z" transform="translate(60 6)"/><path d="M0-8 L2-2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2-2Z" transform="translate(104 18)"/></g></svg>';
