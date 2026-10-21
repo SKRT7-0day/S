@@ -300,6 +300,15 @@
     .switch button { background: none; border: none; color: var(--accent); font-family: inherit; font-weight: 600; cursor: pointer; font-size: inherit; }
     .close-x { position: absolute; }
 
+
+    .av { position: relative; width: var(--s, 40px); height: var(--s, 40px); flex-shrink: 0; display: inline-block; }
+    .av img.base { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; background: var(--card2); }
+    .av img.deco { position: absolute; left: -10%; top: -10%; width: 120%; height: 120%; pointer-events: none; max-width: none; }
+    .pill .av { --s: 26px; }
+    .row .av { --s: 44px; margin: 0 4px; }
+    .row.has-accent { border-color: var(--glow); }
+    .btn.discord { background: linear-gradient(135deg, #5865f2, #4752c4); box-shadow: 0 10px 28px rgba(88,101,242,0.45); }
+
     .toast {
       position: fixed;
       bottom: 22px;
@@ -336,12 +345,12 @@
   <div class="wrap">
     <div class="topbar">
       <a class="pill" href="index.html"><i class="fa-solid fa-arrow-right"></i> الرئيسية</a>
-      <button class="pill" id="accBtn" type="button"><i class="fa-solid fa-user"></i> <span id="accText">تسجيل الدخول</span></button>
+      <button class="pill" id="accBtn" type="button"><span id="accIcon"><i class="fa-brands fa-discord"></i></span> <span id="accText">دخول بديسكورد</span></button>
     </div>
 
     <div class="title reveal">
       <h1>لعبة النجوم</h1>
-      <p>اجمع النجوم، تفادَ الأشواك، وسجّل اسمك بين الأفضل.</p>
+      <p>اجمع النجوم، تفادَ الأشواك، وسجّل اسمك بصورتك بين الأفضل.</p>
     </div>
 
     <div class="layout">
@@ -353,7 +362,7 @@
           <div class="overlay" id="menu">
             <h2>جاهز؟</h2>
             <p id="menuMsg">سجّل دخولك لتدخل لوحة المتصدرين، أو العب تجريبياً.</p>
-            <button class="btn" id="playBtn" type="button"><i class="fa-solid fa-play"></i> <span id="playText">ابدأ اللعب</span></button>
+            <button class="btn discord" id="playBtn" type="button"><i class="fa-solid fa-play" id="playIcon"></i> <span id="playText">ابدأ اللعب</span></button>
             <button class="btn ghost" id="practiceBtn" type="button">لعب تجريبي</button>
             <div class="hint">
               <span><i class="fa-solid fa-keyboard"></i> الأسهم أو A / D</span>
@@ -388,26 +397,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="modal" id="authModal">
-    <div class="modal-box">
-      <h3 id="authTitle">تسجيل الدخول</h3>
-      <form id="authForm" autocomplete="on">
-        <div class="field">
-          <label for="fUser">اسم المستخدم</label>
-          <input id="fUser" name="username" autocomplete="username" maxlength="16" required>
-        </div>
-        <div class="field">
-          <label for="fPass">كلمة السر</label>
-          <input id="fPass" name="password" type="password" autocomplete="current-password" maxlength="64" required>
-        </div>
-        <div class="form-err" id="formErr"></div>
-        <button class="btn" id="authSubmit" type="submit">دخول</button>
-      </form>
-      <div class="switch"><span id="switchText">ما عندك حساب؟</span> <button id="switchBtn" type="button">أنشئ حساباً</button></div>
-      <div class="switch"><button id="authClose" type="button">إغلاق</button></div>
     </div>
   </div>
 
@@ -540,6 +529,41 @@ function createGame(seed) {
         return data;
       }
 
+      const CDN = 'https://cdn.discordapp.com';
+      function avatarUrl(id, hash) {
+        if (hash) return CDN + '/avatars/' + encodeURIComponent(id) + '/' + encodeURIComponent(hash) + '.' + (hash.indexOf('a_') === 0 && !reduced ? 'gif' : 'png') + '?size=128';
+        let idx = 0;
+        try { idx = Number((BigInt(id) >> 22n) % 6n); } catch (e) {}
+        return CDN + '/embed/avatars/' + idx + '.png';
+      }
+      function makeAvatar(id, hash, deco) {
+        const wrap = document.createElement('span');
+        wrap.className = 'av';
+        const img = document.createElement('img');
+        img.className = 'base';
+        img.alt = '';
+        img.loading = 'lazy';
+        img.referrerPolicy = 'no-referrer';
+        img.src = avatarUrl(id, hash);
+        img.onerror = () => { img.onerror = null; img.src = CDN + '/embed/avatars/0.png'; };
+        wrap.appendChild(img);
+        if (deco) {
+          const d = document.createElement('img');
+          d.className = 'deco';
+          d.alt = '';
+          d.loading = 'lazy';
+          d.referrerPolicy = 'no-referrer';
+          d.src = CDN + '/avatar-decoration-presets/' + encodeURIComponent(deco) + '.png?size=128' + (reduced ? '' : '&passthrough=true');
+          d.onerror = () => d.remove();
+          wrap.appendChild(d);
+        }
+        return wrap;
+      }
+      function accentColor(n) {
+        if (!Number.isInteger(n) || n <= 0) return null;
+        return '#' + ('000000' + n.toString(16)).slice(-6);
+      }
+
       function setAuth(t, u) {
         token = t;
         user = u;
@@ -552,65 +576,76 @@ function createGame(seed) {
 
       function renderAuth() {
         const btn = $('accBtn');
+        const icon = $('accIcon');
+        icon.textContent = '';
         if (user) {
+          icon.appendChild(makeAvatar(user.id, user.avatar, user.decoration));
           $('accText').textContent = user.username;
           btn.classList.add('me');
           $('menuMsg').textContent = 'أهلاً ' + user.username + '، أفضل نتيجة لك: ' + user.best;
           $('playText').textContent = 'ابدأ جولة رسمية';
+          $('playIcon').className = 'fa-solid fa-play';
+          $('playBtn').classList.remove('discord');
         } else {
-          $('accText').textContent = 'تسجيل الدخول';
+          const i = document.createElement('i');
+          i.className = 'fa-brands fa-discord';
+          icon.appendChild(i);
+          $('accText').textContent = 'دخول بديسكورد';
           btn.classList.remove('me');
-          $('menuMsg').textContent = 'سجّل دخولك لتدخل لوحة المتصدرين، أو العب تجريبياً.';
-          $('playText').textContent = 'سجّل واللعب';
+          $('menuMsg').textContent = 'ادخل بحساب ديسكورد لتظهر بصورتك وإطارك في لوحة المتصدرين، أو العب تجريبياً.';
+          $('playText').textContent = 'دخول بديسكورد';
+          $('playIcon').className = 'fa-brands fa-discord';
+          $('playBtn').classList.add('discord');
         }
         loadBoard(currentRange);
       }
 
+      function loginDiscord() {
+        window.location.href = API + '/api/auth/discord';
+      }
+
+      const ERRORS = {
+        denied: 'ألغيت تسجيل الدخول',
+        young: 'حساب ديسكورد جديد جداً، جرب بعد أيام',
+        banned: 'هذا الحساب محظور',
+        state: 'انتهت جلسة الدخول، جرب مرة ثانية',
+        bot: 'حسابات البوتات غير مسموحة'
+      };
+      function readHash() {
+        const h = window.location.hash;
+        if (!h || h.length < 2) return;
+        const p = new URLSearchParams(h.slice(1));
+        const t = p.get('t');
+        const e = p.get('error');
+        if (t || e) {
+          try { history.replaceState(null, '', window.location.pathname + window.location.search); } catch (x) {}
+        }
+        if (t) {
+          token = t;
+          try { localStorage.setItem(LS_TOKEN, t); } catch (x) {}
+          pendingWelcome = true;
+        } else if (e) {
+          setTimeout(() => toast(ERRORS[e] || 'تعذر تسجيل الدخول، جرب مرة ثانية'), 400);
+        }
+      }
+      let pendingWelcome = false;
+      readHash();
+
       async function restore() {
         if (!token) { renderAuth(); return; }
         const r = await api('/api/me');
-        if (r.ok) { user = r.user; renderAuth(); }
-        else if (r.status === 401 || r.status === 403) setAuth(null, null);
+        if (r.ok) {
+          user = r.user;
+          renderAuth();
+          if (pendingWelcome) toast('أهلاً ' + user.username);
+        } else if (r.status === 401 || r.status === 403) setAuth(null, null);
         else renderAuth();
       }
 
-      let mode = 'register';
-      const modal = $('authModal');
-      function openAuth(m) {
-        mode = m || 'login';
-        $('authTitle').textContent = mode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب';
-        $('authSubmit').textContent = mode === 'login' ? 'دخول' : 'إنشاء الحساب';
-        $('switchText').textContent = mode === 'login' ? 'ما عندك حساب؟' : 'عندك حساب؟';
-        $('switchBtn').textContent = mode === 'login' ? 'أنشئ حساباً' : 'سجّل دخولك';
-        $('fPass').setAttribute('autocomplete', mode === 'login' ? 'current-password' : 'new-password');
-        $('formErr').textContent = '';
-        modal.classList.add('open');
-        setTimeout(() => $('fUser').focus(), 120);
-      }
-      function closeAuth() { modal.classList.remove('open'); }
-      $('switchBtn').addEventListener('click', () => openAuth(mode === 'login' ? 'register' : 'login'));
-      $('authClose').addEventListener('click', closeAuth);
-      modal.addEventListener('click', e => { if (e.target === modal) closeAuth(); });
-      $('authForm').addEventListener('submit', async e => {
-        e.preventDefault();
-        const btn = $('authSubmit');
-        btn.disabled = true;
-        $('formErr').textContent = '';
-        const r = await api(mode === 'login' ? '/api/login' : '/api/register', 'POST', { username: $('fUser').value, password: $('fPass').value });
-        btn.disabled = false;
-        if (r.ok) {
-          setAuth(r.token, r.user);
-          closeAuth();
-          $('fPass').value = '';
-          toast('أهلاً ' + r.user.username);
-        } else {
-          $('formErr').textContent = r.error || 'حدث خطأ';
-        }
-      });
       $('accBtn').addEventListener('click', () => {
         if (user) {
           if (confirm('تسجيل الخروج؟')) { setAuth(null, null); toast('تم تسجيل الخروج'); }
-        } else openAuth('login');
+        } else loginDiscord();
       });
 
       let currentRange = 'all';
@@ -638,7 +673,12 @@ function createGame(seed) {
         }
         r.rows.forEach((x, i) => {
           const row = document.createElement('div');
-          row.className = 'row' + (user && x.name === user.username ? ' mine' : '');
+          row.className = 'row' + (user && x.id && x.id === user.id ? ' mine' : '');
+          const ac = accentColor(x.accent);
+          if (ac) {
+            row.classList.add('has-accent');
+            row.style.setProperty('--glow', ac);
+          }
           row.style.animationDelay = Math.min(i * 40, 500) + 'ms';
           const rk = document.createElement('div');
           rk.className = 'rank';
@@ -650,6 +690,7 @@ function createGame(seed) {
           pt.className = 'pts';
           pt.textContent = x.score;
           row.appendChild(rk);
+          row.appendChild(makeAvatar(x.id, x.avatar, x.decoration));
           row.appendChild(nm);
           row.appendChild(pt);
           box.appendChild(row);
@@ -983,12 +1024,12 @@ function createGame(seed) {
         practice = isPractice;
         runId = null;
         if (!practice) {
-          if (!user) { pb.disabled = false; pr.disabled = false; openAuth('register'); return; }
+          if (!user) { pb.disabled = false; pr.disabled = false; loginDiscord(); return; }
           const r = await api('/api/start', 'POST');
           if (!r.ok) {
             pb.disabled = false;
             pr.disabled = false;
-            if (r.status === 401 || r.status === 403) { setAuth(null, null); openAuth('login'); }
+            if (r.status === 401 || r.status === 403) setAuth(null, null);
             toast(r.error || 'تعذر بدء الجولة');
             return;
           }
@@ -1074,7 +1115,7 @@ function createGame(seed) {
         requestAnimationFrame(loop);
       }
 
-      $('playBtn').addEventListener('click', () => { if (!user) openAuth('register'); else begin(false); });
+      $('playBtn').addEventListener('click', () => { if (!user) loginDiscord(); else begin(false); });
       $('practiceBtn').addEventListener('click', () => begin(true));
       $('againBtn').addEventListener('click', () => {
         state = 'menu';
