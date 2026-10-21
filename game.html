@@ -309,6 +309,173 @@
     .row.has-accent { border-color: var(--glow); }
     .btn.discord { background: linear-gradient(135deg, #5865f2, #4752c4); box-shadow: 0 10px 28px rgba(88,101,242,0.45); }
 
+    .champ { margin: 0 auto 24px; }
+    .champ-card {
+      position: relative;
+      border-radius: 26px;
+      overflow: hidden;
+      isolation: isolate;
+      text-align: center;
+      padding: 18px 16px 22px;
+      box-shadow: 0 20px 60px rgba(245,158,11,0.22);
+    }
+    .champ-card::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: max(220%, 900px);
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      background: conic-gradient(#fde68a, #f59e0b, #f472b6, #a855f7, #22d3ee, #fde68a);
+      animation: cardSpin 7s linear infinite;
+      z-index: -2;
+    }
+    .champ-card::after {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(251,191,36,0.2), transparent 60%),
+        var(--card);
+      z-index: -1;
+    }
+    @keyframes cardSpin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    .champ-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--head);
+      font-size: 1.05rem;
+      color: #fbbf24;
+      letter-spacing: 0.5px;
+    }
+    .champ-stage { position: relative; width: 170px; height: 160px; margin: 6px auto 0; }
+    .champ-av { position: absolute; left: 50%; top: 46px; margin-left: -52px; width: 104px; height: 104px; }
+    .champ-av .av { --s: 104px; }
+    .champ-ring {
+      position: absolute;
+      inset: -9px;
+      border-radius: 50%;
+      background: conic-gradient(#fde68a, #f59e0b, #f472b6, #a855f7, #22d3ee, #fde68a);
+      animation: ringSpin 4s linear infinite;
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+      filter: drop-shadow(0 0 8px rgba(251,191,36,0.8));
+    }
+    @keyframes ringSpin { to { transform: rotate(360deg); } }
+    .champ-glow {
+      position: absolute;
+      inset: -22px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(251,191,36,0.45), transparent 65%);
+      animation: glowPulse 2.8s ease-in-out infinite;
+    }
+    @keyframes glowPulse { 0%, 100% { opacity: 0.55; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.1); } }
+    .crown-wrap {
+      position: absolute;
+      left: 50%;
+      top: -4px;
+      width: 96px;
+      margin-left: -48px;
+      z-index: 4;
+      transform-origin: 50% 90%;
+      animation: crownLife 7s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(251,191,36,0.75));
+      pointer-events: none;
+    }
+    .crown-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
+    @keyframes crownLife {
+      0% { transform: translateY(0) rotate(-5deg); }
+      20% { transform: translateY(-5px) rotate(-3deg); }
+      40% { transform: translateY(0) rotate(-5deg); }
+      58% { transform: translateY(0) rotate(-5deg); }
+      64% { transform: translateY(-18px) rotate(9deg) scale(1.1); }
+      70% { transform: translateY(0) rotate(-12deg); }
+      76% { transform: translateY(-5px) rotate(5deg); }
+      82% { transform: translateY(0) rotate(-5deg); }
+      100% { transform: translateY(0) rotate(-5deg); }
+    }
+    .tw path { transform-box: fill-box; transform-origin: center; animation: twinkle 2.4s ease-in-out infinite; }
+    .tw path:nth-child(2) { animation-delay: 0.8s; }
+    .tw path:nth-child(3) { animation-delay: 1.5s; }
+    @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); } 50% { opacity: 1; transform: scale(1.3) rotate(45deg); } }
+    .sp {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #fde68a;
+      box-shadow: 0 0 8px #fbbf24;
+      left: var(--x);
+      bottom: 20px;
+      opacity: 0;
+      animation: spRise var(--d) ease-in infinite;
+      animation-delay: var(--dl);
+    }
+    @keyframes spRise { 0% { opacity: 0; transform: translateY(0) scale(0.6); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-120px) scale(1.2); } }
+    .champ-name {
+      font-family: var(--head);
+      font-size: 2rem;
+      line-height: 1.2;
+      margin: 4px 0 2px;
+      background: linear-gradient(110deg, #fde68a 20%, #fff 45%, #f59e0b 60%, #fde68a 80%);
+      background-size: 220% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: goldShine 3.5s linear infinite;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    @keyframes goldShine { to { background-position: -220% center; } }
+    .champ-title { color: var(--sub); font-size: 0.85rem; margin-bottom: 10px; }
+    .champ-score { font-family: var(--head); font-size: 2.4rem; color: #fbbf24; text-shadow: 0 0 22px rgba(251,191,36,0.5); line-height: 1; direction: ltr; }
+    .champ-score small { display: block; font-size: 0.75rem; color: var(--sub); text-shadow: none; margin-top: 4px; font-family: var(--body); direction: rtl; }
+    .champ-perks { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 14px; }
+    .perk {
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #fcd34d;
+      background: rgba(251,191,36,0.12);
+      border: 1px solid rgba(251,191,36,0.4);
+    }
+    .champ-me { margin-top: 12px; font-size: 0.88rem; color: #fcd34d; font-weight: 600; }
+    .champ-empty { padding: 10px 0 4px; color: var(--sub); }
+    .champ-empty .crown-wrap { position: relative; left: auto; top: auto; margin: 0 auto 8px; opacity: 0.55; filter: grayscale(0.6); animation-duration: 9s; }
+
+    .row.podium { position: relative; overflow: hidden; isolation: isolate; border-color: transparent; background: transparent; }
+    .row.podium::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: max(240%, 700px);
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      background: conic-gradient(from 0deg, transparent 0 62%, var(--pc) 82%, transparent 100%);
+      animation: rowSpin var(--ps, 6s) linear infinite;
+      z-index: -2;
+    }
+    .row.podium::after { content: ""; position: absolute; inset: 1.5px; border-radius: 12.5px; background: var(--card2); z-index: -1; }
+    .row.podium.p1 { --pc: #fbbf24; --ps: 3.2s; box-shadow: 0 0 22px rgba(251,191,36,0.25); }
+    .row.podium.p1::before { background: conic-gradient(from 0deg, #f59e0b, #fde68a, transparent 28%, #f59e0b 55%, #fde68a 78%, #f59e0b); }
+    .row.podium.p2 { --pc: #e2e8f0; --ps: 6s; }
+    .row.podium.p3 { --pc: #fb923c; --ps: 6.5s; }
+    @keyframes rowSpin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    .row.p1 .name { background: linear-gradient(110deg, #fde68a 20%, #fff 45%, #f59e0b 60%, #fde68a 80%); background-size: 220% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: goldShine 3.5s linear infinite; }
+    .mini-crown { position: absolute; top: -9px; right: -7px; width: 24px; transform: rotate(18deg); filter: drop-shadow(0 0 4px rgba(251,191,36,0.8)); pointer-events: none; z-index: 3; }
+    .mini-crown svg { width: 100%; height: auto; display: block; }
+    .row .av { overflow: visible; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .champ-card::before, .champ-ring, .champ-glow, .crown-wrap, .champ-name, .sp, .row.podium::before, .row.p1 .name, .tw path { animation: none !important; }
+    }
+
     .toast {
       position: fixed;
       bottom: 22px;
@@ -339,6 +506,21 @@
   </style>
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="crownGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fde68a"/>
+        <stop offset="0.55" stop-color="#f59e0b"/>
+        <stop offset="1" stop-color="#b45309"/>
+      </linearGradient>
+      <linearGradient id="crownShine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="36" y2="30">
+        <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+        <stop offset="0.5" stop-color="#fff" stop-opacity="0.95"/>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        <animateTransform attributeName="gradientTransform" type="translate" from="-70 -20" to="150 40" dur="3.4s" repeatCount="indefinite"/>
+      </linearGradient>
+    </defs>
+  </svg>
   <div class="glow g1"></div>
   <div class="glow g2"></div>
 
@@ -351,6 +533,10 @@
     <div class="title reveal">
       <h1>لعبة النجوم</h1>
       <p>اجمع النجوم، تفادَ الأشواك، وسجّل اسمك بصورتك بين الأفضل.</p>
+    </div>
+
+    <div class="champ reveal">
+      <div class="champ-card" id="champCard"></div>
     </div>
 
     <div class="layout">
@@ -597,6 +783,7 @@ function createGame(seed) {
           $('playIcon').className = 'fa-brands fa-discord';
           $('playBtn').classList.add('discord');
         }
+        renderChamp();
         loadBoard(currentRange);
       }
 
@@ -648,6 +835,82 @@ function createGame(seed) {
         } else loginDiscord();
       });
 
+      const CROWN = '<svg viewBox="0 0 120 80" aria-hidden="true"><path d="M8 66 L16 20 L42 46 L60 8 L78 46 L104 20 L112 66 Z" fill="url(#crownGrad)" stroke="#92400e" stroke-width="2" stroke-linejoin="round"/><rect x="8" y="64" width="104" height="14" rx="5" fill="url(#crownGrad)" stroke="#92400e" stroke-width="2"/><path d="M8 66 L16 20 L42 46 L60 8 L78 46 L104 20 L112 66 Z" fill="url(#crownShine)"/><rect x="8" y="64" width="104" height="14" rx="5" fill="url(#crownShine)"/><circle cx="16" cy="20" r="6" fill="#f43f5e" stroke="#fff" stroke-opacity="0.6"/><circle cx="60" cy="8" r="7" fill="#22d3ee" stroke="#fff" stroke-opacity="0.6"/><circle cx="104" cy="20" r="6" fill="#a855f7" stroke="#fff" stroke-opacity="0.6"/><circle cx="36" cy="71" r="3.5" fill="#f43f5e"/><circle cx="60" cy="71" r="3.5" fill="#22d3ee"/><circle cx="84" cy="71" r="3.5" fill="#a855f7"/><g class="tw" fill="#fff"><path d="M0-8 L2-2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2-2Z" transform="translate(16 18)"/><path d="M0-8 L2-2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2-2Z" transform="translate(60 6)"/><path d="M0-8 L2-2 L8 0 L2 2 L0 8 L-2 2 L-8 0 L-2-2Z" transform="translate(104 18)"/></g></svg>';
+
+      let champion = null;
+      function isChampion() {
+        return !!(user && champion && champion.id && champion.id === user.id);
+      }
+
+      function el(tag, cls, text) {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text !== undefined) e.textContent = text;
+        return e;
+      }
+
+      function renderChamp() {
+        const card = $('champCard');
+        card.textContent = '';
+        const label = el('div', 'champ-label');
+        const li = el('i', 'fa-solid fa-crown');
+        label.appendChild(li);
+        label.appendChild(document.createTextNode(' حاكم المتصدرين'));
+        card.appendChild(label);
+
+        if (!champion) {
+          const empty = el('div', 'champ-empty');
+          const cw = el('div', 'crown-wrap');
+          cw.innerHTML = CROWN;
+          empty.appendChild(cw);
+          empty.appendChild(el('div', '', 'لا يوجد حاكم بعد، كن أول من يعتلي العرش ويرتدي التاج.'));
+          card.appendChild(empty);
+          return;
+        }
+
+        const stage = el('div', 'champ-stage');
+        const glowEl = el('div', 'champ-glow');
+        glowEl.style.cssText = 'position:absolute;left:50%;top:46px;width:104px;height:104px;margin-left:-52px;';
+        stage.appendChild(glowEl);
+        if (!reduced) {
+          for (let i = 0; i < 12; i++) {
+            const sp = el('i', 'sp');
+            sp.style.setProperty('--x', (10 + Math.random() * 80) + '%');
+            sp.style.setProperty('--d', (2.4 + Math.random() * 2.4) + 's');
+            sp.style.setProperty('--dl', (Math.random() * 3) + 's');
+            stage.appendChild(sp);
+          }
+        }
+        const av = el('div', 'champ-av');
+        av.appendChild(el('div', 'champ-ring'));
+        av.appendChild(makeAvatar(champion.id, champion.avatar, champion.decoration));
+        stage.appendChild(av);
+        const cw = el('div', 'crown-wrap');
+        cw.innerHTML = CROWN;
+        stage.appendChild(cw);
+        card.appendChild(stage);
+
+        card.appendChild(el('div', 'champ-name', champion.name));
+        card.appendChild(el('div', 'champ-title', 'الأول على كل الأوقات'));
+        const sc = el('div', 'champ-score', String(champion.score));
+        sc.appendChild(el('small', '', 'نقطة'));
+        card.appendChild(sc);
+        const perks = el('div', 'champ-perks');
+        ['تاج متحرك', 'إطار ذهبي', 'اسم ذهبي', 'سفينة ذهبية بذيل نجوم'].forEach(t => perks.appendChild(el('span', 'perk', t)));
+        card.appendChild(perks);
+        if (isChampion()) card.appendChild(el('div', 'champ-me', 'أنت الحاكم! سفينتك الذهبية شغالة في اللعب.'));
+      }
+
+      let champLoading = false;
+      async function loadChampion() {
+        if (champLoading) return;
+        champLoading = true;
+        const r = await api('/api/leaderboard?range=all');
+        champLoading = false;
+        champion = r.ok && r.rows && r.rows.length ? r.rows[0] : null;
+        renderChamp();
+      }
+
       let currentRange = 'all';
       let boardSeq = 0;
       async function loadBoard(range) {
@@ -673,7 +936,7 @@ function createGame(seed) {
         }
         r.rows.forEach((x, i) => {
           const row = document.createElement('div');
-          row.className = 'row' + (user && x.id && x.id === user.id ? ' mine' : '');
+          row.className = 'row' + (user && x.id && x.id === user.id ? ' mine' : '') + (i < 3 ? ' podium p' + (i + 1) : '');
           const ac = accentColor(x.accent);
           if (ac) {
             row.classList.add('has-accent');
@@ -690,7 +953,13 @@ function createGame(seed) {
           pt.className = 'pts';
           pt.textContent = x.score;
           row.appendChild(rk);
-          row.appendChild(makeAvatar(x.id, x.avatar, x.decoration));
+          const avEl = makeAvatar(x.id, x.avatar, x.decoration);
+          if (i === 0) {
+            const mc = el('span', 'mini-crown');
+            mc.innerHTML = CROWN;
+            avEl.appendChild(mc);
+          }
+          row.appendChild(avEl);
           row.appendChild(nm);
           row.appendChild(pt);
           box.appendChild(row);
@@ -932,9 +1201,11 @@ function createGame(seed) {
             const py = GAME.PY;
             ctx.shadowColor = '#22d3ee';
             ctx.shadowBlur = 20;
+            const gold = isChampion();
             const pg = ctx.createLinearGradient(px - 24, py, px + 24, py);
-            pg.addColorStop(0, '#22d3ee');
-            pg.addColorStop(1, '#a855f7');
+            pg.addColorStop(0, gold ? '#fde68a' : '#22d3ee');
+            pg.addColorStop(1, gold ? '#f59e0b' : '#a855f7');
+            if (gold) ctx.shadowColor = '#fbbf24';
             ctx.fillStyle = pg;
             ctx.beginPath();
             ctx.moveTo(px - 24, py + 10);
@@ -946,6 +1217,22 @@ function createGame(seed) {
             ctx.shadowBlur = 0;
             ctx.fillStyle = 'rgba(255,255,255,0.75)';
             ctx.fillRect(px - 12, py - 6, 24, 3);
+            if (gold) {
+              ctx.fillStyle = '#fbbf24';
+              ctx.beginPath();
+              ctx.moveTo(px - 11, py - 12);
+              ctx.lineTo(px - 8, py - 22);
+              ctx.lineTo(px - 3, py - 15);
+              ctx.lineTo(px, py - 25);
+              ctx.lineTo(px + 3, py - 15);
+              ctx.lineTo(px + 8, py - 22);
+              ctx.lineTo(px + 11, py - 12);
+              ctx.closePath();
+              ctx.fill();
+              if (state === 'playing' && !reduced) {
+                particles.push({ x: px + (Math.random() - 0.5) * 16, y: py + 12, vx: (Math.random() - 0.5) * 0.5, vy: 1 + Math.random() * 1.4, life: 0.9, c: Math.random() < 0.5 ? '#fde68a' : '#f59e0b', r: 1.4 + Math.random() * 1.6 });
+              }
+            }
           }
         } else {
           ctx.shadowColor = '#22d3ee';
@@ -1087,6 +1374,7 @@ function createGame(seed) {
           if (r.score !== g.score) $('finalScore').textContent = r.score;
           if (user) user.best = r.best;
           loadBoard(currentRange);
+          loadChampion();
         } else {
           msg.textContent = r.error || 'تعذر تسجيل النتيجة';
         }
@@ -1136,6 +1424,7 @@ function createGame(seed) {
         else io.observe(el);
       });
 
+      loadChampion();
       restore();
       requestAnimationFrame(loop);
     })();
