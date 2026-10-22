@@ -1468,7 +1468,7 @@ const ROT = [0.992809,0.119712];
         card.appendChild(stage);
 
         card.appendChild(el('div', 'champ-name', champion.name));
-        card.appendChild(el('div', 'champ-title', 'الأول في أفضل جولة'));
+        card.appendChild(el('div', 'champ-title', 'الأول في مجموع النقاط'));
         const sc = el('div', 'champ-score', String(champion.score));
         sc.appendChild(el('small', '', 'نقطة'));
         card.appendChild(sc);
@@ -1507,7 +1507,7 @@ const ROT = [0.992809,0.119712];
       async function loadChampion() {
         if (champLoading) return;
         champLoading = true;
-        const r = await api('/api/leaderboard?range=all');
+        const r = await api('/api/leaderboard?range=total');
         champLoading = false;
         champion = r.ok && r.rows && r.rows.length ? r.rows[0] : null;
         renderChamp();
