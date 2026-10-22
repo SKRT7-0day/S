@@ -1,6 +1,6 @@
 # SKRT7 — Bio Link Page
 
-A personal bio/link-in-bio page with live Discord presence integration (via [Lanyard](https://github.com/Phineas/lanyard)), animated UI, and a dark/light theme toggle.
+A personal bio/link-in-bio page with live Discord presence integration (via [Lanyard](https://github.com/Phineas/lanyard)), animated UI, and a dark/light theme toggle..
 
 🔗 **Live:** [s.skrt7.workers.dev](https://s.skrt7.workers.dev/)
 
