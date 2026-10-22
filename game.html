@@ -666,9 +666,10 @@
       <div class="reveal">
         <div class="card">
           <h2><i class="fa-solid fa-trophy"></i> لوحة المتصدرين</h2>
-          <p class="sub">أفضل نتيجة لكل لاعب.</p>
+          <p class="sub">المجموع يجمع نقاط كل جولاتك المسجّلة. وأفضل جولة والأسبوع يحسبان أعلى نتيجة واحدة.</p>
           <div class="tabs">
-            <button class="tab active" data-range="all" type="button">كل الأوقات</button>
+            <button class="tab active" data-range="total" type="button">المجموع</button>
+            <button class="tab" data-range="all" type="button">أفضل جولة</button>
             <button class="tab" data-range="week" type="button">هذا الأسبوع</button>
           </div>
           <div class="rows" id="rows"><div class="empty">جاري التحميل...</div></div>
@@ -1467,7 +1468,7 @@ const ROT = [0.992809,0.119712];
         card.appendChild(stage);
 
         card.appendChild(el('div', 'champ-name', champion.name));
-        card.appendChild(el('div', 'champ-title', 'الأول على كل الأوقات'));
+        card.appendChild(el('div', 'champ-title', 'الأول في أفضل جولة'));
         const sc = el('div', 'champ-score', String(champion.score));
         sc.appendChild(el('small', '', 'نقطة'));
         card.appendChild(sc);
@@ -1512,7 +1513,7 @@ const ROT = [0.992809,0.119712];
         renderChamp();
       }
 
-      let currentRange = 'all';
+      let currentRange = 'total';
       let boardSeq = 0;
       async function loadBoard(range) {
         currentRange = range;
