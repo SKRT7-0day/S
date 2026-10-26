@@ -1,4 +1,3 @@
-// oneko.js: https://github.com/adryd325/oneko.js
 
 (function oneko() {
   const isReducedMotion =
@@ -22,7 +21,7 @@
   let idleAnimationFrame = 0;
 
   const nekoSpeed = 10;
-  const nekoScale = 2.2; // bump this up/down to resize the cat (1 = original 32px size)
+  const nekoScale = 2.2;
   let menuOpen = false;
   let currentSkinFile = "./oneko.gif";
   const spriteSets = {
@@ -106,7 +105,7 @@
     try {
       const savedSkin = window.localStorage.getItem("onekoSkin");
       if (savedSkin) currentSkinFile = savedSkin;
-    } catch (e) { /* ignore */ }
+    } catch (e) {}
   
     if (persistPosition) {
       let storedNeko = JSON.parse(window.localStorage.getItem("oneko"));
@@ -173,7 +172,6 @@
   let lastFrameTimestamp;
 
   function onAnimationFrame(timestamp) {
-    // Stops execution if the neko element is removed from DOM
     if (!nekoEl.isConnected) {
       return;
     }
@@ -192,10 +190,6 @@
     nekoEl.style.backgroundPosition = `${sprite[0] * 32}px ${sprite[1] * 32}px`;
   }
 
-  // ==========================================
-  // SKIN PICKER — click the cat to pop out a
-  // circle of character choices around it.
-  // ==========================================
   const SKIN_OPTIONS = [
     { file: "oneko.gif", label: "Classic" },
     { file: "oneko-alt1.webp", label: "Neko 1" },
@@ -210,17 +204,29 @@
     const el = skinMenuEl;
     skinMenuEl = null;
     menuOpen = false;
+    document.removeEventListener("click", onOutsideClick);
+    document.removeEventListener("keydown", onMenuKey);
     el.style.opacity = "0";
+    el.style.transform = el.dataset.hideTransform;
     setTimeout(function () {
       if (el.parentNode) el.parentNode.removeChild(el);
-    }, 180);
+    }, 200);
   }
 
   function chooseSkin(file) {
     currentSkinFile = file;
     nekoEl.style.backgroundImage = `url(${file})`;
-    try { window.localStorage.setItem("onekoSkin", file); } catch (e) { /* ignore */ }
+    try { window.localStorage.setItem("onekoSkin", file); } catch (e) {}
     closeSkinMenu();
+  }
+
+  function onOutsideClick(e) {
+    if (skinMenuEl && skinMenuEl.contains(e.target)) return;
+    closeSkinMenu();
+  }
+
+  function onMenuKey(e) {
+    if (e.key === "Escape") closeSkinMenu();
   }
 
   function toggleSkinMenu() {
@@ -230,76 +236,108 @@
     }
     menuOpen = true;
 
-    const wrap = document.createElement("div");
-    wrap.style.position = "fixed";
-    wrap.style.left = "0";
-    wrap.style.top = "0";
-    wrap.style.width = "0";
-    wrap.style.height = "0";
-    wrap.style.zIndex = 2147483647;
-    wrap.style.opacity = "1";
-    wrap.style.transition = "opacity 0.18s ease";
+    const panel = document.createElement("div");
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-label", "Choose your cat");
+    const s = panel.style;
+    s.position = "fixed";
+    s.zIndex = 2147483647;
+    s.boxSizing = "border-box";
+    s.width = `${Math.min(344, window.innerWidth - 16)}px`;
+    s.padding = "14px 14px 16px";
+    s.borderRadius = "20px";
+    s.background = "linear-gradient(160deg,#2a1d38,#1a1325)";
+    s.border = "1px solid rgba(255,255,255,0.12)";
+    s.boxShadow = "0 18px 48px rgba(0,0,0,0.55)";
+    s.color = "#fff";
+    s.fontFamily = "system-ui,-apple-system,'Segoe UI',Roboto,sans-serif";
+    s.direction = "ltr";
+    s.opacity = "0";
+    s.transition = "opacity 0.2s ease, transform 0.25s cubic-bezier(0.2,1.3,0.4,1)";
 
-    const centerX = nekoPosX;
-    const centerY = nekoPosY;
-    const radius = 78;
-    const count = SKIN_OPTIONS.length;
+    const title = document.createElement("div");
+    title.textContent = "Choose your cat";
+    title.style.cssText = "font-size:14px;font-weight:700;letter-spacing:0.3px;text-align:center;margin:0 0 12px;color:#ffd6ea";
+    panel.appendChild(title);
 
-    SKIN_OPTIONS.forEach(function (skin, i) {
-      const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
-      const bx = centerX + Math.cos(angle) * radius;
-      const by = centerY + Math.sin(angle) * radius;
+    const grid = document.createElement("div");
+    grid.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:8px";
+    panel.appendChild(grid);
 
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.title = skin.label;
-      btn.style.position = "fixed";
-      btn.style.left = `${bx - 20}px`;
-      btn.style.top = `${by - 20}px`;
-      btn.style.width = "40px";
-      btn.style.height = "40px";
-      btn.style.borderRadius = "50%";
-      btn.style.border = skin.file === currentSkinFile ? "2px solid #ff6fae" : "2px solid rgba(255,255,255,0.25)";
-      btn.style.background = "#1b1420";
-      btn.style.backgroundImage = `url(${skin.file})`;
-      btn.style.backgroundPosition = "-96px -96px"; // idle frame crop
-      btn.style.backgroundSize = "256px 128px";
-      btn.style.imageRendering = "pixelated";
-      btn.style.cursor = "pointer";
-      btn.style.boxShadow = "0 6px 16px rgba(0,0,0,0.4)";
-      btn.style.transform = "scale(0)";
-      btn.style.opacity = "0";
-      btn.style.transition = "transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease";
-      btn.style.transitionDelay = `${i * 0.05}s`;
+    SKIN_OPTIONS.forEach(function (skin) {
+      const active = skin.file === currentSkinFile;
+      const card = document.createElement("button");
+      card.type = "button";
+      card.title = skin.label;
+      card.style.cssText =
+        "display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 2px 7px;" +
+        "border-radius:14px;cursor:pointer;color:#fff;font:600 11px system-ui,sans-serif;" +
+        "transition:transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;" +
+        "border:2px solid " + (active ? "#ff6fae" : "rgba(255,255,255,0.1)") + ";" +
+        "background:" + (active ? "rgba(255,111,174,0.18)" : "rgba(255,255,255,0.05)");
 
-      btn.addEventListener("click", function (e) {
+      const box = document.createElement("div");
+      box.style.cssText = "width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(0,0,0,0.28)";
+      const sprite = document.createElement("div");
+      sprite.style.cssText =
+        "width:32px;height:32px;transform:scale(1.5);image-rendering:pixelated;" +
+        "background-repeat:no-repeat;background-size:256px 128px;background-position:-96px -96px;" +
+        `background-image:url(${skin.file})`;
+      box.appendChild(sprite);
+
+      const name = document.createElement("span");
+      name.textContent = skin.label;
+
+      card.appendChild(box);
+      card.appendChild(name);
+
+      card.addEventListener("mouseenter", function () {
+        card.style.transform = "translateY(-2px)";
+        if (!active) card.style.background = "rgba(255,255,255,0.12)";
+      });
+      card.addEventListener("mouseleave", function () {
+        card.style.transform = "none";
+        if (!active) card.style.background = "rgba(255,255,255,0.05)";
+      });
+      card.addEventListener("click", function (e) {
         e.stopPropagation();
         chooseSkin(skin.file);
       });
+      grid.appendChild(card);
+    });
 
-      wrap.appendChild(btn);
+    panel.style.left = "-9999px";
+    panel.style.top = "0";
+    document.body.appendChild(panel);
 
-      // Trigger the pop-in on the next frame so the transition applies.
+    const pw = panel.offsetWidth;
+    const ph = panel.offsetHeight;
+    let left = nekoPosX - pw / 2;
+    left = Math.max(8, Math.min(window.innerWidth - pw - 8, left));
+    let top = nekoPosY - 16 * nekoScale - ph - 10;
+    let below = false;
+    if (top < 8) {
+      top = nekoPosY + 16 * nekoScale + 10;
+      below = true;
+    }
+    top = Math.max(8, Math.min(window.innerHeight - ph - 8, top));
+    panel.style.left = `${left}px`;
+    panel.style.top = `${top}px`;
+    const hide = below ? "translateY(-8px) scale(0.96)" : "translateY(8px) scale(0.96)";
+    panel.dataset.hideTransform = hide;
+    panel.style.transform = hide;
+    requestAnimationFrame(function () {
       requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          btn.style.transform = "scale(1)";
-          btn.style.opacity = "1";
-        });
+        panel.style.opacity = "1";
+        panel.style.transform = "none";
       });
     });
 
-    document.body.appendChild(wrap);
-    skinMenuEl = wrap;
-
-    // Close if the user clicks anywhere outside the menu/cat.
+    skinMenuEl = panel;
     setTimeout(function () {
       document.addEventListener("click", onOutsideClick);
+      document.addEventListener("keydown", onMenuKey);
     }, 0);
-  }
-
-  function onOutsideClick() {
-    document.removeEventListener("click", onOutsideClick);
-    closeSkinMenu();
   }
 
   function resetIdleAnimation() {
@@ -310,7 +348,6 @@
   function idle() {
     idleTime += 1;
 
-    // every ~ 20 seconds
     if (
       idleTime > 10 &&
       Math.floor(Math.random() * 200) == 0 &&
@@ -380,7 +417,6 @@
 
     if (idleTime > 1) {
       setSprite("alert", 0);
-      // count down after being alerted before moving
       idleTime = Math.min(idleTime, 7);
       idleTime -= 1;
       return;
