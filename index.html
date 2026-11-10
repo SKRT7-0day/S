@@ -2448,5 +2448,183 @@ Thanks for stopping by!">
       requestAnimationFrame(frame);
     })();
   </script>
+  <script>
+(() => {
+  if (window.__swarm) return;
+  window.__swarm = true;
+
+  const AUTO_RUN = false; // true = starts by itself after the loading screen
+  const COLORS = ['#a855f7', '#22c55e', '#3b82f6', '#f97316', '#ef4444', '#eab308', '#ec4899', '#14b8a6'];
+  const NAMES = ['Ava', 'Noor', 'Kai', 'Lina', 'Omar', 'Zed', 'Mia', 'Sami'];
+  const SEL = [
+    '#blurBio', '.avatar-wrapper', '#particleTextName', '#nowLine', '#customStatusContainer',
+    '#visitorCounter', '#activityCard', '#spotifyEmbedWrap', '.theme-switch-wrapper',
+    '.button-stack > a', '#timeProgressWidget', '.bottom-links', '#ratingWidget', 'footer'
+  ];
+
+  const root = document.documentElement;
+  const st = document.createElement('style');
+  st.textContent = `
+#swarm-btn{position:fixed;left:16px;bottom:16px;z-index:100001;border:0;border-radius:999px;padding:11px 18px;font:700 .85rem sans-serif;color:#fff;background:linear-gradient(135deg,#a855f7,#7c3aed);box-shadow:0 8px 22px rgba(168,85,247,.45);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .4s}
+#swarm-btn.on{opacity:1;pointer-events:auto}
+#swarm-layer{position:absolute;left:0;top:0;pointer-events:none;overflow:hidden;z-index:100000}
+.sw-cur{position:absolute;left:0;top:0;z-index:2;will-change:transform}
+.sw-cur span{position:absolute;left:16px;top:18px;color:#fff;font:700 11px sans-serif;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.sw-box{position:absolute;z-index:1;border:1.5px solid;border-radius:4px;box-sizing:border-box;background:rgba(255,255,255,.04)}
+.sw-box i{position:absolute;right:0;top:100%;margin-top:6px;font:600 10px monospace;font-style:normal;color:#fff;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.sw-hide{opacity:0 !important}
+.swarm-in{animation:swarmIn .6s ease both}
+@keyframes swarmIn{from{opacity:0;clip-path:inset(-30px 100% -30px -30px)}to{opacity:1;clip-path:inset(-30px -30px -30px -30px)}}`;
+  document.head.appendChild(st);
+
+  const btn = document.createElement('button');
+  btn.id = 'swarm-btn';
+  btn.type = 'button';
+  btn.textContent = '✨ Swarm';
+  document.body.appendChild(btn);
+
+  let tok = 0, running = false, hidden = [], layer = null;
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const docRect = el => {
+    const r = el.getBoundingClientRect();
+    return { x: r.left + scrollX, y: r.top + scrollY, w: r.width, h: r.height };
+  };
+
+  function makeCursor(i, x, y) {
+    const color = COLORS[i % COLORS.length];
+    const el = document.createElement('div');
+    el.className = 'sw-cur';
+    el.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" style="display:block"><path d="M3 2l7 19 3-8 8-3z" fill="${color}" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg><span style="background:${color}">${NAMES[i % NAMES.length]}</span>`;
+    el.style.transform = `translate(${x}px,${y}px)`;
+    layer.appendChild(el);
+    return { el, color, x, y };
+  }
+
+  async function move(c, x, y, ms) {
+    const a = c.el.animate(
+      [{ transform: `translate(${c.x}px,${c.y}px)` }, { transform: `translate(${x}px,${y}px)` }],
+      { duration: ms, easing: 'cubic-bezier(.45,0,.2,1)', fill: 'forwards' }
+    );
+    c.x = x; c.y = y;
+    try { await a.finished; } catch (e) {}
+    c.el.style.transform = `translate(${x}px,${y}px)`;
+    a.cancel();
+  }
+
+  function follow(r) {
+    const top = scrollY, vh = innerHeight;
+    if (r.y < top + 30 || r.y + Math.min(r.h, 200) > top + vh - 60) {
+      scrollTo({ top: Math.max(0, r.y - vh * 0.3), behavior: 'smooth' });
+    }
+  }
+
+  function reveal(el) {
+    el.classList.remove('sw-hide');
+    el.classList.add('swarm-in');
+    setTimeout(() => el.classList.remove('swarm-in'), 750);
+  }
+
+  async function build(id, c, el) {
+    const r = docRect(el);
+    follow(r);
+    await move(c, r.x, r.y, 450 + Math.random() * 450);
+    if (id !== tok) return;
+    const b = document.createElement('div');
+    b.className = 'sw-box';
+    b.style.cssText = `left:${r.x}px;top:${r.y}px;border-color:${c.color}`;
+    b.innerHTML = `<i style="background:${c.color}">${Math.round(r.w)} × ${Math.round(r.h)}</i>`;
+    layer.appendChild(b);
+    const ms = 420 + Math.min(500, (r.w + r.h) * 0.4);
+    const grow = b.animate(
+      [{ width: '0px', height: '0px' }, { width: r.w + 'px', height: r.h + 'px' }],
+      { duration: ms, easing: 'cubic-bezier(.3,.7,.2,1)', fill: 'forwards' }
+    );
+    await Promise.all([move(c, r.x + r.w, r.y + r.h, ms), grow.finished.catch(() => {})]);
+    if (id !== tok) return;
+    reveal(el);
+    await sleep(180);
+    b.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }).finished
+      .then(() => b.remove()).catch(() => {});
+  }
+
+  function finish() {
+    hidden.forEach(e => e.classList.remove('sw-hide'));
+    hidden = [];
+    if (layer) layer.remove();
+    layer = null;
+    running = false;
+    btn.textContent = '✨ Swarm';
+  }
+
+  function stop() { tok++; finish(); }
+
+  async function run() {
+    const id = ++tok;
+    running = true;
+    btn.textContent = '✕ Stop';
+    scrollTo({ top: 0, behavior: 'instant' });
+    await sleep(120);
+
+    const els = [...new Set(SEL.flatMap(s => [...document.querySelectorAll(s)]))]
+      .filter(e => {
+        const r = e.getBoundingClientRect();
+        return r.width > 2 && r.height > 2 && getComputedStyle(e).display !== 'none';
+      })
+      .sort((a, b) => docRect(a).y - docRect(b).y || docRect(a).x - docRect(b).x);
+
+    layer = document.createElement('div');
+    layer.id = 'swarm-layer';
+    layer.style.width = root.scrollWidth + 'px';
+    layer.style.height = root.scrollHeight + 'px';
+    root.appendChild(layer);
+
+    els.forEach(e => { e.classList.add('sw-hide'); hidden.push(e); });
+
+    // intro: cursors orbit the center, then fan out
+    const n = innerWidth < 600 ? 4 : 6;
+    const cx = innerWidth / 2, cy = scrollY + innerHeight / 2;
+    const cs = Array.from({ length: n }, (_, i) => makeCursor(i, cx, cy));
+    const t0 = performance.now();
+    await new Promise(res => {
+      (function f(t) {
+        const k = (t - t0) / 1100;
+        cs.forEach((c, i) => {
+          const a = k * 4 + (i * Math.PI * 2) / n;
+          c.x = cx + Math.cos(a) * 90;
+          c.y = cy + Math.sin(a) * 90;
+          c.el.style.transform = `translate(${c.x}px,${c.y}px)`;
+        });
+        if (k < 1 && id === tok) requestAnimationFrame(f); else res();
+      })(t0);
+    });
+
+    const q = [...els];
+    await Promise.all(cs.map(async c => {
+      while (q.length && id === tok) await build(id, c, q.shift());
+    }));
+
+    if (id !== tok) return;
+    layer.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: 'forwards' });
+    await sleep(650);
+    if (id === tok) finish();
+  }
+
+  const toggle = () => (running ? stop() : run());
+  btn.addEventListener('click', toggle);
+  addEventListener('keydown', e => {
+    if (e.altKey && e.shiftKey && e.code === 'KeyS') toggle();
+    if (e.key === 'Escape' && running) stop();
+  });
+
+  const t = setInterval(() => {
+    if (document.body.classList.contains('page-loaded')) {
+      clearInterval(t);
+      btn.classList.add('on');
+      if (AUTO_RUN) setTimeout(run, 1200);
+    }
+  }, 300);
+})();
+</script>
+          
 </body>
   </html>
