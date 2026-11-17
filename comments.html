@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#a855f7">
+<title>Guestbook | SKRT7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<style>
+:root{--bg:#08080d;--glass:rgba(255,255,255,.04);--line:rgba(255,255,255,.09);--text:#ececf4;--mut:#8a8aa3;
+--a:#a855f7;--b:#6366f1;--c:#ec4899;--grad:linear-gradient(135deg,var(--a),var(--c));color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "Plus Jakarta Sans","IBM Plex Sans Arabic",system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+/* animated background */
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;
+background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:26px 26px}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;animation:float 18s ease-in-out infinite}
+.o1{width:420px;height:420px;background:var(--a);top:-120px;left:-100px}
+.o2{width:380px;height:380px;background:var(--c);bottom:-140px;right:-120px;animation-delay:-6s;opacity:.25}
+.o3{width:300px;height:300px;background:var(--b);top:45%;left:55%;animation-delay:-11s;opacity:.2}
+@keyframes float{50%{transform:translate(60px,-50px) scale(1.15)}}
+main{max-width:660px;margin:0 auto;padding:28px 16px 70px}
+/* header */
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+.back{color:var(--mut);text-decoration:none;font:500 13px "JetBrains Mono","IBM Plex Sans Arabic",monospace;transition:.2s}
+.back:hover{color:var(--text);transform:translateX(-3px)}
+.live{display:flex;align-items:center;gap:7px;font:500 12px "JetBrains Mono","IBM Plex Sans Arabic",monospace;color:var(--mut)}
+.live i{width:8px;height:8px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 #34d39988;animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+h1{font:700 clamp(34px,9vw,52px)/1.05 "JetBrains Mono","IBM Plex Sans Arabic",monospace;margin:0 0 8px;letter-spacing:-1.5px;
+background:linear-gradient(120deg,#fff 20%,var(--a) 55%,var(--c));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+.sub{color:var(--mut);margin:0 0 26px}
+.sub b{color:var(--text)}
+/* composer */
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:16px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:border-color .25s,box-shadow .25s}
+.glass:focus-within{border-color:rgba(168,85,247,.55);box-shadow:0 0 0 4px rgba(168,85,247,.12),0 10px 40px -12px rgba(168,85,247,.45)}
+.who{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+input,textarea{width:100%;background:transparent;border:0;color:var(--text);font:inherit;outline:none}
+input::placeholder,textarea::placeholder{color:#6b6b82}
+#name{font-weight:600}
+input,textarea{font-size:16px}
+.ta{position:relative}
+.ta textarea,.mirror{font:500 16px/1.7 "Plus Jakarta Sans","IBM Plex Sans Arabic",system-ui,sans-serif;padding:0;margin:0;border:0;width:100%;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word}
+.ta textarea{position:relative;display:block;min-height:84px;resize:none;color:transparent;caret-color:var(--c);overflow-y:auto;scrollbar-width:none}
+.ta textarea::-webkit-scrollbar{display:none}
+.mirror{position:absolute;inset:0;overflow:hidden;pointer-events:none;color:var(--text)}
+.mirror .k{animation:ink .8s ease-out both}
+@keyframes ink{0%{color:var(--c);text-shadow:0 0 18px rgba(236,72,153,.95),0 0 4px rgba(168,85,247,.9)}100%{color:var(--text);text-shadow:0 0 0 transparent}}
+.glass.typing{box-shadow:0 0 0 4px rgba(168,85,247,.16),0 12px 46px -10px rgba(236,72,153,.5)}
+textarea::placeholder{color:#7a7a93}
+.hp{position:absolute;left:-9999px;opacity:0;height:0}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;padding-top:12px;border-top:1px solid var(--line)}
+.ring{display:flex;align-items:center;gap:8px;color:var(--mut);font:500 12px "JetBrains Mono","IBM Plex Sans Arabic",monospace}
+.ring svg{transform:rotate(-90deg)}
+.ring .tr{stroke:var(--line)}.ring .pg{stroke:var(--a);transition:stroke-dashoffset .15s,stroke .2s}
+.ring.warn .pg{stroke:#fbbf24}.ring.max .pg{stroke:#f87171}
+.btn{position:relative;overflow:hidden;font:600 14px "Plus Jakarta Sans","IBM Plex Sans Arabic",sans-serif;color:#fff;background:var(--grad);border:0;border-radius:12px;padding:9px 22px;cursor:pointer;transition:transform .15s,box-shadow .2s,opacity .2s;box-shadow:0 6px 22px -6px rgba(168,85,247,.7)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px -6px rgba(236,72,153,.7)}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.5;cursor:wait;transform:none}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.35),transparent 70%);transform:translateX(-120%);transition:transform .6s}
+.btn:hover::after{transform:translateX(120%)}
+#ts{margin-top:10px;min-height:0}
+.cap{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mut);margin-bottom:10px;padding:6px 10px;border-radius:10px;background:rgba(168,85,247,.1)}
+.cap b{color:var(--a)}
+.cap a{color:var(--text);text-decoration:none;opacity:.7}.cap a:hover{opacity:1}
+/* list head */
+.lh{display:flex;justify-content:space-between;align-items:center;margin:34px 0 6px}
+.lh span{font:700 13px "JetBrains Mono","IBM Plex Sans Arabic",monospace;color:var(--mut);letter-spacing:1px;text-transform:uppercase}
+.tabs{display:flex;gap:4px;background:var(--glass);border:1px solid var(--line);border-radius:12px;padding:3px}
+.tabs button{background:none;border:0;color:var(--mut);font:600 12px "Plus Jakarta Sans","IBM Plex Sans Arabic";padding:5px 12px;border-radius:9px;cursor:pointer;transition:.2s}
+.tabs button.on{background:rgba(168,85,247,.22);color:#fff}
+/* comments */
+.c{padding:16px 0 4px;position:relative}
+.roots>.c{border-bottom:1px solid var(--line);padding-bottom:14px}
+.c.new>.head,.c.new>.body,.c.new>.acts{animation:rise .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*45ms)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+.head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.av{width:36px;height:36px;border-radius:50%;object-fit:cover;flex:none;display:grid;place-items:center;font:700 14px "Plus Jakarta Sans","IBM Plex Sans Arabic";color:#fff}
+.av.ring{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--a),0 0 18px rgba(168,85,247,.6)}
+.name{font-weight:600}
+.owner .name{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.badge{display:inline-flex;align-items:center;gap:4px;font:700 10px "JetBrains Mono","IBM Plex Sans Arabic",monospace;letter-spacing:.5px;text-transform:uppercase;color:#fff;background:var(--grad);border-radius:7px;padding:2px 8px;box-shadow:0 0 14px rgba(168,85,247,.5)}
+.time{color:var(--mut);font-size:12px}
+.body{margin:6px 0 8px 46px;white-space:pre-wrap;word-break:break-word;color:#dcdce8}
+.owner>.body{color:#fff}
+.acts{display:flex;gap:6px;align-items:center;margin-left:40px;flex-wrap:wrap}
+.acts button{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--mut);font:500 13px "Plus Jakarta Sans","IBM Plex Sans Arabic";padding:5px 10px;border-radius:999px;cursor:pointer;transition:.2s}
+.acts button:hover{background:var(--glass);color:var(--text)}
+.like svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;transition:.2s}
+.like.on{color:#f43f8e}.like.on svg{fill:#f43f8e;stroke:#f43f8e}
+.like.pop svg{animation:pop .45s cubic-bezier(.2,2,.4,1)}
+@keyframes pop{40%{transform:scale(1.6) rotate(-8deg)}}
+.like{position:relative}
+.p{position:absolute;left:16px;top:6px;font-size:11px;pointer-events:none;animation:fly .75s ease-out forwards}
+@keyframes fly{to{transform:translate(var(--x),var(--y)) scale(.4);opacity:0}}
+.del:hover{color:#f87171!important}
+.slot{margin:10px 0 6px 40px}
+.slot:not(:empty){animation:rise .35s both}
+.kids{position:relative;margin-left:17px;padding-left:20px}
+.rail{position:absolute;left:-6px;top:0;bottom:6px;width:14px;background:none;border:0;cursor:pointer;padding:0}
+.rail::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:2px;border-radius:2px;background:var(--line);transition:.2s}
+.rail:hover::before{background:var(--grad);width:3px;left:5.5px;box-shadow:0 0 10px rgba(168,85,247,.6)}
+.kids>.c::before{content:"";position:absolute;left:-20px;top:34px;width:16px;height:12px;border-bottom:2px solid var(--line);border-left:2px solid var(--line);border-bottom-left-radius:10px;transform:translateY(-12px);display:none}
+.collapsed>.kids,.collapsed>.slot{display:none}
+/* states */
+.empty{text-align:center;padding:50px 10px;color:var(--mut)}
+.empty .e{font-size:44px;display:block;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(6deg)}}
+.sk{display:flex;gap:12px;padding:18px 0}
+.sk i{width:36px;height:36px;border-radius:50%;flex:none}
+.sk div{flex:1}.sk u{display:block;height:11px;border-radius:6px;margin:6px 0;text-decoration:none}
+.sk i,.sk u{background:linear-gradient(90deg,var(--glass) 25%,rgba(255,255,255,.09) 50%,var(--glass) 75%);background-size:200% 100%;animation:sh 1.3s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,30px);opacity:0;background:#1d1d2b;border:1px solid var(--line);color:var(--text);padding:10px 18px;border-radius:14px;font-weight:500;box-shadow:0 12px 40px rgba(0,0,0,.5);transition:.35s;pointer-events:none;z-index:9}
+#toast.show{transform:translate(-50%,0);opacity:1}
+#toast.bad{border-color:#f8717166;color:#fca5a5}
+footer{margin-top:46px;text-align:center;font:500 12px "JetBrains Mono","IBM Plex Sans Arabic",monospace;color:#55556b}
+footer a{color:inherit;cursor:pointer;text-decoration:none}footer a:hover{color:var(--a)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+<main>
+  <div class="top">
+    <a class="back" href="/">← back home</a>
+    <div class="live"><i></i><span>live</span></div>
+  </div>
+  <h1>guestbook</h1>
+  <p class="sub">Leave a note, drop a ❤️, or jump into a thread. <b id="count">0</b> messages so far.</p>
+
+  <div id="slot0"><form id="form" class="glass" autocomplete="off">
+    <div class="cap" id="cap" hidden><span id="capt"></span><a href="#" id="cancel">✕ cancel</a></div>
+    <div class="who">
+      <div class="av" id="pav" style="background:linear-gradient(135deg,#555,#333)">?</div>
+      <input id="name" maxlength="30" dir="auto" placeholder="Your name (optional)">
+    </div>
+    <input class="hp" id="website" tabindex="-1" autocomplete="off">
+    <div class="ta"><div class="mirror" id="mirror" aria-hidden="true"></div><textarea id="text" maxlength="300" dir="auto" placeholder="Say something nice…"></textarea></div>
+    <div id="ts"></div>
+    <div class="bar">
+      <div class="ring" id="ring">
+        <svg width="24" height="24" viewBox="0 0 24 24"><circle class="tr" cx="12" cy="12" r="9" fill="none" stroke-width="3"/><circle class="pg" id="pg" cx="12" cy="12" r="9" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="56.55" stroke-dashoffset="56.55"/></svg>
+        <span id="left">300</span>
+      </div>
+      <button class="btn" id="send" type="submit">Post ✦</button>
+    </div>
+  </form></div>
+
+  <div class="lh"><span>Messages</span>
+    <div class="tabs" id="tabs"><button data-s="new" class="on">Newest</button><button data-s="top">Top</button><button data-s="old">Oldest</button></div>
+  </div>
+  <div id="list" class="roots"></div>
+  <footer><a id="olog">owner login</a> · protected by Cloudflare</footer>
+</main>
+<div id="toast"></div>
+
+<script>
+// ===== CONFIG =====
+const API = 'https://skrt7-comments.YOUR-SUBDOMAIN.workers.dev'; // your Worker URL
+const SITEKEY = 'YOUR_TURNSTILE_SITE_KEY';
+const PAGE = 'home';
+// ==================
+
+const $ = id => document.getElementById(id);
+let key = localStorage.getItem('adminKey') || '';
+let isOwner = false, owner = {}, parentId = null, wid = null, comments = [], sort = 'new', animate = true;
+
+const api = (p, o = {}) => fetch(API + p, { ...o, headers: { 'content-type': 'application/json', ...(key ? { 'x-admin-key': key } : {}) } }).then(r => r.json());
+const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+
+function toast(msg, bad) {
+  const t = $('toast'); t.textContent = msg; t.className = 'show' + (bad ? ' bad' : '');
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.className = '', 3000);
+}
+function ago(t) {
+  const s = Date.now() / 1000 - t;
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s / 60) + 'm ago';
+  if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+  if (s < 86400 * 7) return Math.floor(s / 86400) + 'd ago';
+  return new Date(t * 1000).toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+function grad(name) {
+  let h = 0; for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) % 360;
+  return `linear-gradient(135deg,hsl(${h} 70% 58%),hsl(${(h + 55) % 360} 75% 45%))`;
+}
+function avatar(c) {
+  if (c.is_owner && owner.avatar) { const i = el('img', 'av ring'); i.src = owner.avatar; i.alt = ''; return i; }
+  const d = el('div', 'av', ([...c.name][0] || '?').toUpperCase()); d.style.background = grad(c.name); return d;
+}
+const HEART = '<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.3C1 8.5 3 5 6.4 5c2 0 3.5 1.1 4.3 2.4h.6C12.1 6.1 13.6 5 15.6 5 19 5 21 8.5 19.6 11.7 19.5 11.9 12 21 12 21z" stroke-linejoin="round"/></svg>';
+
+function burst(btn) {
+  for (let i = 0; i < 7; i++) {
+    const p = el('span', 'p', ['❤️', '💜', '✨'][i % 3]);
+    p.style.setProperty('--x', (Math.random() * 70 - 35) + 'px');
+    p.style.setProperty('--y', -(20 + Math.random() * 44) + 'px');
+    btn.append(p); setTimeout(() => p.remove(), 800);
+  }
+}
+
+function render() {
+  const by = {};
+  comments.forEach(c => (by[c.parent_id || 0] ||= []).push(c));
+  let n = 0;
+  const build = c => {
+    const box = el('div', 'c' + (c.is_owner ? ' owner' : '') + (animate ? ' new' : ''));
+    box.style.setProperty('--i', Math.min(n++, 12));
+    const head = el('div', 'head');
+    head.append(avatar(c), el('span', 'name', c.name));
+    if (c.is_owner) head.append(el('span', 'badge', '✓ Owner'));
+    head.append(el('span', 'time', ago(c.created_at)));
+    const body = el('div', 'body', c.text); body.dir = 'auto';
+
+    const acts = el('div', 'acts');
+    const lk = el('button', 'like' + (c.liked ? ' on' : ''));
+    lk.innerHTML = HEART + '<span>' + c.likes + '</span>';
+    lk.onclick = async () => {
+      c.liked = !c.liked; c.likes += c.liked ? 1 : -1;
+      lk.classList.toggle('on', c.liked); lk.querySelector('span').textContent = c.likes;
+      if (c.liked) { lk.classList.remove('pop'); void lk.offsetWidth; lk.classList.add('pop'); burst(lk); }
+      try { await api('/api/like', { method: 'POST', body: JSON.stringify({ id: c.id }) }); } catch { toast('Like failed', 1); }
+    };
+    const rp = el('button', '', '↩ Reply'); rp.onclick = () => openReply(c, box);
+    acts.append(lk, rp);
+
+    const kids = (by[c.id] || []);
+    if (kids.length) {
+      const tg = el('button', '', '− ' + kids.length + (kids.length > 1 ? ' replies' : ' reply'));
+      tg.onclick = () => { box.classList.toggle('collapsed'); tg.textContent = box.classList.contains('collapsed') ? '+ show ' + kids.length : '− ' + kids.length + (kids.length > 1 ? ' replies' : ' reply'); };
+      acts.append(tg);
+    }
+    if (isOwner) {
+      const d = el('button', 'del', '🗑 Delete');
+      d.onclick = async () => { if (confirm('Delete this comment and its replies?')) { await api('/api/comments/' + c.id, { method: 'DELETE' }); toast('Deleted'); animate = false; load(); } };
+      acts.append(d);
+    }
+    box.append(head, body, acts, el('div', 'slot'));
+    if (kids.length) {
+      const k = el('div', 'kids');
+      const rail = el('button', 'rail'); rail.title = 'Collapse thread'; rail.setAttribute('aria-label', 'Collapse thread');
+      rail.onclick = () => acts.lastElementChild && [...acts.children].find(b => /replies?$|show/.test(b.textContent))?.click();
+      k.append(rail);
+      kids.forEach(x => k.append(build(x)));
+      box.append(k);
+    }
+    return box;
+  };
+
+  $('slot0').append($('form'));
+  const list = $('list'); list.replaceChildren();
+  let roots = (by[0] || []).slice();
+  if (sort === 'new') roots.reverse();
+  if (sort === 'top') roots.sort((a, b) => b.likes - a.likes || b.created_at - a.created_at);
+  roots.forEach(c => list.append(build(c)));
+  if (!roots.length) {
+    const e = el('div', 'empty'); e.innerHTML = '<span class="e">👻</span>It\'s quiet in here…<br>be the first to say hi!';
+    list.append(e);
+  }
+  $('count').textContent = comments.length;
+  parentId = null; $('cap').hidden = true;
+  $('text').placeholder = 'Say something nice…';
+  animate = false;
+}
+
+function openReply(c, box) {
+  parentId = c.id;
+  box.querySelector(':scope > .slot').append($('form'));
+  $('capt').innerHTML = 'Replying to <b></b>'; $('capt').querySelector('b').textContent = c.name;
+  $('cap').hidden = false; $('text').placeholder = 'Write a reply…'; $('text').focus();
+}
+$('cancel').onclick = e => { e.preventDefault(); parentId = null; $('cap').hidden = true; $('text').placeholder = 'Say something nice…'; $('slot0').append($('form')); };
+
+async function load() {
+  try {
+    const d = await api('/api/comments?page=' + PAGE);
+    comments = d.comments || []; owner = d.owner || {};
+    render();
+  } catch { $('list').replaceChildren(); toast('Could not load comments', 1); }
+}
+
+document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#tabs button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); sort = b.dataset.s; animate = true; render();
+});
+
+function mode() {
+  $('name').parentElement.hidden = isOwner; $('ts').hidden = isOwner;
+  $('olog').textContent = isOwner ? 'owner logout' : 'owner login';
+  if (isOwner) toast('Owner mode on ✓');
+}
+function pav() {
+  const n = $('name').value.trim() || '?';
+  $('pav').textContent = n[0].toUpperCase();
+  $('pav').style.background = n === '?' ? 'linear-gradient(135deg,#555,#333)' : grad(n);
+}
+$('name').oninput = pav;
+let prev = '', typingT;
+const setDir = d => { $('text').dir = d; $('mirror').dir = d; };
+function paint(v) {
+  const m = $('mirror'), max = Math.min(prev.length, v.length);
+  let p = 0; while (p < max && prev[p] === v[p]) p++;
+  let q = 0; while (q < max - p && prev[prev.length - 1 - q] === v[v.length - 1 - q]) q++;
+  const mid = v.slice(p, v.length - q);
+  m.replaceChildren(document.createTextNode(v.slice(0, p)));
+  if (mid) m.append(el('span', 'k', mid)); // glowing "ink" on freshly typed letters
+  m.append(document.createTextNode(v.slice(v.length - q) + (v.endsWith('\n') ? '\u200b' : '')));
+  prev = v;
+}
+$('text').oninput = () => {
+  const t = $('text'), v = t.value, l = v.length, left = 300 - l;
+  setDir('auto'); paint(v);
+  $('left').textContent = left;
+  $('pg').style.strokeDashoffset = 56.55 * (1 - l / 300);
+  $('ring').className = 'ring' + (left <= 0 ? ' max' : left <= 40 ? ' warn' : '');
+  t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 220) + 'px';
+  $('form').classList.add('typing'); clearTimeout(typingT);
+  typingT = setTimeout(() => $('form').classList.remove('typing'), 700);
+};
+$('text').onscroll = () => $('mirror').scrollTop = $('text').scrollTop;
+
+// typewriter placeholder (English + Arabic)
+const PH = ['Say something nice…', 'Drop a thought ✨', 'Tell me what you think…', 'اكتب شي حلو…', 'شاركنا رأيك 💜', 'Hello from the other side 👋'];
+let phI = 0, phT;
+function phIdle() { const t = $('text'); return t.value || document.activeElement === t || parentId; }
+function typePh() {
+  clearTimeout(phT);
+  if (phIdle()) return void (phT = setTimeout(typePh, 1500));
+  const s = [...PH[phI++ % PH.length]], t = $('text');
+  setDir(/[\u0600-\u06FF]/.test(s.join('')) ? 'rtl' : 'ltr');
+  let i = 0;
+  (function step() {
+    if (phIdle()) return void (phT = setTimeout(typePh, 1500));
+    t.placeholder = s.slice(0, ++i).join('') + (i < s.length ? ' |' : '');
+    phT = setTimeout(i < s.length ? step : typePh, i < s.length ? 60 + Math.random() * 50 : 2400);
+  })();
+}
+$('text').addEventListener('focus', () => { setDir('auto'); $('text').placeholder = parentId ? 'Write a reply…' : 'Say something nice…'; });
+$('text').addEventListener('blur', () => { if (!$('text').value && !parentId) { clearTimeout(phT); phT = setTimeout(typePh, 1200); } });
+
+$('form').onsubmit = async e => {
+  e.preventDefault();
+  const text = $('text').value.trim(); if (!text) return toast('Write something first', 1);
+  const token = isOwner ? '' : (window.turnstile && turnstile.getResponse(wid));
+  if (!isOwner && !token) return toast('Complete the human check first', 1);
+  $('send').disabled = true; $('send').textContent = 'Posting…';
+  try {
+    const r = await api('/api/comments', { method: 'POST', body: JSON.stringify({ name: $('name').value, text, parent_id: parentId, token, page: PAGE, website: $('website').value }) });
+    if (r.error) toast(r.error, 1);
+    else { $('text').value = ''; $('text').oninput(); toast('Posted! 🎉'); animate = true; await load(); }
+  } catch { toast('Connection problem', 1); }
+  $('send').disabled = false; $('send').textContent = 'Post ✦';
+  if (window.turnstile && !isOwner) turnstile.reset(wid);
+};
+
+$('olog').onclick = async () => {
+  if (isOwner) { key = ''; localStorage.removeItem('adminKey'); isOwner = false; mode(); animate = false; return load(); }
+  const k = prompt('Admin key:'); if (!k) return;
+  key = k; const r = await api('/api/me');
+  if (r.owner) { localStorage.setItem('adminKey', k); isOwner = true; mode(); animate = false; load(); }
+  else { key = ''; toast('Wrong key', 1); }
+};
+
+// skeleton while loading
+$('list').innerHTML = '<div class="sk"><i></i><div><u style="width:35%"></u><u style="width:90%"></u></div></div>'.repeat(3);
+(async () => {
+  if (key) { isOwner = !!(await api('/api/me').catch(() => ({}))).owner; if (!isOwner) key = ''; }
+  mode(); load(); typePh();
+  const t = setInterval(() => { if (window.turnstile) { clearInterval(t); wid = turnstile.render('#ts', { sitekey: SITEKEY, theme: 'dark' }); } }, 200);
+})();
+</script>
+</body>
+</html>
