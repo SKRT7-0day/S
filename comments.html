@@ -342,7 +342,13 @@ $('cancel').onclick = e => { e.preventDefault(); parentId = null; $('cap').hidde
 async function load() {
   try {
     const d = await api('/api/comments?page=' + PAGE);
-    comments = d.comments || []; owner = d.owner || {};
+    if (!d.comments) {
+      const msg = (d.error || 'error') + (d.detail ? ': ' + d.detail : '');
+      toast('Could not load comments (' + msg + ')', 1);
+      if (!comments.length) $('list').replaceChildren(el('p', 'mut', 'Could not load comments: ' + msg));
+      return;
+    }
+    comments = d.comments; owner = d.owner || {};
     render();
   } catch { $('list').replaceChildren(); toast('Could not load comments', 1); }
 }
