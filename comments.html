@@ -139,6 +139,33 @@ footer a{color:inherit;cursor:pointer;text-decoration:none}footer a:hover{color:
 .chip span{font-size:15px;line-height:1.3}
 .chip:hover{transform:translateY(-1px);color:var(--text)}
 .chip.me{border-color:var(--a);color:#fff;background:rgba(168,85,247,.2)}
+
+/* bubbles */
+.c{padding:10px 0 2px}
+.roots>.c{border-bottom:0;padding:12px 0 6px}
+.c.new>.row{animation:rise .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*45ms)}
+.c.new>.head,.c.new>.body,.c.new>.acts{animation:none}
+.row{display:flex;gap:10px;align-items:flex-start}
+.main{flex:1;min-width:0}
+.bubble{display:block;width:fit-content;max-width:100%;padding:9px 14px 11px;background:rgba(255,255,255,.065);border:1px solid var(--line);border-radius:6px 20px 20px 20px;box-shadow:0 6px 22px -8px rgba(0,0,0,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:border-color .25s,box-shadow .25s}
+.bubble:hover{border-color:rgba(168,85,247,.35)}
+.owner>.row .bubble{background:linear-gradient(135deg,rgba(168,85,247,.24),rgba(236,72,153,.12));border-color:rgba(168,85,247,.55);box-shadow:0 8px 30px -8px rgba(168,85,247,.5)}
+.bname{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.bubble .body{margin:3px 0 0;color:#e6e6f0}
+.owner>.row .bubble .body{color:#fff}
+.main .chips{margin:-8px 0 0 14px;position:relative;z-index:1;gap:5px}
+.main .chip{background:#1b1b28;padding:1px 8px;box-shadow:0 3px 10px rgba(0,0,0,.4)}
+.main .chip.me{background:#2c1d44}
+.main .acts{margin:5px 0 0 8px;gap:2px}
+.main .acts .time{margin-right:8px;font-size:12px}
+.main .acts button{font-size:12.5px;padding:3px 8px}
+.main .acts .like{border:0!important;padding:3px 8px!important;border-radius:999px!important}
+.main>.slot{margin:8px 0 0}
+.kids{margin-left:17px;padding-left:14px}
+.kids .av{width:30px;height:30px;font-size:12px}
+.c.flat>.kids{margin-left:0;padding-left:0}
+.c.flat>.kids>.rail{display:none}
+.collapsed>.kids{display:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -243,7 +270,6 @@ function rxView(c, chips, btn) {
   btn.className = 'like' + (c.mine ? ' on' : '');
   btn.replaceChildren();
   if (c.mine) btn.append(el('em', 'me-e', RXE[c.mine] || '❤️')); else btn.insertAdjacentHTML('beforeend', HEART);
-  btn.append(el('span', '', c.likes));
 }
 
 async function react(c, k, chips, btn) {
@@ -262,16 +288,17 @@ function render() {
   const by = {};
   comments.forEach(c => (by[c.parent_id || 0] ||= []).push(c));
   let n = 0;
-  const build = c => {
-    const box = el('div', 'c' + (c.is_owner ? ' owner' : '') + (animate ? ' new' : ''));
+  const build = (c, depth = 0) => {
+    const box = el('div', 'c' + (c.is_owner ? ' owner' : '') + (animate ? ' new' : '') + (depth >= 3 ? ' flat' : ''));
     box.style.setProperty('--i', Math.min(n++, 12));
-    const head = el('div', 'head');
-    head.append(avatar(c), el('span', 'name', c.name));
-    if (c.is_owner) head.append(el('span', 'badge', '✓ Owner'));
-    head.append(el('span', 'time', ago(c.created_at)));
+    const row = el('div', 'row'), main = el('div', 'main'), bubble = el('div', 'bubble'), bn = el('div', 'bname');
+    bn.append(el('span', 'name', c.name));
+    if (c.is_owner) bn.append(el('span', 'badge', '✓ Owner'));
     const body = el('div', 'body', c.text); body.dir = 'auto';
+    bubble.append(bn, body);
 
     const acts = el('div', 'acts');
+    acts.append(el('span', 'time', ago(c.created_at)));
     const lk = el('button', 'like'), chips = el('div', 'chips'), rxw = el('span', 'rx');
     rxw.append(lk);
     rxView(c, chips, lk);
@@ -303,13 +330,15 @@ function render() {
       d.onclick = async () => { if (confirm('Delete this comment and its replies?')) { await api('/api/comments/' + c.id, { method: 'DELETE' }); toast('Deleted'); animate = false; load(); } };
       acts.append(d);
     }
-    box.append(head, body, chips, acts, el('div', 'slot'));
+    main.append(bubble, chips, acts, el('div', 'slot'));
+    row.append(avatar(c), main);
+    box.append(row);
     if (kids.length) {
       const k = el('div', 'kids');
       const rail = el('button', 'rail'); rail.title = 'Collapse thread'; rail.setAttribute('aria-label', 'Collapse thread');
-      rail.onclick = () => acts.lastElementChild && [...acts.children].find(b => /replies?$|show/.test(b.textContent))?.click();
+      rail.onclick = () => [...acts.children].find(b => b.tagName === 'BUTTON' && /replies?$|show/.test(b.textContent))?.click();
       k.append(rail);
-      kids.forEach(x => k.append(build(x)));
+      kids.forEach(x => k.append(build(x, depth + 1)));
       box.append(k);
     }
     return box;
@@ -333,7 +362,7 @@ function render() {
 
 function openReply(c, box) {
   parentId = c.id;
-  box.querySelector(':scope > .slot').append($('form'));
+  box.querySelector('.slot').append($('form'));
   $('capt').innerHTML = 'Replying to <b></b>'; $('capt').querySelector('b').textContent = c.name;
   $('cap').hidden = false; $('text').placeholder = 'Write a reply…'; $('text').focus();
 }
