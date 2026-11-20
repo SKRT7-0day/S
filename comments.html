@@ -128,11 +128,6 @@ footer a{color:inherit;cursor:pointer;text-decoration:none}footer a:hover{color:
 .rx{position:relative;display:inline-flex}
 .me-e{display:inline-block;font-style:normal;font-size:17px;line-height:1}
 .like.pop .me-e{animation:pop .45s cubic-bezier(.2,2,.4,1)}
-.acts .picker{position:absolute;bottom:calc(100% + 8px);left:0;display:flex;gap:2px;padding:6px 8px;background:#1b1b28;border:1px solid var(--line);border-radius:999px;box-shadow:0 14px 44px rgba(0,0,0,.6);z-index:30;animation:rise .25s both}
-.acts .picker button{font-size:24px;line-height:1;padding:3px 5px;border:0;background:none;border-radius:50%;transition:transform .15s;animation:pk .35s cubic-bezier(.2,1.6,.4,1) both;animation-delay:calc(var(--k)*40ms)}
-.acts .picker button:hover{transform:scale(1.4) translateY(-5px);background:none}
-.acts .picker button.me{background:rgba(168,85,247,.3)}
-@keyframes pk{from{opacity:0;transform:translateY(12px) scale(.3)}}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px 46px}
 .chips:empty{display:none}
 .chip{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--mut);font:600 12px "Plus Jakarta Sans","IBM Plex Sans Arabic",sans-serif;cursor:pointer;transition:.2s}
@@ -159,13 +154,36 @@ footer a{color:inherit;cursor:pointer;text-decoration:none}footer a:hover{color:
 .main .acts{margin:5px 0 0 8px;gap:2px}
 .main .acts .time{margin-right:8px;font-size:12px}
 .main .acts button{font-size:12.5px;padding:3px 8px}
-.main .acts .like{border:0!important;padding:3px 8px!important;border-radius:999px!important}
 .main>.slot{margin:8px 0 0}
 .kids{margin-left:17px;padding-left:14px}
 .kids .av{width:30px;height:30px;font-size:12px}
 .c.flat>.kids{margin-left:0;padding-left:0}
 .c.flat>.kids>.rail{display:none}
 .collapsed>.kids{display:none}
+
+/* apple emoji images */
+.emoji{height:1.18em;width:1.18em;vertical-align:-.22em;display:inline-block;margin:0 .04em;-webkit-user-drag:none;user-select:none}
+.me-e .emoji{margin:0}
+/* reaction trigger */
+.main .acts .like{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line)!important;background:rgba(255,255,255,.04);padding:3px 12px 3px 9px!important;border-radius:999px!important;color:var(--mut);transition:transform .15s,background .2s,border-color .2s,color .2s}
+.main .acts .like:hover{background:rgba(168,85,247,.14);border-color:rgba(168,85,247,.5)!important;color:var(--text);transform:translateY(-1px)}
+.main .acts .like:active{transform:scale(.95)}
+.main .acts .like.on{border-color:rgba(168,85,247,.6)!important;background:rgba(168,85,247,.18);color:#fff}
+.like .lbl{font-weight:600}
+/* reaction picker */
+.acts .picker{position:absolute;bottom:calc(100% + 10px);left:0;display:flex;gap:2px;padding:7px 10px;background:rgba(24,24,36,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(168,85,247,.38);border-radius:999px;box-shadow:0 18px 50px -8px rgba(0,0,0,.7),0 0 0 4px rgba(168,85,247,.08),0 0 32px -6px rgba(168,85,247,.5);z-index:30;transform-origin:var(--ox,22px) 100%;animation:pkIn .4s cubic-bezier(.2,1.4,.35,1) both}
+.acts .picker.below{bottom:auto;top:calc(100% + 10px);transform-origin:var(--ox,22px) 0}
+.acts .picker.out{animation:pkOut .16s ease-in both;pointer-events:none}
+@keyframes pkIn{from{opacity:0;transform:translateY(14px) scale(.55)}}
+@keyframes pkOut{to{opacity:0;transform:translateY(8px) scale(.8)}}
+.acts .picker button{position:relative;isolation:isolate;width:40px;height:40px;padding:0;display:grid;place-items:center;font-size:26px;line-height:1;border:0;background:none;border-radius:50%;transition:transform .22s cubic-bezier(.2,1.8,.4,1);animation:pkE .5s cubic-bezier(.2,1.8,.4,1) both;animation-delay:calc(70ms + var(--k)*45ms)}
+@keyframes pkE{from{opacity:0;transform:translateY(16px) scale(.2) rotate(-14deg)}}
+.acts .picker button .emoji{width:30px;height:30px;margin:0;vertical-align:0}
+.acts .picker button:hover,.acts .picker button:focus-visible{transform:translateY(-9px) scale(1.45);background:none;z-index:2}
+.acts .picker button:active{transform:translateY(-4px) scale(1.15)}
+.acts .picker button.me::before{content:"";position:absolute;inset:2px;border-radius:50%;background:rgba(168,85,247,.3);box-shadow:0 0 14px rgba(168,85,247,.6);z-index:-1}
+.acts .picker button::after{content:attr(data-l);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%) scale(.7);opacity:0;pointer-events:none;background:rgba(0,0,0,.8);color:#fff;font:600 9px "Plus Jakarta Sans","IBM Plex Sans Arabic",sans-serif;padding:2px 7px;border-radius:8px;white-space:nowrap;transition:.15s}
+.acts .picker button:hover::after,.acts .picker button:active::after{opacity:1;transform:translateX(-50%) scale(1)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -252,8 +270,52 @@ function burst(btn, em = '❤️') {
 
 const RX = [['heart', '❤️'], ['like', '👍'], ['haha', '😂'], ['wow', '😮'], ['sad', '😢'], ['angry', '😡'], ['fire', '🔥']];
 const RXE = Object.fromEntries(RX);
+const RXL = { heart: 'Love', like: 'Like', haha: 'Haha', wow: 'Wow', sad: 'Sad', angry: 'Angry', fire: 'Fire' };
+const SMILE = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14c.8 1.2 2 1.8 3.5 1.8s2.7-.6 3.5-1.8" stroke-linecap="round"/><path d="M9 9.6h.01M15 9.6h.01" stroke-linecap="round" stroke-width="2.8"/></svg>';
+
+// ---- iPhone (Apple) emoji: swap every emoji for its Apple image ----
+const AP = 'https://cdn.jsdelivr.net/npm/emoji-datasource-apple@15.1.2/img/apple/64/';
+const EMO_UNIT = '(?:\\p{Emoji_Presentation}|\\p{Extended_Pictographic}\\uFE0F)\\p{Emoji_Modifier}?';
+const EMO = new RegExp('\\p{Regional_Indicator}{2}|[0-9#*]\\uFE0F?\\u20E3|' + EMO_UNIT + '(?:\\u200D' + EMO_UNIT + ')*', 'gu');
+const EMO_TEST = new RegExp(EMO.source, 'u');
+const hexOf = s => [...s].map(c => c.codePointAt(0).toString(16).padStart(4, '0')); // file names pad to 4 digits (0031-fe0f-20e3)
+function emojiImg(ch) {
+  const cps = hexOf(ch), i = document.createElement('img');
+  i.className = 'emoji'; i.alt = ch; i.draggable = false; i.decoding = 'async';
+  i.src = AP + cps.join('-') + '.png';
+  let step = 0;
+  i.onerror = () => {
+    const alt = cps.filter(c => c !== 'fe0f').join('-');
+    if (step++ === 0 && alt !== cps.join('-')) { i.src = AP + alt + '.png'; return; }
+    const s = document.createElement('span'); s.dataset.native = '1'; s.textContent = ch; // fall back to the device emoji
+    i.replaceWith(s);
+  };
+  return i;
+}
+function appleify(root) {
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => (n.parentElement && EMO_TEST.test(n.nodeValue) && !n.parentElement.closest('textarea,input,.mirror,script,style,[data-native]'))
+      ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+  });
+  const nodes = []; while (w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(n => {
+    const s = n.nodeValue, frag = document.createDocumentFragment(); let last = 0;
+    for (const m of s.matchAll(EMO)) {
+      if (m.index > last) frag.append(s.slice(last, m.index));
+      frag.append(emojiImg(m[0])); last = m.index + m[0].length;
+    }
+    if (last < s.length) frag.append(s.slice(last));
+    n.replaceWith(frag);
+  });
+}
+
 let openPicker = null;
-function closePicker() { if (openPicker) { openPicker.remove(); openPicker = null; } }
+function closePicker(instant) {
+  const p = openPicker; if (!p) return; openPicker = null;
+  if (instant) return p.remove();
+  p.classList.add('out'); setTimeout(() => p.remove(), 170);
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePicker(); });
 document.addEventListener('click', e => { if (openPicker && !openPicker.contains(e.target)) closePicker(); });
 
 function rxView(c, chips, btn) {
@@ -269,7 +331,8 @@ function rxView(c, chips, btn) {
   });
   btn.className = 'like' + (c.mine ? ' on' : '');
   btn.replaceChildren();
-  if (c.mine) btn.append(el('em', 'me-e', RXE[c.mine] || '❤️')); else btn.insertAdjacentHTML('beforeend', HEART);
+  if (c.mine) btn.append(el('em', 'me-e', RXE[c.mine] || '❤️')); else btn.insertAdjacentHTML('beforeend', SMILE);
+  btn.append(el('span', 'lbl', c.mine ? (RXL[c.mine] || 'React') : 'React'));
 }
 
 async function react(c, k, chips, btn) {
@@ -284,7 +347,7 @@ async function react(c, k, chips, btn) {
 }
 
 function render() {
-  closePicker();
+  closePicker(true);
   const by = {};
   comments.forEach(c => (by[c.parent_id || 0] ||= []).push(c));
   let n = 0;
@@ -310,11 +373,15 @@ function render() {
       const pk = el('div', 'picker');
       RX.forEach(([k, em], i) => {
         const b = el('button', c.mine === k ? 'me' : '', em);
+        b.dataset.l = RXL[k]; b.setAttribute('aria-label', RXL[k]);
         b.style.setProperty('--k', i);
         b.onclick = ev => { ev.stopPropagation(); closePicker(); react(c, k, chips, lk); };
         pk.append(b);
       });
       rxw.append(pk); openPicker = pk;
+      const r = rxw.getBoundingClientRect(), over = r.left + pk.offsetWidth - (innerWidth - 8);
+      if (over > 0) { pk.style.left = (-over) + 'px'; pk.style.setProperty('--ox', (22 + over) + 'px'); }
+      if (r.top < pk.offsetHeight + 24) pk.classList.add('below');
     };
     const rp = el('button', '', '↩ Reply'); rp.onclick = () => openReply(c, box);
     acts.append(rxw, rp);
@@ -326,7 +393,7 @@ function render() {
       acts.append(tg);
     }
     if (isOwner) {
-      const d = el('button', 'del', '🗑 Delete');
+      const d = el('button', 'del', '🗑️ Delete');
       d.onclick = async () => { if (confirm('Delete this comment and its replies?')) { await api('/api/comments/' + c.id, { method: 'DELETE' }); toast('Deleted'); animate = false; load(); } };
       acts.append(d);
     }
@@ -471,6 +538,13 @@ $('list').innerHTML = '<div class="sk"><i></i><div><u style="width:35%"></u><u s
   mode(); load(); typePh();
   const t = setInterval(() => { if (window.turnstile) { clearInterval(t); wid = turnstile.render('#ts', { sitekey: SITEKEY, theme: 'dark' }); } }, 200);
 })();
+
+// convert existing + future emoji to Apple images, and warm the cache for the picker
+appleify(document.body);
+new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => {
+  if (n.nodeType === 1) appleify(n); else if (n.nodeType === 3 && n.parentElement) appleify(n.parentElement);
+}))).observe(document.body, { childList: true, subtree: true });
+RX.forEach(([, e]) => { new Image().src = AP + hexOf(e).join('-') + '.png'; });
 </script>
 </body>
 </html>
