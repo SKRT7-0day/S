@@ -546,6 +546,64 @@
     </div>
   </div>
 
+  <!-- Consent gate: self-contained on purpose, so it keeps working even if another script fails
+       or the browser blocks storage. -->
+  <script>
+    (function () {
+      var overlay = document.getElementById('warningOverlay');
+      if (!overlay) return;
+      var KEY = 'tos_warning_acknowledged';
+
+      function readAck() {
+        try { if (window.localStorage.getItem(KEY) === 'true') return true; } catch (e) {}
+        try { if (document.cookie.indexOf(KEY + '=1') !== -1) return true; } catch (e) {}
+        return false;
+      }
+      function saveAck() {
+        try { window.localStorage.setItem(KEY, 'true'); } catch (e) {}
+        try { document.cookie = KEY + '=1; max-age=31536000; path=/; SameSite=Lax'; } catch (e) {}
+      }
+      function closeGate() {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        document.body.classList.remove('warning-active');
+      }
+
+      if (readAck()) { closeGate(); return; }
+
+      var check = document.getElementById('warningCheck');
+      var btn = document.getElementById('warningOkBtn');
+      var row = document.querySelector('.warning-check');
+      if (!check || !btn) return;
+
+      // Keep the button look in sync with the checkbox, however its state changed
+      // (tap, keyboard, or the browser restoring it after a reload / back navigation).
+      function sync() {
+        btn.classList.toggle('is-locked', !check.checked);
+        btn.setAttribute('aria-disabled', String(!check.checked));
+      }
+      sync();
+      ['change', 'input', 'click'].forEach(function (ev) { check.addEventListener(ev, sync); });
+      window.addEventListener('pageshow', sync);
+      var watch = setInterval(function () {
+        if (!document.body.contains(overlay)) { clearInterval(watch); return; }
+        sync();
+      }, 300);
+
+      btn.addEventListener('click', function () {
+        // Read the checkbox itself at click time, never a stale flag.
+        if (!check.checked) {
+          row.classList.remove('nudge');
+          void row.offsetWidth;
+          row.classList.add('nudge');
+          return;
+        }
+        saveAck();
+        clearInterval(watch);
+        closeGate();
+      });
+    })();
+  </script>
+
   <div class="container animate-enter">
     <div class="header">
       <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
@@ -1648,55 +1706,4 @@
       const colored = groups.filter(g => g.rgb).map(g => {
         const d = labDist(rgbToLab(...g.rgb), tLab);
         const hsl = rgbToHsl(...g.rgb);
-        let dh = Math.abs(tHsl[0] - hsl[0]); dh = Math.min(dh, 360 - dh);
-        const bothChromatic = tHsl[1] >= 0.25 && hsl[1] >= 0.25;
-        const hueClose = bothChromatic && dh <= 18 && Math.abs(tHsl[2] - hsl[2]) < 0.35;
-        return { g, d, ok: d <= COLOR_T || hueClose };
-      }).sort((a, b) => a.d - b.d);
-      const sel = colored.filter(x => x.ok);
-      return {
-        keys: new Set(sel.map(x => x.g.key)),
-        dist: new Map(sel.map(x => [x.g.key, x.d])),
-        nearest: colored.length ? colored[0].g : null,
-        none: !colored.length
-      };
-    }
-
-    function getFilteredServers(query) {
-      if (aiFilter) {
-        const order = new Map(aiFilter.codes.map((c, i) => [c, i]));
-        return allServersCache.filter(s => order.has(s.code)).sort((a, b) => order.get(a.code) - order.get(b.code));
-      }
-      const q = query.trim();
-      const cm = tagFilter.custom ? computeColorMatch(tagGroups()) : null;
-      const qBuckets = q ? colorWordBuckets(q) : [];
-      let rows = allServersCache.map((s, i) => ({ s, i, score: 0, d: 0 }));
-      if (q) {
-        rows.forEach(o => {
-          const ns = fuzzyScore(q, o.s.name) * 0.85;
-          const ts = o.s.tag ? fuzzyScore(q, o.s.tag) : 0;
-          const cs = o.s.tag_bucket && qBuckets.includes(o.s.tag_bucket) ? 700 : 0;
-          o.score = Math.max(ns, ts, cs);
-        });
-        rows = rows.filter(o => o.score > 0);
-      }
-      if (tagFilter.tag) rows = rows.filter(o => o.s.tag && norm(o.s.tag) === tagFilter.tag);
-      if (tagFilter.bucket) rows = rows.filter(o => o.s.tag_bucket === tagFilter.bucket);
-      if (cm) {
-        rows = rows.filter(o => o.s.tag && cm.keys.has(norm(o.s.tag)));
-        rows.forEach(o => { o.d = cm.dist.get(norm(o.s.tag)); });
-      }
-      rows.sort((a, b) => q ? (b.score - a.score || a.i - b.i) : cm ? (a.d - b.d || a.i - b.i) : a.i - b.i);
-      return rows.map(o => o.s);
-    }
-
-    let tfAnimateNext = false;
-
-    function renderTagFinder() {
-      const box = document.getElementById('tagFinder');
-      if (!box) return;
-      const groups = tagGroups();
-      if (!groups.length) { box.hidden = true; return; }
-      box.hidden = false;
-      box.classList.toggle('tf-animate', tfAnimateNext);
-      tfAnimateNe
+        let dh = Math.abs(tHsl[0] - h
