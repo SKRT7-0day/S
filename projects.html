@@ -172,6 +172,10 @@
 
     .tf-note { display: flex; align-items: center; gap: 8px; margin: -4px 0 12px; padding: 7px 11px; border-radius: 10px; font-size: 0.78rem; color: var(--sub-text); background: rgba(128, 128, 128, 0.1); }
     .tf-note:empty { display: none; }
+    .tf-note { flex-wrap: wrap; }
+    .tf-near { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; }
+    .tf-near .tf-chip { padding: 3px 10px 3px 6px; font-size: 0.74rem; border-radius: 10px; }
+    .tf-near .tf-chip img { width: 16px; height: 16px; }
     .tf-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
     .tf-summary { display: flex; align-items: center; gap: 9px; margin-top: 4px; padding-top: 12px; border-top: 1px dashed rgba(128, 128, 128, 0.28); font-size: 0.8rem; color: var(--sub-text); }
     .tf-summary:empty { display: none; }
@@ -195,6 +199,22 @@
     @media (prefers-reduced-motion: reduce) {
       .tf-orb-ring, .tf-orb-core, .tf-star, .tf-orb-pulse, .tf-think-text, .tf-think-dot, .tag-finder.is-thinking::before, .tag-finder.tf-animate .tf-chip, .tag-finder.tf-animate .tf-swatch { animation: none !important; }
     }
+    /* ===== Ask AI (Gemini) ===== */
+    .tf-ask { position: relative; overflow: hidden; display: flex; align-items: center; gap: 10px; width: 100%; margin: 0 0 6px; padding: 11px 14px; border-radius: 14px; border: 1.5px solid transparent; cursor: pointer; font-family: inherit; text-align: left; color: var(--text-color);
+      background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, linear-gradient(120deg, #a855f7, #60a5fa, #34d399) border-box; transition: transform 0.18s ease, box-shadow 0.2s ease; animation: tfPop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.25); }
+    .tf-ask[hidden], .tf-ask-sub[hidden], .tf-ai-note[hidden] { display: none; }
+    .tf-ask::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.14) 50%, transparent 80%); transform: translateX(-100%); animation: tfShimmer 3.4s ease-in-out infinite; pointer-events: none; }
+    .tf-ask:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(168, 85, 247, 0.35); }
+    .tf-ask:active { transform: scale(0.99); }
+    .tf-ask-icon { width: 22px; height: 22px; flex-shrink: 0; }
+    .tf-ask-text { flex: 1; min-width: 0; font-weight: 800; font-size: 0.86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tf-ask-tag { flex-shrink: 0; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(66, 133, 244, 0.16); color: #8ab4f8; border: 1px solid rgba(66, 133, 244, 0.4); }
+    .tf-ask-sub { margin: 0 0 14px 4px; font-size: 0.7rem; color: var(--sub-text); }
+    .tf-ai-note { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; padding: 9px 12px; border-radius: 12px; font-size: 0.82rem; line-height: 1.45; color: var(--text-color); background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(52, 211, 153, 0.1)); border: 1px solid rgba(168, 85, 247, 0.42); animation: tfPop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.25); }
+    .tf-ai-note.warn { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.45); }
+    .tf-ai-badge { flex-shrink: 0; font-size: 0.62rem; font-weight: 900; letter-spacing: 1px; padding: 3px 8px; border-radius: 999px; background: linear-gradient(135deg, #a855f7, #6366f1); color: #fff; }
+    .tf-ask-inline { margin-left: 8px; background: linear-gradient(135deg, #a855f7, #7c3aed); color: #fff; border: none; border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: 0.8rem; cursor: pointer; font-family: inherit; }
+    @media (prefers-reduced-motion: reduce) { .tf-ask, .tf-ask::after, .tf-ai-note { animation: none !important; } }
     .server-search-input { width: 100%; box-sizing: border-box; background-color: var(--card-bg); border: 1.5px solid rgba(168, 85, 247, 0.25); color: var(--text-color); padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; font-family: inherit; outline: none; transition: border-color 0.2s ease; }
     .server-search-input:focus { border-color: var(--accent-color); }
     .server-search-input::placeholder { color: var(--sub-text); }
@@ -588,6 +608,13 @@
           <button type="button" class="tf-clear" id="tfClear" hidden><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Clear</button>
         </div>
         <div class="tf-thinking" id="tfThinking" aria-live="polite"><span class="tf-think-text" id="tfThinkText">Thinking…</span><span class="tf-think-dots"><i class="tf-think-dot"></i><i class="tf-think-dot"></i><i class="tf-think-dot"></i></span></div>
+        <button type="button" class="tf-ask" id="tfAsk" hidden>
+          <svg class="tf-ask-icon" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="tfAskGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs><path d="M12 3 L13.8 10.2 L21 12 L13.8 13.8 L12 21 L10.2 13.8 L3 12 L10.2 10.2 Z" fill="url(#tfAskGrad)"/></svg>
+          <span class="tf-ask-text" id="tfAskText">Ask AI</span>
+          <span class="tf-ask-tag">Gemini</span>
+        </button>
+        <div class="tf-ask-sub" id="tfAskSub" hidden>Your search words are sent to Google Gemini to find matches by meaning.</div>
+        <div class="tf-ai-note" id="tfAiNote" hidden></div>
         <div class="tf-section">
           <div class="tf-section-title">Colors</div>
           <div class="tf-colors">
@@ -1081,6 +1108,23 @@
     function resetTurnstile() {
       turnstileToken = null;
       if (window.turnstile && turnstileWidgetId !== null) turnstile.reset(turnstileWidgetId);
+    }
+
+    // For the AI request: wait for a token, use it, then ask Turnstile for a new one.
+    async function takeTurnstileToken(timeoutMs = 15000) {
+      if (turnstileError) { turnstileError = null; resetTurnstile(); }
+      renderTurnstile();
+      const t0 = Date.now();
+      while (Date.now() - t0 < timeoutMs) {
+        if (turnstileToken) {
+          const t = turnstileToken;
+          resetTurnstile();
+          return t;
+        }
+        if (turnstileError) return null;
+        await new Promise(r => setTimeout(r, 200));
+      }
+      return null;
     }
 
     function supabaseHeaders(extra) {
@@ -1597,17 +1641,30 @@
     }
 
     function computeColorMatch(groups) {
-      const target = rgbToLab(...hexToRgb(tagFilter.custom));
-      const colored = groups.filter(g => g.rgb)
-        .map(g => ({ g, d: labDist(rgbToLab(...g.rgb), target) }))
-        .sort((a, b) => a.d - b.d);
-      let sel = colored.filter(x => x.d <= COLOR_T);
-      let fallback = false;
-      if (!sel.length) { sel = colored.slice(0, 3); fallback = true; }
-      return { keys: new Set(sel.map(x => x.g.key)), dist: new Map(sel.map(x => [x.g.key, x.d])), fallback, none: !colored.length };
+      const target = hexToRgb(tagFilter.custom);
+      const tLab = rgbToLab(...target), tHsl = rgbToHsl(...target);
+      const colored = groups.filter(g => g.rgb).map(g => {
+        const d = labDist(rgbToLab(...g.rgb), tLab);
+        const hsl = rgbToHsl(...g.rgb);
+        let dh = Math.abs(tHsl[0] - hsl[0]); dh = Math.min(dh, 360 - dh);
+        const bothChromatic = tHsl[1] >= 0.25 && hsl[1] >= 0.25;
+        const hueClose = bothChromatic && dh <= 18 && Math.abs(tHsl[2] - hsl[2]) < 0.35;
+        return { g, d, ok: d <= COLOR_T || hueClose };
+      }).sort((a, b) => a.d - b.d);
+      const sel = colored.filter(x => x.ok);
+      return {
+        keys: new Set(sel.map(x => x.g.key)),
+        dist: new Map(sel.map(x => [x.g.key, x.d])),
+        nearest: colored.length ? colored[0].g : null,
+        none: !colored.length
+      };
     }
 
     function getFilteredServers(query) {
+      if (aiFilter) {
+        const order = new Map(aiFilter.codes.map((c, i) => [c, i]));
+        return allServersCache.filter(s => order.has(s.code)).sort((a, b) => order.get(a.code) - order.get(b.code));
+      }
       const q = query.trim();
       const cm = tagFilter.custom ? computeColorMatch(tagGroups()) : null;
       const qBuckets = q ? colorWordBuckets(q) : [];
@@ -1647,454 +1704,4 @@
       groups.forEach(g => { if (g.bucket) counts[g.bucket] = (counts[g.bucket] || 0) + g.count; });
       const sw = BUCKETS.filter(b => counts[b.id]).map((b, i) => {
         const rgb = hexToRgb(b.hex), on = tagFilter.bucket === b.id;
-        const name = b.id.charAt(0).toUpperCase() + b.id.slice(1);
-        return `<button type="button" class="tf-swatch${on ? ' active' : ''}" data-bucket="${b.id}" aria-pressed="${on}" style="--r:${rgb[0]};--g:${rgb[1]};--b:${rgb[2]};--i:${i}"><i class="tf-sw-dot"></i><span>${name}</span><em>${counts[b.id]}</em></button>`;
-      }).join('');
-      document.getElementById('tfSwatches').innerHTML = sw || '<span class="tf-skel"></span><span class="tf-skel"></span><span class="tf-skel"></span>';
-
-      let visible = groups.slice();
-      let note = '';
-      if (q) {
-        const qb = colorWordBuckets(q);
-        visible = visible.map(g => ({ g, s: Math.max(fuzzyScore(q, g.tag), qb.includes(g.bucket) ? 700 : 0) }))
-          .filter(x => x.s > 0).sort((a, b) => b.s - a.s).map(x => x.g);
-        if (qb.length) note = `Matching the color ${qb.join(' / ')}`;
-      } else {
-        visible.sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
-      }
-      if (tagFilter.bucket) visible = visible.filter(g => g.bucket === tagFilter.bucket);
-      if (tagFilter.custom) {
-        const cm = computeColorMatch(groups);
-        visible = visible.filter(g => cm.keys.has(g.key)).sort((a, b) => cm.dist.get(a.key) - cm.dist.get(b.key));
-        note = cm.none
-          ? 'Colors are still loading, try again in a moment.'
-          : `<i class="tf-dot" style="background:${tagFilter.custom}"></i><span>${cm.fallback ? 'No close match, showing the nearest tags' : 'Tags closest to this color'}</span>`;
-      }
-      document.getElementById('tfNote').innerHTML = note;
-
-      const check = '<svg class="tf-check" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.6 2.6L10 3.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      document.getElementById('tfTags').innerHTML = visible.length
-        ? visible.map((g, i) => {
-            const on = tagFilter.tag === g.key;
-            const cv = g.rgb ? `--r:${g.rgb[0]};--g:${g.rgb[1]};--b:${g.rgb[2]};` : '';
-            return `<button type="button" class="tf-chip${on ? ' active' : ''}" data-key="${escapeHtml(g.key)}" aria-pressed="${on}" style="${cv}--i:${i}">${g.badge ? `<img src="${escapeHtml(g.badge)}" alt="">` : ''}<span>${escapeHtml(g.tag)}</span><em>${g.count}</em>${on ? check : ''}</button>`;
-          }).join('')
-        : '<span class="tf-none">No tags match.</span>';
-
-      document.getElementById('tfClear').hidden = !(tagFilter.tag || tagFilter.bucket || tagFilter.custom);
-      const picker = document.getElementById('tfPicker');
-      picker.classList.toggle('has-color', !!tagFilter.custom);
-      if (tagFilter.custom) picker.style.setProperty('--pc', tagFilter.custom);
-      document.getElementById('tfPickerLabel').textContent = tagFilter.custom ? tagFilter.custom.toUpperCase() : 'Custom';
-    }
-
-    function updateTfSummary(count) {
-      const el = document.getElementById('tfSummary');
-      if (!el) return;
-      const active = !!(document.getElementById('serverSearchInput').value.trim() || tagFilter.tag || tagFilter.bucket || tagFilter.custom);
-      if (!active) { el.innerHTML = ''; return; }
-      el.innerHTML = count
-        ? `<i class="tf-spark-dot"></i><span><b>${count}</b> of ${allServersCache.length} servers match</span>`
-        : '<i class="tf-spark-dot warn"></i><span>No matches. Try fewer letters or another color.</span>';
-    }
-
-    const TF_HINTS = [
-      'Type a few letters from anywhere in a tag.',
-      'Try a color name: red, blue, أحمر…',
-      'Or pick any color with the picker.'
-    ];
-    let tfHintIdx = 0;
-    setInterval(() => {
-      const el = document.getElementById('tfHint'), box = document.getElementById('tagFinder');
-      if (!el || !box || box.hidden || document.hidden || box.classList.contains('is-thinking')) return;
-      tfHintIdx = (tfHintIdx + 1) % TF_HINTS.length;
-      el.textContent = TF_HINTS[tfHintIdx];
-      el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap');
-    }, 3800);
-
-    // ===== "Thinking" state: brief AI-style pause before results update =====
-    let thinkTimer = null, thinkTick = null;
-
-    function setThinking(on, messages) {
-      const box = document.getElementById('tagFinder');
-      const grid = document.getElementById('serversGrid');
-      const textEl = document.getElementById('tfThinkText');
-      clearInterval(thinkTick);
-      if (!box) return;
-      box.classList.toggle('is-thinking', on);
-      grid.classList.toggle('is-thinking', on);
-      if (!on || !messages || !textEl) return;
-      let i = 0;
-      const show = () => {
-        textEl.textContent = messages[i % messages.length];
-        textEl.style.animation = 'none'; void textEl.offsetWidth; textEl.style.animation = '';
-        i++;
-      };
-      show();
-      thinkTick = setInterval(show, 420);
-    }
-
-    function renderWithThinking(delay) {
-      const input = document.getElementById('serverSearchInput');
-      const box = document.getElementById('tagFinder');
-      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      clearTimeout(thinkTimer);
-      const finish = () => {
-        setThinking(false);
-        tfAnimateNext = true;
-        skipCardAnim = true;
-        renderFilteredServers(input.value);
-        skipCardAnim = false;
-      };
-      if (reduce || !box || box.hidden) { finish(); return; }
-
-      const q = input.value.trim();
-      const short = q.length > 14 ? q.slice(0, 14) + '…' : q;
-      const msgs = (tagFilter.custom || tagFilter.bucket)
-        ? ['Analyzing the color…', 'Comparing tag colors…', 'Ranking results…']
-        : q
-          ? [`Reading "${short}"…`, 'Matching tags…', 'Ranking results…']
-          : ['Thinking…', 'Matching tags…', 'Ranking results…'];
-      setThinking(true, msgs);
-      thinkTimer = setTimeout(finish, delay);
-    }
-
-    function initTagFinder() {
-      const box = document.getElementById('tagFinder');
-      if (!box) return;
-      const refresh = () => renderWithThinking(450);
-      const setFilter = (patch) => { tagFilter.tag = null; tagFilter.bucket = null; tagFilter.custom = null; Object.assign(tagFilter, patch); refresh(); };
-
-      box.addEventListener('click', (e) => {
-        const sw = e.target.closest('.tf-swatch');
-        if (sw) { setFilter(tagFilter.bucket === sw.dataset.bucket ? {} : { bucket: sw.dataset.bucket }); return; }
-        const chip = e.target.closest('.tf-chip');
-        if (chip) { setFilter(tagFilter.tag === chip.dataset.key ? {} : { tag: chip.dataset.key }); return; }
-        if (e.target.closest('#tfClear')) setFilter({});
-      });
-      document.getElementById('tfColorInput').addEventListener('input', (e) => setFilter({ custom: e.target.value }));
-    }
-    document.addEventListener('DOMContentLoaded', initTagFinder);
-
-    function renderFilteredServers(query) {
-      const grid = document.getElementById('serversGrid');
-      renderTagFinder();
-
-      if (allServersCache.length === 0) {
-        grid.innerHTML = `<div class="servers-empty">No servers added yet. Be the first!</div>`;
-        return;
-      }
-
-      const filtered = getFilteredServers(query);
-      updateTfSummary(filtered.length);
-
-      if (filtered.length === 0) {
-        grid.innerHTML = query.trim()
-          ? `<div class="servers-empty">No servers match "${escapeHtml(query)}".</div>`
-          : `<div class="servers-empty">No servers match this filter.</div>`;
-        return;
-      }
-
-      grid.innerHTML = '';
-      filtered.forEach((server, index) => {
-        grid.appendChild(renderServerCard(server, index));
-      });
-    }
-
-    async function loadServers() {
-      await renderServersGrid();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const input = document.getElementById('serverInviteInput');
-      const addBtn = document.getElementById('addServerBtn');
-      const statusEl = document.getElementById('addServerStatus');
-      const searchInput = document.getElementById('serverSearchInput');
-
-      searchInput.addEventListener('input', () => {
-        renderWithThinking(350);
-      });
-
-      const gridEl = document.getElementById('serversGrid');
-      const openFromCard = (e) => {
-        if (e.target.closest('a')) return;
-        const card = e.target.closest('.server-card');
-        if (!card) return;
-        const server = allServersCache.find(s => s.code === card.dataset.code);
-        if (server) openServerModal(server);
-      };
-      gridEl.addEventListener('click', openFromCard);
-      gridEl.addEventListener('keydown', (e) => {
-        if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('server-card')) {
-          e.preventDefault();
-          openFromCard(e);
-        }
-      });
-
-      const failVerification = () => {
-        addBtn.disabled = false;
-        statusEl.className = 'add-server-status error';
-        const hint = turnstileError === '110200' ? ' This domain is not allowed in the Turnstile settings.' : '';
-        statusEl.textContent = 'Human verification failed' + (turnstileError ? ` (code ${turnstileError}).` : ' (timed out).') + hint + ' Try again.';
-        turnstileError = null;
-        resetTurnstile();
-      };
-
-      const submit = async (code) => {
-        addBtn.disabled = true;
-        statusEl.className = 'add-server-status loading';
-        statusEl.textContent = 'Looking up server...';
-
-        try {
-          const res = await fetch(WORKER_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ code, turnstileToken })
-          });
-
-          const data = await res.json().catch(() => ({}));
-
-          if (res.ok && data.success) {
-            statusEl.className = 'add-server-status success';
-            statusEl.innerHTML = `<span class="success-check"><i class="fa-solid fa-check"></i></span> ${escapeHtml(data.server.name)} added successfully!`;
-            const newServer = normalizeServer(data.server);
-            justAddedCode = newServer.code;
-            fireConfetti();
-            input.value = '';
-
-            allServersCache = allServersCache.filter(s => s.code !== newServer.code);
-            allServersCache.unshift(newServer);
-            renderFilteredServers(searchInput.value);
-
-            setTimeout(async () => {
-              const freshList = await loadServersList();
-              if (freshList.length) {
-                allServersCache = freshList;
-                renderFilteredServers(searchInput.value);
-              }
-              justAddedCode = null;
-            }, 1500);
-          } else if (res.status === 409 || data.error === 'duplicate') {
-            statusEl.className = 'add-server-status error';
-            statusEl.textContent = 'This server is already in the list.';
-          } else if (res.status === 429) {
-            statusEl.className = 'add-server-status error';
-            statusEl.textContent = data.error || 'Too many requests. Try again later.';
-          } else {
-            statusEl.className = 'add-server-status error';
-            statusEl.textContent = data.error || 'Could not add that server. Check the invite link and try again.';
-          }
-        } catch (err) {
-          statusEl.className = 'add-server-status error';
-          statusEl.textContent = 'Network error. Try again.';
-        }
-
-        resetTurnstile();
-        addBtn.disabled = false;
-      };
-
-      addBtn.addEventListener('click', () => {
-        const raw = input.value;
-        if (!raw.trim() || addBtn.disabled) return;
-        const code = extractInviteCode(raw);
-
-        if (turnstileToken) { submit(code); return; }
-
-        // No token yet: wait for it and submit automatically (no second click needed).
-        addBtn.disabled = true;
-        statusEl.className = 'add-server-status loading';
-        statusEl.textContent = 'Verifying that you are human...';
-        onVerifyFailed = failVerification;
-        renderTurnstile();
-        if (turnstileError) { failVerification(); return; }
-        pendingAdd = () => submit(code);
-        clearTimeout(verifyTimer);
-        verifyTimer = setTimeout(() => { pendingAdd = null; failVerification(); }, 20000);
-      });
-
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') addBtn.click();
-      });
-    });
-
-    const translations = {
-      en: {
-        pageTitle: 'My Projects',
-        backBtn: 'Back to Home',
-        warningTitle: 'Important Notice Before Continuing',
-        warningText1: 'Some projects listed on this page (such as <strong>Selfbots</strong>) <strong>violate Discord\'s Terms of Service</strong>, specifically the section prohibiting automation of personal accounts (Self-Bots).',
-        warningText2: 'Using these projects on your personal account may result in a permanent Discord ban. These projects are provided for educational/experimental purposes only, and you are fully responsible for any use of them.',
-        warningLink: 'Read Discord\'s Terms of Service',
-        warningOkBtn: 'Continue',
-        warningBadge: 'Notice',
-        warningCheck: 'I have read the notice and I accept full responsibility for how I use these projects.',
-        warningBackBtn: 'Go back',
-        viewProjectBtn: 'View Project',
-        notAvailableBtn: 'Not Available Yet',
-        comingSoonTag: 'Coming Soon',
-        detectingTag: 'Detecting...',
-        unknownTag: 'Unknown'
-      },
-      ar: {
-        pageTitle: 'مشاريعي',
-        backBtn: 'العودة للرئيسية',
-        warningTitle: 'تنبيه هام قبل المتابعة',
-        warningText1: 'بعض المشاريع المعروضة في هذه الصفحة (مثل <strong>Selfbots</strong>) <strong>تخالف شروط استخدام Discord</strong>، وتحديداً القسم الخاص بمنع أتمتة الحسابات الشخصية (Self-Bots).',
-        warningText2: 'استخدام هذه المشاريع على حسابك الشخصي قد يعرضك لحظر دائم من Discord. هذه المشاريع مطروحة لأغراض تعليمية/تجريبية فقط، وأنت مسؤول بالكامل عن أي استخدام لها.',
-        warningLink: 'اقرأ شروط استخدام Discord (Terms of Service)',
-        warningOkBtn: 'متابعة',
-        warningBadge: 'تنبيه',
-        warningCheck: 'قرأت التنبيه وأتحمل كامل المسؤولية عن استخدامي لهذه المشاريع.',
-        warningBackBtn: 'رجوع',
-        viewProjectBtn: 'عرض المشروع',
-        notAvailableBtn: 'غير متاح بعد',
-        comingSoonTag: 'قريباً',
-        detectingTag: 'جارِ الكشف...',
-        unknownTag: 'غير معروف'
-      }
-    };
-
-    function getCurrentLang() {
-      return localStorage.getItem('site_lang') || 'en';
-    }
-
-    const flagUrls = {
-      en: 'https://flagcdn.com/w40/gb.png',
-      ar: 'https://flagcdn.com/w40/sa.png'
-    };
-
-    function updateToggleButtons(currentLang) {
-      const nextLang = currentLang === 'en' ? 'ar' : 'en';
-      const nextCode = nextLang === 'ar' ? 'AR' : 'EN';
-
-      document.querySelectorAll('.lang-toggle').forEach(btn => {
-        const flagImg = btn.querySelector('.flag img');
-        const codeSpan = btn.querySelector('.lang-code');
-
-        btn.classList.add('spin', 'fading');
-        setTimeout(() => {
-          flagImg.src = flagUrls[nextLang];
-          codeSpan.textContent = nextCode;
-          btn.classList.remove('fading');
-        }, 180);
-        setTimeout(() => btn.classList.remove('spin'), 400);
-      });
-    }
-
-    function applyTextTranslations(lang) {
-      const dict = translations[lang];
-
-      const warningCard = document.querySelector('.warning-card');
-      if (warningCard) {
-        warningCard.dir = lang === 'ar' ? 'rtl' : 'ltr';
-      }
-
-      document.querySelectorAll('.warning-card [data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (dict[key] !== undefined) {
-          el.innerHTML = dict[key];
-        }
-      });
-
-      localStorage.setItem('site_lang', lang);
-    }
-
-    function applyLanguage(lang, animate) {
-      updateToggleButtons(lang);
-
-      if (!animate) {
-        applyTextTranslations(lang);
-        return;
-      }
-
-      const warningCard = document.querySelector('.warning-card');
-      if (!warningCard) {
-        applyTextTranslations(lang);
-        return;
-      }
-      warningCard.classList.add('lang-transition-target', 'lang-fading');
-
-      setTimeout(() => {
-        applyTextTranslations(lang);
-        warningCard.classList.remove('lang-fading');
-      }, 200);
-    }
-
-    function toggleLanguage() {
-      const current = getCurrentLang();
-      const next = current === 'en' ? 'ar' : 'en';
-      applyLanguage(next, true);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      applyLanguage(getCurrentLang(), false);
-      document.getElementById('langToggleModal').addEventListener('click', toggleLanguage);
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const overlay = document.getElementById('warningOverlay');
-      const okBtn = document.getElementById('warningOkBtn');
-
-      const alreadyAcknowledged = localStorage.getItem('tos_warning_acknowledged') === 'true';
-
-      if (alreadyAcknowledged) {
-        overlay.remove();
-        document.body.classList.remove('warning-active');
-      } else {
-        const check = document.getElementById('warningCheck');
-        check.addEventListener('change', () => { okBtn.disabled = !check.checked; });
-        okBtn.addEventListener('click', () => {
-          if (okBtn.disabled) return;
-          localStorage.setItem('tos_warning_acknowledged', 'true');
-          overlay.remove();
-          document.body.classList.remove('warning-active');
-        });
-      }
-    });
-
-    function initRotatingText() {
-      const el = document.getElementById('rotatingText');
-      if (!el) return;
-
-      const texts = ['Projects', 'Scripts', 'Bots', 'Automation', 'Tools'];
-      let index = 0;
-      const rotationInterval = 2200;
-      const staggerDuration = 30;
-      const exitDuration = 380;
-
-      function renderChars(text) {
-        el.innerHTML = '';
-        Array.from(text).forEach((ch, i) => {
-          const span = document.createElement('span');
-          span.className = 'text-rotate-element';
-          span.textContent = ch === ' ' ? '\u00A0' : ch;
-          span.style.transitionDelay = (i * staggerDuration) + 'ms';
-          el.appendChild(span);
-        });
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            el.querySelectorAll('.text-rotate-element').forEach(span => span.classList.add('enter'));
-          });
-        });
-      }
-
-      function next() {
-        index = (index + 1) % texts.length;
-        const current = el.querySelectorAll('.text-rotate-element');
-        current.forEach((span, i) => {
-          span.style.transitionDelay = (i * staggerDuration) + 'ms';
-          span.classList.remove('enter');
-          span.classList.add('exit');
-        });
-        setTimeout(() => renderChars(texts[index]), exitDuration);
-      }
-
-      renderChars(texts[index]);
-      setInterval(next, rotationInterval);
-    }
-
-    document.addEventListener('DOMContentLoaded', initRotatingText);
-  </script>
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad" async defer></script>
-</body>
-</html>
+        const name = b
